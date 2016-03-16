@@ -40,6 +40,7 @@ function M.parse(arg)
     cmd:option('-netType',     'alexnetowtbn', 'Options: alexnet | overfeat | alexnetowtbn | vgg | googlenet')
     cmd:option('-retrain',     'none', 'provide path to model to retrain with')
     cmd:option('-optimState',  'none', 'provide path to an optimState to reload from')
+    cmd:option('-verbose',  true, 'verbose output')
     cmd:text()
 
     local opt = cmd:parse(arg or {})
