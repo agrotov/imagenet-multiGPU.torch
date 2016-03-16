@@ -99,8 +99,6 @@ function dataset:__init(...)
       end
    end
 
-   print(self.classes)
-
    local function tableFind(t, o) for k,v in pairs(t) do if v == o then return k end end end
    -- loop over each paths folder, get list of unique class names,
    -- also store the directory paths per class
@@ -222,6 +220,9 @@ function dataset:__init(...)
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
       if length == 0 then
+         print("self.classes")
+         print(self.classes)
+         print("end self.classes")
          error('Class has zero samples')
       else
          self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + length, length):long()
