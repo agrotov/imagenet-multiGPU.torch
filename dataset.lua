@@ -213,17 +213,10 @@ function dataset:__init(...)
    local runningIndex = 0
    for i=1,#self.classes do
       if self.verbose then xlua.progress(i, #(self.classes)) end
-      print("Artem")
-      print(classFindFiles[i])
-      print("end Artem")
       local length = tonumber(sys.fexecute(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
       if length == 0 then
-         print("self.classes")
-         print(self.classes)
-         print("end self.classes")
-         error('Class has zero samples')
       else
          self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + length, length):long()
          self.imageClass[{{runningIndex + 1, runningIndex + length}}]:fill(i)
