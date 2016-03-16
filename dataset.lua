@@ -212,6 +212,9 @@ function dataset:__init(...)
    local runningIndex = 0
    for i=1,#self.classes do
       if self.verbose then xlua.progress(i, #(self.classes)) end
+      print("Artem")
+      print(classFindFiles[i])
+      print("end Artem")
       local length = tonumber(sys.fexecute(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
