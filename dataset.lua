@@ -98,6 +98,9 @@ function dataset:__init(...)
          classPaths[k] = {}
       end
    end
+
+   print(self.classes)
+
    local function tableFind(t, o) for k,v in pairs(t) do if v == o then return k end end end
    -- loop over each paths folder, get list of unique class names,
    -- also store the directory paths per class
