@@ -78,7 +78,17 @@ local function reward_for_actions(loss_matrix, actions, labels)
     print("actions")
     print(actions:size())
     print(actions:type())
-    return loss_matrix:index(1,actions)
+
+    print("labels")
+    print(labels:size())
+    print(labels:type())
+
+
+    result = loss_matrix:index(1,actions)
+    print("result")
+    print(result)
+
+    return
 end
 
 local function probability_of_actions(model_output, actions)
