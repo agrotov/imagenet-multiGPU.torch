@@ -287,6 +287,11 @@ function trainBatch(inputsCPU, labelsCPU)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
+
+      print("outputs before")
+      print(outputs:size())
+      print(outputs:type())
+
 --      err = criterion:forward(outputs, labels)
 --      local gradOutputs = criterion:backward(outputs, labels)
 --      model:backward(inputs, gradOutputs)
@@ -301,8 +306,11 @@ function trainBatch(inputsCPU, labelsCPU)
       local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
 
-      print "step"
-      err = bandit_criterion:forward(outputs, target)
+      print("outputs after")
+      print(outputs:size())
+      print(outputs:type())
+--      err = bandit_criterion:forward(outputs, target)
+      err = 0
 --      local gradOutputs = criterion:backward(outputs, target)
 --      model:backward(inputs, gradOutputs)
 
