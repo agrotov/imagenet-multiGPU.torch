@@ -70,7 +70,8 @@ end
 
 
 local function reward_for_actions(loss_matrix, actions, labels)
-    return loss_matrix:index(1,actions):gather(2,labels)
+    --return loss_matrix:index(1,actions):gather(2,labels)
+    return loss_matrix:index(1,actions)
 end
 
 local function probability_of_actions(model_output, actions)
