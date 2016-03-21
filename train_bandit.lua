@@ -115,7 +115,7 @@ end
 -- Custom AutoGrad MSE Criterion Loss Function designed to over/under predict.
 ------------------------------------------------------------------------------
 local autoMaximizationCriterion = function(prediciton, target)
-    return torch.sum(prediciton :cmul(target))
+    return torch.sum(prediciton:cmul(target))
 end
 
 
