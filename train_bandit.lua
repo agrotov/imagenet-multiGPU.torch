@@ -117,10 +117,10 @@ end
 local autoMaximizationCriterion = function(x, y)
     print ("autoMaximizationCriterion x")
     print(x)
-    print("x:size()")
-    print(x:size())
     print("x:type()")
     print(x:type())
+    print("x:size()")
+    print(x:size())
     print("x done")
     return torch.sum(torch.cmul(x:float(),y))
 end
