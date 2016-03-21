@@ -80,7 +80,7 @@ local function probability_of_actions(model_output, actions)
 end
 
 local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    return rewards:cdiv(probability_actions_student_model:cmul(probability_actions_teacher_model))
+    return torch.cdiv(rewards,torch.cmul(probability_actions_student_model,probability_actions_teacher_model))
 end
 
 local function load_rewards(file_name)
@@ -309,8 +309,8 @@ function trainBatch(inputsCPU, labelsCPU)
       print("outputs after")
       print(outputs:size())
       print(outputs:type())
---      err = bandit_criterion:forward(outputs, target)
-      err = 0
+      err = bandit_criterion:forward(outputs, target)
+--      err = 0
 --      local gradOutputs = criterion:backward(outputs, target)
 --      model:backward(inputs, gradOutputs)
 
