@@ -268,11 +268,14 @@ function trainBatch(inputsCPU, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs)
 
+      size_output = outputs:size()
+
 
       actions = sample_action(outputs)
-      p_of_actions = probability_of_actions(outputs, actions)
+      p_of_actions_teacher = probability_of_actions(outputs, actions)
+      p_of_actions_student = probability_of_actions(outputs, actions)
       rewards = reward_for_actions(loss_matrix, actions, labels)
-      target = compute_target()
+      target = compute_target(size_output, rewards, p_of_actions_student, p_of_actions_teacher)
 
       return err, gradParameters
    end
