@@ -115,10 +115,10 @@ end
 -- Custom AutoGrad MSE Criterion Loss Function designed to over/under predict.
 ------------------------------------------------------------------------------
 local autoMaximizationCriterion = function(prediciton, target)
-    print ("prediciton")
-    print(prediction)
-    print(prediciton:size())
-    print(prediciton:type())
+--    print ("prediciton")
+--    print(prediction)
+--    print(prediciton:size())
+--    print(prediciton:type())
     return torch.sum(torch.cmul(prediciton:float(),target))
 end
 
@@ -214,6 +214,9 @@ function train()
    local tm = torch.Timer()
    top1_epoch = 0
    loss_epoch = 0
+
+   opt.epochSize = 1
+
    for i=1,opt.epochSize do
       -- queue jobs to data-workers
       donkeys:addjob(
@@ -298,6 +301,7 @@ function trainBatch(inputsCPU, labelsCPU)
       target = compute_target(size_output, rewards, p_of_actions_student, p_of_actions_teacher)
 
 
+      print "step"
       err = bandit_criterion:forward(outputs, target)
 --      local gradOutputs = criterion:backward(outputs, target)
 --      model:backward(inputs, gradOutputs)
@@ -306,8 +310,6 @@ function trainBatch(inputsCPU, labelsCPU)
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
-
-   exit()
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
