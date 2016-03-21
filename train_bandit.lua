@@ -116,6 +116,7 @@ end
 ------------------------------------------------------------------------------
 local autoMaximizationCriterion = function(prediciton, target)
     print ("prediciton")
+    print(prediction)
     print(prediciton:size())
     print(prediciton:type())
     return torch.sum(torch.cmul(prediciton:float(),target))
@@ -305,6 +306,8 @@ function trainBatch(inputsCPU, labelsCPU)
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
+
+   exit()
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
