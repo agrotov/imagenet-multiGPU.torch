@@ -277,6 +277,8 @@ function trainBatch(inputsCPU, labelsCPU)
       rewards = reward_for_actions(loss_matrix, actions, labels)
       target = compute_target(size_output, rewards, p_of_actions_student, p_of_actions_teacher)
 
+      print(target)
+
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
