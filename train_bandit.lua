@@ -174,7 +174,7 @@ end
 
 
 -- Create an autograd criterion using the loss function above.
-criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
+--criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
 
 
 
