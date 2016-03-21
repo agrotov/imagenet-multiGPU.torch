@@ -18,6 +18,9 @@ function load_rewards_csv(filePath)
     -- Read CSV file
 
     -- Split string
+
+    print("load_rewards_csv")
+
     function string:split(sep)
       local sep, fields = sep, {}
       local pattern = string.format("([^%s]+)", sep)
@@ -54,6 +57,7 @@ function load_rewards_csv(filePath)
     end
 
     csvFile:close()
+
 
     return data
 end
