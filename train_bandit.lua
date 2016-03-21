@@ -91,6 +91,8 @@ function train()
    -- set the dropouts to training mode
    model:training()
 
+   loss_matrix = load_rewards("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+
    local tm = torch.Timer()
    top1_epoch = 0
    loss_epoch = 0
