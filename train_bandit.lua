@@ -10,6 +10,51 @@ require 'optim'
 require("csvigo")
 autograd = require 'autograd'
 
+
+
+local function sample_action(model_output)
+    local result = torch.multinomial(model_output,1)
+    return result
+end
+
+
+local function reward_for_actions(loss_matrix, actions, labels)
+    return loss_matrix:index(1,actions):gather(2,labels)
+end
+
+local function probability_of_actions(model_output, actions)
+    return model_output:gather(2,actions)
+end
+
+local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+    return rewards:cdiv(probability_actions_student_model:cmul(probability_actions_teacher_model))
+end
+
+local function load_rewards(file_name)
+    return csvigo.load({path = file_name, mode = "large"})
+end
+
+local function compute_target(size, rewards, probability_actions_student_model, probability_actions_teacher_model)
+    target = torch.Tensor(size)
+    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+    target:scatter(2,actions,weight)
+    return weight
+end
+
+
+------------------------------------------------------------------------------
+-- Custom AutoGrad MSE Criterion Loss Function designed to over/under predict.
+------------------------------------------------------------------------------
+local autoMaximizationCriterion = function(prediciton, target)
+  return prediciton * target
+end
+
+
+-- Create an autograd criterion using the loss function above.
+--criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
+
+
+
 --[[
    1. Setup SGD optimization state and learning rate schedule
    2. Create loggers.
@@ -135,48 +180,6 @@ function train()
    torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 end -- of train()
 
-
-
-local function sample_action(model_output)
-    local result = torch.multinomial(model_output,1)
-    return result
-end
-
-
-local function reward_for_actions(loss_matrix, actions, labels)
-    return loss_matrix:index(1,actions):gather(2,labels)
-end
-
-local function probability_of_actions(model_output, actions)
-    return model_output:gather(2,actions)
-end
-
-local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    return rewards:cdiv(probability_actions_student_model:cmul(probability_actions_teacher_model))
-end
-
-local function load_rewards(file_name)
-    return csvigo.load({path = file_name, mode = "large"})
-end
-
-local function compute_target(size, rewards, probability_actions_student_model, probability_actions_teacher_model)
-    target = torch.Tensor(size)
-    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    target:scatter(2,actions,weight)
-    return weight
-end
-
-
-------------------------------------------------------------------------------
--- Custom AutoGrad MSE Criterion Loss Function designed to over/under predict.
-------------------------------------------------------------------------------
-local autoMaximizationCriterion = function(prediciton, target)
-  return prediciton * target
-end
-
-
--- Create an autograd criterion using the loss function above.
---criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
 
 
 
