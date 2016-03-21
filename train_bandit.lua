@@ -70,38 +70,9 @@ end
 
 
 local function reward_for_actions(loss_matrix, actions, labels)
-    --return loss_matrix:index(1,actions):gather(2,labels)
---    print("loss_matrix")
---    print(loss_matrix:size())
---    print(loss_matrix:type())
---
---    print("actions")
---    print(actions:size())
---    print(actions:type())
---
---    print("labels")
---    print(labels:size())
---    print(labels:type())
-
-    temp = loss_matrix:index(1,actions:view(actions:nElement()))
-
-
-    print("temp")
-    print(temp:size())
-    print(temp:type())
-
-
-    print("labels")
-    print(labels:size())
-    print(labels:type())
-
-    result = temp:gather(2,labels:long():view(labels:nElement(),1))
-
---    result = loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long())
---    print("result")
---    print(result)
-
-    return
+--    temp = loss_matrix:index(1,actions:view(actions:nElement()))
+--    result = temp:gather(2,labels:long():view(labels:nElement(),1))
+    return  loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1))
 end
 
 local function probability_of_actions(model_output, actions)
