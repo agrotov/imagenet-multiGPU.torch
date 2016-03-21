@@ -283,7 +283,7 @@ function trainBatch(inputsCPU, labelsCPU)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-   local err, outputs
+--   local err, outputs
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
