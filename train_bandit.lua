@@ -87,7 +87,7 @@ local function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
-local function compute_target(size, rewards, probability_actions_student_model, probability_actions_teacher_model)
+local function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size)
 
 --    print("target")
@@ -298,7 +298,7 @@ function trainBatch(inputsCPU, labelsCPU)
       local p_of_actions_teacher = probability_of_actions(outputs, actions)
       local p_of_actions_student = probability_of_actions(outputs, actions)
       local rewards = reward_for_actions(loss_matrix, actions, labels)
-      local target = compute_target(size_output, rewards, p_of_actions_student, p_of_actions_teacher)
+      local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
 
       print "step"
