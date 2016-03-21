@@ -89,9 +89,25 @@ end
 
 local function compute_target(size, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size)
+
+--    print("target")
+--    print(target:size())
+--    pring(target:type())
+
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+
+--    print("weight")
+--    print(weight:size())
+--    pring(weight:type())
+
     target:scatter(2,actions,weight)
-    return weight
+
+--    print("target:scatter")
+--    print(target:size())
+--    pring(target:type())
+
+
+    return target
 end
 
 
