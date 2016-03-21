@@ -120,7 +120,7 @@ end
 
 
 -- Create an autograd criterion using the loss function above.
---criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
+bandit_criterion = autograd.nn.AutoCriterion('AutoMax')(autoMaximizationCriterion)
 
 
 
@@ -280,9 +280,9 @@ function trainBatch(inputsCPU, labelsCPU)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
-      err = criterion:forward(outputs, labels)
-      local gradOutputs = criterion:backward(outputs, labels)
-      model:backward(inputs, gradOutputs)
+--      err = criterion:forward(outputs, labels)
+--      local gradOutputs = criterion:backward(outputs, labels)
+--      model:backward(inputs, gradOutputs)
 
       size_output = outputs:size()
 
@@ -293,7 +293,11 @@ function trainBatch(inputsCPU, labelsCPU)
       rewards = reward_for_actions(loss_matrix, actions, labels)
       target = compute_target(size_output, rewards, p_of_actions_student, p_of_actions_teacher)
 
-      print(target)
+
+      err = bandit_criterion:forward(outputs, target)
+--      local gradOutputs = criterion:backward(outputs, target)
+--      model:backward(inputs, gradOutputs)
+
 
       return err, gradParameters
    end
