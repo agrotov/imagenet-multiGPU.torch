@@ -65,6 +65,8 @@ end
 
 
 local function sample_action(model_output)
+    print("sample_action")
+    print(torch.multinomial(model_output,1))
     return torch.LongTensor(torch.multinomial(model_output,1))
 end
 
