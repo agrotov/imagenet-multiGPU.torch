@@ -209,6 +209,8 @@ function train()
    -- set the dropouts to training mode
    model:training()
 
+--   modelf, params_f = autograd.functionalize(model)
+
    loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
@@ -311,8 +313,8 @@ function trainBatch(inputsCPU, labelsCPU)
       print(outputs:type())
       err = bandit_criterion:forward(outputs, target)
 --      err = 0
---      local gradOutputs = criterion:backward(outputs, target)
---      model:backward(inputs, gradOutputs)
+      local gradOutputs = criterion:backward(outputs, target)
+      model:backward(inputs, gradOutputs)
 
 
       return err, gradParameters
