@@ -269,7 +269,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       actions = sample_action(outputs)
       p_of_actions = probability_of_actions(outputs, actions)
-      --rewards = reward_for_actions(loss_matrix, actions, labels)
+      rewards = reward_for_actions(loss_matrix, actions, labels)
       --target = compute_target()
 
       return err, gradParameters
