@@ -82,6 +82,19 @@ local function reward_for_actions(loss_matrix, actions, labels)
 --    print("labels")
 --    print(labels:size())
 --    print(labels:type())
+
+    temp = loss_matrix:index(1,actions:view(actions:nElement()))
+
+
+    print("temp")
+    print(temp:size())
+    print(temp:type())
+
+
+    print("labels")
+    print(labels:size())
+    print(labels:type())
+
 --
 
     result = loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long())
