@@ -309,23 +309,24 @@ function trainBatch(inputsCPU, labelsCPU)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 --      local cuda_target = torch.CudaTensor(target)
 
-      print("target")
-      print(target:size())
-      print(target:type())
-      print("outputs before")
-      print(outputs:size())
-      print(outputs:type())
+--      print("target")
+--      print(target:size())
+--      print(target:type())
+--      print("outputs before")
+--      print(outputs:size())
+--      print(outputs:type())
 
---      err = bandit_criterion:forward(outputs, cuda_target)
+      err = criterion:forward(outputs, labels)
 --      err = 0
---      local gradOutputs = criterion:backward(outputs, target)
-      grads_ones = torch.Tensor(outputs:size())
-      s = grads_ones:storage()
-      for i=1,s:size() do -- fill up the Storage
-        s[i] = 1
-      end
+      local gradOutputs = criterion:backward(outputs, target)
+--      grads_ones = torch.Tensor(outputs:size())
+--      s = grads_ones:storage()
+--      for i=1,s:size() do -- fill up the Storage
+--        s[i] = 1
+--      end
 
-      model:backward(inputs, grads_ones)
+      model:backward(inputs, gradOutputs)
+
 
 
       return err, gradParameters
