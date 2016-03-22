@@ -123,7 +123,7 @@ local autoMaximizationCriterion = function(x, y)
     print(x:size())
     print(x)
     print("x done")
-    return torch.sum(torch.cmul(x:float(),y))
+    return torch.sum(torch.cmul(x,y))
 end
 
 
@@ -302,7 +302,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --      local gradOutputs = criterion:backward(outputs, labels)
 --      model:backward(inputs, gradOutputs)
 
-      size_output = outputs:size()
+      local size_output = outputs:size()
 
 
       local actions = sample_action(outputs)
@@ -310,12 +310,12 @@ function trainBatch(inputsCPU, labelsCPU)
       local p_of_actions_student = probability_of_actions(outputs, actions)
       local rewards = reward_for_actions(loss_matrix, actions, labels)
       local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
-
+      local cuda_target = torch.CudaTensor(target)
 
       print("outputs after")
       print(outputs:size())
       print(outputs:type())
-      err = bandit_criterion:forward(outputs, target)
+      err = bandit_criterion:forward(outputs, cuda_target)
 --      err = 0
       local gradOutputs = criterion:backward(outputs, target)
       model:backward(inputs, gradOutputs)
