@@ -294,9 +294,6 @@ function trainBatch(inputsCPU, labelsCPU)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
 
---      print("outputs before")
---      print(outputs:size())
---      print(outputs:type())
 
 --      err = criterion:forward(outputs, labels)
 --      local gradOutputs = criterion:backward(outputs, labels)
@@ -315,6 +312,10 @@ function trainBatch(inputsCPU, labelsCPU)
       print("target")
       print(target:size())
       print(target:type())
+      print("outputs before")
+      print(outputs:size())
+      print(outputs:type())
+
 --      err = bandit_criterion:forward(outputs, cuda_target)
 --      err = 0
 --      local gradOutputs = criterion:backward(outputs, target)
