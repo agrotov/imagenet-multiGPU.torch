@@ -319,6 +319,7 @@ function trainBatch(inputsCPU, labelsCPU)
       err = criterion:forward(outputs, labels)
 --      err = 0
       local gradOutputs = criterion:backward(outputs, target)
+      model:backward(inputs, gradOutputs)
 --      grads_ones = torch.Tensor(outputs:size())
 --      s = grads_ones:storage()
 --      for i=1,s:size() do -- fill up the Storage
@@ -344,7 +345,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
 
 
-   optim.sgd(feval, parameters, optimState)
+   optim.sgd(feva_bandit, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
