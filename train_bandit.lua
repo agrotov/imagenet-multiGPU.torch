@@ -94,7 +94,9 @@ local function compute_target(size, actions, rewards, probability_actions_studen
 --    print(target:size())
 --    pring(target:type())
 
-    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+--    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+
+    weight =  rewards
 
 --    print("weight")
 --    print(weight:size())
