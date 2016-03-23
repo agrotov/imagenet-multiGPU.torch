@@ -300,6 +300,10 @@ function trainBatch(inputsCPU, labelsCPU)
       actions = sample_action(outputs)
 
       print(actions)
+      if actions[0] == 0 then
+          print(outputs)
+      end
+
 
       if torch.sum(inputs:ne(inputs)) > 0 then
           print("NaN in inputs")
