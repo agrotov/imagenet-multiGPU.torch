@@ -351,10 +351,13 @@ function trainBatch(inputsCPU, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labels)
 
 
---      print("gradOutputs")
---      print(gradOutputs)
---      print(gradOutputs:size())
---      print(gradOutputs:type())
+      print("gradOutputs")
+      print(gradOutputs:size())
+      print(gradOutputs:type())
+
+      print("target")
+      print(target:size())
+      print(target:type())
 
 --      local my_grads = torch.Tensor(gradOutputs)
 
