@@ -353,9 +353,9 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --
 --      local my_grads = torch.Tensor(gradOutputs)
-      print("gpu_target")
-      print(torch.max(gpu_target))
-      print(torch.min(gpu_target))
+      print("rewards")
+      print(torch.max(rewards))
+      print(torch.min(rewards))
 
 
       model:backward(inputs, gpu_target)
