@@ -343,6 +343,7 @@ function trainBatch(inputsCPU, labelsCPU)
       local p_of_actions_teacher = probability_of_actions(outputs, actions)
       local p_of_actions_student = probability_of_actions(outputs, actions)
       local rewards = reward_for_actions(loss_matrix, actions, labels)
+      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
 
 
