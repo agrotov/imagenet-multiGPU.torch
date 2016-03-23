@@ -299,19 +299,21 @@ function trainBatch(inputsCPU, labelsCPU)
       size_output = outputs:size()
       actions = sample_action(outputs)
 
-      if actions[1][1] == 0 then
-          print(target)
+      print(actions)
+
+      if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
+          print("NaN in actions")
       end
 
+      if torch.min(outputs) ~= torch.min(outputs) or torch.sum(outputs:ne(outputs)) > 0 then
+          print("NaN in outputs")
+      end
 
-      if torch.sum(inputs:ne(inputs)) > 0 then
+      if torch.min(inputs) ~= torch.min(inputs) or torch.sum(inputs:ne(inputs)) > 0 then
           print("NaN in inputs")
       end
 
 
-      if torch.sum(outputs:ne(outputs)) > 0 then
-          print(target)
-      end
 
 
 
