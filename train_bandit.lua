@@ -325,8 +325,8 @@ function trainBatch(inputsCPU, labelsCPU)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
 
-      print(target)
-      
+--      print(target)
+
       gpu_target = target:cuda()
 
       if torch.sum(target:ne(target)) > 0 then
@@ -346,7 +346,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --      local my_grads = torch.Tensor(gradOutputs)
 
-      model:backward(inputs, gpu_target)
+--      model:backward(inputs, gpu_target)
       return err, gradParameters
    end
 
