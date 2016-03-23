@@ -289,15 +289,15 @@ function trainBatch(inputsCPU, labelsCPU)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-   local err, outputs, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target
+   local err, outputs, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
 
 
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
 
-      local size_output = outputs:size()
-      local actions = sample_action(outputs)
+      size_output = outputs:size()
+      actions = sample_action(outputs)
 
       if torch.sum(inputs:ne(inputs)) > 0 then
           print("NaN in inputs")
