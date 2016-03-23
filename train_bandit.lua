@@ -300,7 +300,7 @@ function trainBatch(inputsCPU, labelsCPU)
       actions = sample_action(outputs)
 
       if actions[1][1] == 0 then
-          print(outputs)
+          print(inputs)
       end
 
 
