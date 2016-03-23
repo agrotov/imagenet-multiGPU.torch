@@ -298,6 +298,9 @@ function trainBatch(inputsCPU, labelsCPU)
 
       local size_output = outputs:size()
       local actions = sample_action(outputs)
+      print("actions")
+      print(actions)
+
       local p_of_actions_teacher = probability_of_actions(outputs, actions)
       local p_of_actions_student = probability_of_actions(outputs, actions)
       local rewards = reward_for_actions(loss_matrix, actions, labels)
