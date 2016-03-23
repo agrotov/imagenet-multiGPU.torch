@@ -350,6 +350,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       print(p_of_actions_teacher)
       print("outputs")
+      print(outputs.size())
       print(torch.max(p_of_actions_teacher))
       print(torch.min(p_of_actions_teacher))
 
