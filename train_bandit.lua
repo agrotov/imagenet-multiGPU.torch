@@ -303,6 +303,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
           print("NaN in actions")
+          print(target)
       end
 
       if torch.min(outputs) ~= torch.min(outputs) or torch.sum(outputs:ne(outputs)) > 0 then
