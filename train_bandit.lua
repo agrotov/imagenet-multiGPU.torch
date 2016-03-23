@@ -221,7 +221,7 @@ function train()
    top1_epoch = 0
    loss_epoch = 0
 
---   opt.epochSize = 1
+   opt.epochSize = 1
 
    for i=1,opt.epochSize do
       -- queue jobs to data-workers
