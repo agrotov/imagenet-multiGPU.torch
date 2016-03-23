@@ -347,6 +347,9 @@ function trainBatch(inputsCPU, labelsCPU)
 --      local my_grads = torch.Tensor(gradOutputs)
 
       model:backward(inputs, gpu_target)
+
+      print(model:getParameters())
+
       return err, gradParameters
    end
 
