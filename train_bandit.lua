@@ -299,7 +299,7 @@ function trainBatch(inputsCPU, labelsCPU)
       size_output = outputs:size()
       actions = sample_action(outputs)
 
-      print(target)
+
 
       if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
           print("NaN in actions")
@@ -323,6 +323,10 @@ function trainBatch(inputsCPU, labelsCPU)
       p_of_actions_student = probability_of_actions(outputs, actions)
       rewards = reward_for_actions(loss_matrix, actions, labels)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
+
+
+      print(target)
+      
       gpu_target = target:cuda()
 
       if torch.sum(target:ne(target)) > 0 then
