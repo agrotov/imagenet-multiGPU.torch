@@ -337,6 +337,15 @@ function trainBatch(inputsCPU, labelsCPU)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
+
+
+      local actions = sample_action(outputs)
+      local p_of_actions_teacher = probability_of_actions(outputs, actions)
+      local p_of_actions_student = probability_of_actions(outputs, actions)
+      local rewards = reward_for_actions(loss_matrix, actions, labels)
+
+
+
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs)
