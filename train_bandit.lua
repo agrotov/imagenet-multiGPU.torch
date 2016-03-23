@@ -316,16 +316,16 @@ function trainBatch(inputsCPU, labelsCPU)
 --      print(outputs:size())
 --      print(outputs:type())
 
-      err = criterion:forward(outputs, labels)
+--      err = criterion:forward(outputs, labels)
 --      err = 0
-      local gradOutputs = criterion:backward(outputs, target)
+--      local gradOutputs = criterion:backward(outputs, target)
 --      grads_ones = torch.Tensor(outputs:size())
 --      s = grads_ones:storage()
 --      for i=1,s:size() do -- fill up the Storage
 --        s[i] = 1
 --      end
 
-      model:backward(inputs, gradOutputs)
+--      model:backward(inputs, gradOutputs)
 
 
 
