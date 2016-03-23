@@ -316,7 +316,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --      print(outputs:size())
 --      print(outputs:type())
 
---      err = criterion:forward(outputs, labels)
+      err = criterion:forward(outputs, labels)
 --      err = 0
 --      local gradOutputs = criterion:backward(outputs, target)
 --      grads_ones = torch.Tensor(outputs:size())
