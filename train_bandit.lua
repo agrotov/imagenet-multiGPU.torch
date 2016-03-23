@@ -90,41 +90,13 @@ end
 local function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size):fill(0)
 
-    print("target init")
-    print(torch.max(target))
-    print(torch.min(target))
-
-
---    print("target")
---    print(target:size())
---    pring(target:type())
-
 --    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
     local weight =  torch.cmul(rewards,probability_actions_student_model)
 
 
-    print("weight")
-    print(weight)
-    print(torch.max(weight))
-    print(torch.min(weight))
-
-
---    print("weight")
---    print(weight:size())
---    pring(weight:type())
 
     target:scatter(2,actions,weight)
-
---    print("target:scatter")
---    print(target:size())
---    pring(target:type())
-
-    print("target finish init")
-    print(torch.max(target))
-    print(torch.min(target))
-
-
 
     return target
 end
