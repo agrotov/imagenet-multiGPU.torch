@@ -304,7 +304,7 @@ function trainBatch(inputsCPU, labelsCPU)
       local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
       local gpu_target = target:cuda()
 
-      mean_reward = rewards:mean()
+      err = rewards:mean()
 
 
       print("rewards")
@@ -312,8 +312,6 @@ function trainBatch(inputsCPU, labelsCPU)
       print("mean_reward")
       print(mean_reward)
 
-
-      err = 0
 
 --      local my_grads = torch.Tensor(gradOutputs)
 
