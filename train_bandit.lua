@@ -289,49 +289,7 @@ function trainBatch(inputsCPU, labelsCPU)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
---   local err, outputs
-   feval_bandit = function(x)
-      model:zeroGradParameters()
-      outputs = model:forward(inputs)
-
-
---      err = criterion:forward(outputs, labels)
---      local gradOutputs = criterion:backward(outputs, labels)
---      model:backward(inputs, gradOutputs)
-
-      local size_output = outputs:size()
-
-
-      local actions = sample_action(outputs)
-      local p_of_actions_teacher = probability_of_actions(outputs, actions)
-      local p_of_actions_student = probability_of_actions(outputs, actions)
-      local rewards = reward_for_actions(loss_matrix, actions, labels)
-      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
---      local cuda_target = torch.CudaTensor(target)
-
---      print("target")
---      print(target:size())
---      print(target:type())
---      print("outputs before")
---      print(outputs:size())
---      print(outputs:type())
-
-      err = criterion:forward(outputs, labels)
---      err = 0
-      local gradOutputs = criterion:backward(outputs, target)
-      model:backward(inputs, gradOutputs)
---      grads_ones = torch.Tensor(outputs:size())
---      s = grads_ones:storage()
---      for i=1,s:size() do -- fill up the Storage
---        s[i] = 1
---      end
-
-      model:backward(inputs, gradOutputs)
-
-
-
-      return err, gradParameters
-   end
+   local err, outputs
 
 
    feval = function(x)
