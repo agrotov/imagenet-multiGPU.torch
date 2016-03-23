@@ -356,7 +356,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --      print(gradOutputs:size())
 --      print(gradOutputs:type())
 
-      local my_grads = torch.Tensor(gradOutputs)
+--      local my_grads = torch.Tensor(gradOutputs)
 
       model:backward(inputs, gradOutputs)
       return err, gradParameters
