@@ -306,17 +306,17 @@ function trainBatch(inputsCPU, labelsCPU)
 
       err = rewards:mean()
 
-
-      print("rewards")
-      print(rewards)
-      print("mean_reward")
-      print(mean_reward)
-
-
+--
+--      print("rewards")
+--      print(rewards)
+--      print("mean_reward")
+--      print(mean_reward)
+--
+--
 --      local my_grads = torch.Tensor(gradOutputs)
 
       model:backward(inputs, gpu_target)
-      return mean_reward, gradParameters
+      return err, gradParameters
    end
 
 
