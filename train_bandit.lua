@@ -320,12 +320,10 @@ function trainBatch(inputsCPU, labelsCPU)
 
 
       p_of_actions_teacher = probability_of_actions(outputs, actions)
-      print(torch.max(p_of_actions_teacher))
-      print(torch.min(p_of_actions_teacher))
-
-      print(p_of_actions_teacher)
-      print("outputs")
-      print(outputs:size())
+--
+--      print(p_of_actions_teacher)
+--      print("outputs")
+--      print(outputs:size())
 
 
       p_of_actions_student = probability_of_actions(outputs, actions)
@@ -345,6 +343,8 @@ function trainBatch(inputsCPU, labelsCPU)
 
       err = rewards:mean()
 
+
+
 --
 --      print("rewards")
 --      print(rewards)
@@ -353,6 +353,10 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --
 --      local my_grads = torch.Tensor(gradOutputs)
+
+      print(torch.max(p_of_actions_teacher))
+      print(torch.min(p_of_actions_teacher))
+
 
       model:backward(inputs, gpu_target)
 
