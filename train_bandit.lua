@@ -88,7 +88,7 @@ local function load_rewards(file_name)
 end
 
 local function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
-    target = torch.Tensor(size)
+    target = torch.Tensor(size):fill(0)
 
     print("target init")
     print(torch.max(target))
