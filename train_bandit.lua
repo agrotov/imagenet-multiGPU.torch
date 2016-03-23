@@ -76,7 +76,7 @@ local function reward_for_actions(loss_matrix, actions, labels)
 end
 
 local function probability_of_actions(model_output, actions)
-    return torch.cdiv(model_output:float():gather(2,actions), torch.sum(model_output:float(), 2))
+    return torch.cdiv(model_output:float():gather(2,actions), torch.sum(model_output:float(), 1))
 end
 
 local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
