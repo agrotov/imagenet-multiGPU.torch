@@ -349,6 +349,13 @@ function trainBatch(inputsCPU, labelsCPU)
 
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
+
+
+      print("gradOutputs")
+      print(gradOutputs)
+      print(gradOutputs:size())
+      print(gradOutputs:type())
+
       model:backward(inputs, gradOutputs)
       return err, gradParameters
    end
