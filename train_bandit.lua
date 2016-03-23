@@ -356,9 +356,15 @@ function trainBatch(inputsCPU, labelsCPU)
       print("target")
       print(torch.max(p_of_actions_teacher))
       print(torch.min(p_of_actions_teacher))
+      print("probs")
       print(torch.max(p_of_actions_student))
       print(torch.min(p_of_actions_student))
-
+      print("rewards")
+      print(torch.max(rewards))
+      print(torch.min(rewards))
+      print("outputs")
+      print(torch.max(outputs))
+      print(torch.min(outputs))
 
 
       model:backward(inputs, gpu_target)
