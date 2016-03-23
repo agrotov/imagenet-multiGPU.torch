@@ -351,12 +351,14 @@ function trainBatch(inputsCPU, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labels)
 
 
-      print("gradOutputs")
-      print(gradOutputs)
-      print(gradOutputs:size())
-      print(gradOutputs:type())
+--      print("gradOutputs")
+--      print(gradOutputs)
+--      print(gradOutputs:size())
+--      print(gradOutputs:type())
 
-      model:backward(inputs, gradOutputs)
+      my_grads = torch.Tensor(size_output)
+
+      model:backward(inputs, my_grads)
       return err, gradParameters
    end
 
