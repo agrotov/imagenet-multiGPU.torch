@@ -348,7 +348,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       model:backward(inputs, gpu_target)
 
-      print(model:getParameters())
+      print(torch.max(model:getParameters()))
 
       return err, gradParameters
    end
