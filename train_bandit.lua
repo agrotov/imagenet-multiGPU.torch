@@ -96,7 +96,7 @@ local function compute_target(size, actions, rewards, probability_actions_studen
 
 --    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
-    weight =  torch:cmul(rewards,probability_actions_student_model)
+    weight =  torch.cmul(rewards,probability_actions_student_model)
 
 --    print("weight")
 --    print(weight:size())
