@@ -307,6 +307,12 @@ function trainBatch(inputsCPU, labelsCPU)
       mean_reward = rewards:mean()
 
 
+      print("rewards")
+      print(rewards)
+      print("mean_reward")
+      print(mean_reward)
+
+
       err = 0
 
 --      local my_grads = torch.Tensor(gradOutputs)
