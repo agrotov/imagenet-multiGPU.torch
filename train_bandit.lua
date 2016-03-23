@@ -337,7 +337,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       if torch.sum(target:ne(target)) > 0 then
           print("NaN in target")
-          os.exit()
+--          os.exit()
       end
 
 
