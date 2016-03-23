@@ -348,7 +348,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       model:backward(inputs, gpu_target)
 
-      print("target")
+      print("model_output")
       print(torch.max(model_output))
       print(torch.min(model_output))
 
