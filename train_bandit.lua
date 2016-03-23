@@ -299,7 +299,7 @@ function trainBatch(inputsCPU, labelsCPU)
       size_output = outputs:size()
       actions = sample_action(outputs)
 
-      if actions[0] == 0 then
+      if actions[1][1] == 0 then
           print(outputs)
       end
 
