@@ -338,7 +338,7 @@ function trainBatch(inputsCPU, labelsCPU)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
 
-
+      local size_output = outputs:size()
       local actions = sample_action(outputs)
       local p_of_actions_teacher = probability_of_actions(outputs, actions)
       local p_of_actions_student = probability_of_actions(outputs, actions)
