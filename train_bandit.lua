@@ -80,7 +80,7 @@ local function probability_of_actions(model_output, actions)
 end
 
 local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    return torch.cdiv(rewards,torch.cmul(probability_actions_student_model,probability_actions_teacher_model))
+    return torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
 end
 
 local function load_rewards(file_name)
@@ -353,9 +353,9 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --
 --      local my_grads = torch.Tensor(gradOutputs)
-      print("rewards")
-      print(torch.max(rewards))
-      print(torch.min(rewards))
+      print("target")
+      print(torch.max(target))
+      print(torch.min(target))
 
 
       model:backward(inputs, gpu_target)
