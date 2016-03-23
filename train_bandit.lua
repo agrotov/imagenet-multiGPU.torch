@@ -98,6 +98,13 @@ local function compute_target(size, actions, rewards, probability_actions_studen
 
     weight =  torch.cmul(rewards,probability_actions_student_model)
 
+
+    print("weight")
+    print(weight)
+    print(torch.max(weight))
+    print(torch.min(weight))
+
+
 --    print("weight")
 --    print(weight:size())
 --    pring(weight:type())
@@ -356,14 +363,14 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --      local my_grads = torch.Tensor(gradOutputs)
       print("target")
-      print(target)
+--      print(target)
       print(torch.max(target))
       print(torch.min(target))
       print("probs")
       print(torch.max(p_of_actions_student))
       print(torch.min(p_of_actions_student))
       print("rewards")
-      print(rewards)
+--      print(rewards)
       print(torch.max(rewards))
       print(torch.min(rewards))
       print("outputs")
