@@ -325,7 +325,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --        s[i] = 1
 --      end
 
---      model:backward(inputs, gradOutputs)
+      model:backward(inputs, gradOutputs)
 
 
 
