@@ -320,6 +320,14 @@ function trainBatch(inputsCPU, labelsCPU)
 
 
       p_of_actions_teacher = probability_of_actions(outputs, actions)
+
+      print(p_of_actions_teacher)
+      print("outputs")
+      print(outputs:size())
+      print(torch.max(p_of_actions_teacher))
+      print(torch.min(p_of_actions_teacher))
+
+
       p_of_actions_student = probability_of_actions(outputs, actions)
       rewards = reward_for_actions(loss_matrix, actions, labels)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
@@ -348,11 +356,6 @@ function trainBatch(inputsCPU, labelsCPU)
 
       model:backward(inputs, gpu_target)
 
-      print(p_of_actions_teacher)
-      print("outputs")
-      print(outputs.size())
-      print(torch.max(p_of_actions_teacher))
-      print(torch.min(p_of_actions_teacher))
 
       return err, gradParameters
    end
