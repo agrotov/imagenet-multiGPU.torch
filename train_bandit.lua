@@ -290,7 +290,7 @@ function trainBatch(inputsCPU, labelsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
 --   local err, outputs
-   feval = function(x)
+   feva_bandit = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
 
@@ -331,6 +331,19 @@ function trainBatch(inputsCPU, labelsCPU)
 
       return err, gradParameters
    end
+
+
+   feval = function(x)
+      model:zeroGradParameters()
+      outputs = model:forward(inputs)
+      err = criterion:forward(outputs, labels)
+      local gradOutputs = criterion:backward(outputs, labels)
+      model:backward(inputs, gradOutputs)
+      return err, gradParameters
+   end
+
+
+
    optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
