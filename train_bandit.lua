@@ -304,13 +304,15 @@ function trainBatch(inputsCPU, labelsCPU)
       local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
       local gpu_target = target:cuda()
 
+      mean_reward = rewards:mean()
+
 
       err = 0
 
 --      local my_grads = torch.Tensor(gradOutputs)
 
       model:backward(inputs, gpu_target)
-      return err, gradParameters
+      return mean_reward, gradParameters
    end
 
 
