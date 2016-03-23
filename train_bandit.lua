@@ -307,7 +307,7 @@ function trainBatch(inputsCPU, labelsCPU)
 
       if torch.sum(outputs:ne(outputs)) > 0 then
           print("NaN in output")
-          exit()
+          return 1000, gradParameters
       end
 
 
