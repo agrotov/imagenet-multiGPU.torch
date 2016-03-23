@@ -9,7 +9,7 @@
 require 'optim'
 require("csvigo")
 autograd = require 'autograd'
-
+require("os")
 
 
 
@@ -316,6 +316,12 @@ function trainBatch(inputsCPU, labelsCPU)
       local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
       local gpu_target = target:cuda()
 
+      if torch.sum(target:ne(target)) > 0 then
+          print("NaN in target")
+          os.exit()
+      end
+
+
       err = rewards:mean()
 
 --
@@ -327,7 +333,7 @@ function trainBatch(inputsCPU, labelsCPU)
 --
 --      local my_grads = torch.Tensor(gradOutputs)
 
---      model:backward(inputs, gpu_target)
+      model:backward(inputs, gpu_target)
       return err, gradParameters
    end
 
