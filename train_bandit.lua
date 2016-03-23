@@ -299,7 +299,7 @@ function trainBatch(inputsCPU, labelsCPU)
       local size_output = outputs:size()
       local actions = sample_action(outputs)
 
-      if torch.sum(a:ne(a)) > 0 then
+      if torch.sum(outputs:ne(outputs)) > 0 then
           print("NaN in output")
           exit()
       end
