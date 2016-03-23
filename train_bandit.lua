@@ -289,7 +289,7 @@ function trainBatch(inputsCPU, labelsCPU)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-   local err, outputs
+   local err, outputs, target
 
 
    feval = function(x)
@@ -305,15 +305,14 @@ function trainBatch(inputsCPU, labelsCPU)
 
 
       if torch.sum(outputs:ne(outputs)) > 0 then
-          print("NaN in output")
-          return 1000, gradParameters
+          print(target)
       end
 
 
       local p_of_actions_teacher = probability_of_actions(outputs, actions)
       local p_of_actions_student = probability_of_actions(outputs, actions)
       local rewards = reward_for_actions(loss_matrix, actions, labels)
-      local target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
+      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
       local gpu_target = target:cuda()
 
       if torch.sum(target:ne(target)) > 0 then
