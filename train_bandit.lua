@@ -66,14 +66,14 @@ end
 
 
 local function sample_action(model_output)
-    return torch.multinomial(model_output,1):long()
+    return torch.multinomial(model_output,10):long()
 end
 
 
 local function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
-    return  (1-loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
+    return  -(1-loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
 end
 
 local function probability_of_actions(model_output, actions)
