@@ -251,7 +251,7 @@ local parameters, gradParameters = model:getParameters()
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
 function trainBatch(inputsCPU, labelsCPU, optimState)
 
-
+   batchNumber = batchNumber or 1
 
    cutorch.synchronize()
    collectgarbage()
