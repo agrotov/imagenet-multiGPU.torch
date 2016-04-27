@@ -12,7 +12,6 @@ paths.dofile('dataset-mnist.lua')
 require 'pl'
 --torch.setdefaulttensortype('torch.CudaTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
-local ffi = require 'ffi'
 
 ----------------------------------------------------------------------
 -- parse command-line options
@@ -130,10 +129,10 @@ print('<mnist> using model:')
 -- loss function: negative log-likelihood
 --
 model:add(nn.LogSoftMax())
-model:cuda()
-cudnn.convert(model, cudnn)
+--model:cuda()
+--cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
-criterion:cuda()
+--criterion:cuda()
 
 print(model)
 ----------------------------------------------------------------------
