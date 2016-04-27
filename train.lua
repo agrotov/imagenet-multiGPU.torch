@@ -136,7 +136,6 @@ local inputs = torch.CudaTensor()
 local labels = torch.CudaTensor()
 
 local outputs = torch.CudaTensor()
-local outputs_cpu = torch.Tensor()
 
 local timer = torch.Timer()
 local dataTimer = torch.Timer()
@@ -194,7 +193,5 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --          optimState.learningRate, dataLoadingTime))
 --
    dataTimer:reset()
-   outputs_cpu:resize(outputs:size()):copy(outputs)
---   print(outputs)
    return outputs
 end
