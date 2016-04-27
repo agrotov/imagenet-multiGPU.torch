@@ -273,7 +273,7 @@ function test(dataset)
       end
 
       -- test samples
-      local preds = model:forward(inputs)
+      local preds = model:forward(inputs:cuda())
 
       -- confusion:
       for i = 1,opt.batchSize do
