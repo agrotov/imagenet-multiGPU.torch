@@ -68,7 +68,7 @@ end
 
 local function sample_action(model_output)
 --    return torch.multinomial(model_output,1):long()
-    return torch.uniform():long()
+    return torch.random(0,10)
 end
 
 
