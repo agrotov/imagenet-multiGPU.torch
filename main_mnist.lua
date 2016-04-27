@@ -200,8 +200,7 @@ function train_mnist_bandit(dataset)
          learningRateDecay = 5e-7
       }
 
-      local err, outputs
-      trainBatch(inputs,targets, optimState)
+      outputs = trainBatch(inputs,targets, optimState)
 
       -- disp progress
       xlua.progress(t, dataset:size())
