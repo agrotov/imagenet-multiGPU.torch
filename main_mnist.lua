@@ -229,6 +229,7 @@ function train_mnist_bandit(dataset)
 --         learningRateDecay = 5e-7
 --      }
 --      optim.sgd(feval, parameters, sgdState)
+      print(targets)
 
       -- disp progress
       xlua.progress(t, dataset:size())
