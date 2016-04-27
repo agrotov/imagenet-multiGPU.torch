@@ -157,6 +157,8 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
+   print(labels)
+
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
