@@ -7,6 +7,7 @@ require 'image'
 require 'paths'
 paths.dofile('dataset-mnist.lua')
 require 'pl'
+require 'cutorch'
 
 ----------------------------------------------------------------------
 -- parse command-line options

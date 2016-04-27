@@ -9,7 +9,6 @@
 require 'optim'
 require("csvigo")
 require("os")
-require 'cutorch'
 
 
 
