@@ -161,7 +161,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       model:cuda():zeroGradParameters()
       outputs = model:cuda():forward(inputs)
       err = criterion:cuda():forward(outputs, labels)
---      local gradOutputs = criterion:cuda():backward(outputs, labels)
+      local gradOutputs = criterion:cuda():backward(outputs, labels)
 --      model:cuda():backward(inputs, gradOutputs)
 --      return err, gradParameters
    end
