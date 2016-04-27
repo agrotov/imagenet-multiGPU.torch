@@ -135,6 +135,8 @@ end -- of train()
 local inputs = torch.CudaTensor()
 local labels = torch.CudaTensor()
 
+local outputs = torch.Tensor()
+
 local timer = torch.Timer()
 local dataTimer = torch.Timer()
 
