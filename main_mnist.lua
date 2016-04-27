@@ -11,6 +11,8 @@ require 'cutorch'
 torch.setdefaulttensortype('torch.FloatTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
 
+paths.dofile('train.lua')
+
 ----------------------------------------------------------------------
 -- parse command-line options
 --
@@ -110,7 +112,7 @@ else
 end
 
 -- retrieve parameters and gradients
-parameters,gradParameters = model:getParameters()
+--parameters,gradParameters = model:getParameters()
 
 -- verbose
 print('<mnist> using model:')
@@ -155,8 +157,6 @@ testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
 -- training function
 
-
-paths.dofile('train.lua')
 
 
 
