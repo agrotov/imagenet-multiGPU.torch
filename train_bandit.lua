@@ -291,6 +291,8 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       size_output = outputs:size()
       actions = sample_action(outputs)
 
+      print("target")
+      print(target)
 
 
       if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
