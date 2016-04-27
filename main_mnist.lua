@@ -1,95 +1,344 @@
-----------------------------------------------------------------------
--- This script downloads and loads the MNIST dataset
--- http://yann.lecun.com/exdb/mnist/
-----------------------------------------------------------------------
-
-
 require 'torch'
-require 'cutorch'
-require 'paths'
-require 'xlua'
-require 'optim'
 require 'nn'
-
-
-print '==> downloading dataset'
-
--- Here we download dataset files.
-
--- Note: files were converted from their original LUSH format
--- to Torch's internal format.
-
--- The SVHN dataset contains 3 files:
---    + train: training data
---    + test:  test data
-
-tar = 'http://torch7.s3-website-us-east-1.amazonaws.com/data/mnist.t7.tgz'
-
-if not paths.dirp('mnist.t7') then
-   os.execute('wget ' .. tar)
-   os.execute('tar xvf ' .. paths.basename(tar))
-end
-
-train_file = 'mnist.t7/train_32x32.t7'
-test_file = 'mnist.t7/test_32x32.t7'
+require 'nnx'
+require 'optim'
+require 'image'
+require 'dataset-mnist'
+require 'pl'
+require 'paths'
 
 ----------------------------------------------------------------------
-print '==> loading dataset'
+-- parse command-line options
+--
+local opt = lapp[[
+   -s,--save          (default "logs")      subdirectory to save logs
+   -n,--network       (default "")          reload pretrained network
+   -m,--model         (default "convnet")   type of model tor train: convnet | mlp | linear
+   -f,--full                                use the full dataset
+   -p,--plot                                plot while training
+   -o,--optimization  (default "SGD")       optimization: SGD | LBFGS 
+   -r,--learningRate  (default 0.05)        learning rate, for SGD only
+   -b,--batchSize     (default 10)          batch size
+   -m,--momentum      (default 0)           momentum, for SGD only
+   -i,--maxIter       (default 3)           maximum nb of iterations per batch, for LBFGS
+   --coefL1           (default 0)           L1 penalty on the weights
+   --coefL2           (default 0)           L2 penalty on the weights
+   -t,--threads       (default 4)           number of threads
+]]
 
--- We load the dataset from disk, it's straightforward
+-- fix seed
+torch.manualSeed(1)
 
-trainData = torch.load(train_file,'ascii')
-testData = torch.load(test_file,'ascii')
+-- threads
+torch.setnumthreads(opt.threads)
+print('<torch> set nb of threads to ' .. torch.getnumthreads())
 
-print('Training Data:')
-print(trainData)
-print()
-
-print('Test Data:')
-print(testData)
-print()
-
-----------------------------------------------------------------------
-print '==> visualizing data'
-
--- Visualization is quite easy, using itorch.image().
-if itorch then
-   print('training data:')
-   itorch.image(trainData.data[{ {1,256} }])
-   print('test data:')
-   itorch.image(testData.data[{ {1,256} }])
+-- use floats, for SGD
+if opt.optimization == 'SGD' then
+   torch.setdefaulttensortype('torch.FloatTensor')
 end
 
+-- batch size?
+if opt.optimization == 'LBFGS' and opt.batchSize < 100 then
+   error('LBFGS should not be used with small mini-batches; 1000 is recommended')
+end
 
-torch.setdefaulttensortype('torch.FloatTensor')
+----------------------------------------------------------------------
+-- define model to train
+-- on the 10-class classification problem
+--
+classes = {'1','2','3','4','5','6','7','8','9','10'}
 
-local opts = paths.dofile('opts.lua')
+-- geometry: width and height of input images
+geometry = {32,32}
 
-opt = opts.parse(arg)
+if opt.network == '' then
+   -- define model to train
+   model = nn.Sequential()
 
-nClasses = opt.nClasses
+   if opt.model == 'convnet' then
+      ------------------------------------------------------------
+      -- convolutional network 
+      ------------------------------------------------------------
+      -- stage 1 : mean suppresion -> filter bank -> squashing -> max pooling
+      model:add(nn.SpatialConvolutionMM(1, 32, 5, 5))
+      model:add(nn.Tanh())
+      model:add(nn.SpatialMaxPooling(3, 3, 3, 3))
+      -- stage 2 : mean suppresion -> filter bank -> squashing -> max pooling
+      model:add(nn.SpatialConvolutionMM(32, 64, 5, 5))
+      model:add(nn.Tanh())
+      model:add(nn.SpatialMaxPooling(2, 2, 2, 2))
+      -- stage 3 : standard 2-layer MLP:
+      model:add(nn.Reshape(64*2*2))
+      model:add(nn.Linear(64*2*2, 200))
+      model:add(nn.Tanh())
+      model:add(nn.Linear(200, #classes))
+      ------------------------------------------------------------
 
-paths.dofile('util.lua')
-paths.dofile('model.lua')
-opt.imageSize = model.imageSize or opt.imageSize
-opt.imageCrop = model.imageCrop or opt.imageCrop
+   elseif opt.model == 'mlp' then
+      ------------------------------------------------------------
+      -- regular 2-layer MLP
+      ------------------------------------------------------------
+      model:add(nn.Reshape(1024))
+      model:add(nn.Linear(1024, 2048))
+      model:add(nn.Tanh())
+      model:add(nn.Linear(2048,#classes))
+      ------------------------------------------------------------
 
-print(opt)
+   elseif opt.model == 'linear' then
+      ------------------------------------------------------------
+      -- simple linear model: logistic regression
+      ------------------------------------------------------------
+      model:add(nn.Reshape(1024))
+      model:add(nn.Linear(1024,#classes))
+      ------------------------------------------------------------
 
-cutorch.setDevice(opt.GPU) -- by default, use GPU 1
-torch.manualSeed(opt.manualSeed)
+   else
+      print('Unknown model type')
+      cmd:text()
+      error()
+   end
+else
+   print('<trainer> reloading previously trained network')
+   model = torch.load(opt.network)
+end
 
-print('Saving everything to: ' .. opt.save)
-os.execute('mkdir -p ' .. opt.save)
+-- retrieve parameters and gradients
+parameters,gradParameters = model:getParameters()
 
-paths.dofile('data.lua')
+-- verbose
+print('<mnist> using model:')
+print(model)
+
+----------------------------------------------------------------------
+-- loss function: negative log-likelihood
+--
+model:add(nn.LogSoftMax())
+criterion = nn.ClassNLLCriterion()
+
+----------------------------------------------------------------------
+-- get/create dataset
+--
+if opt.full then
+   nbTrainingPatches = 60000
+   nbTestingPatches = 10000
+else
+   nbTrainingPatches = 2000
+   nbTestingPatches = 1000
+   print('<warning> only using 2000 samples to train quickly (use flag -full to use 60000 samples)')
+end
+
+-- create training set and normalize
+trainData = mnist.loadTrainSet(nbTrainingPatches, geometry)
+trainData:normalizeGlobal(mean, std)
+
+-- create test set and normalize
+testData = mnist.loadTestSet(nbTestingPatches, geometry)
+testData:normalizeGlobal(mean, std)
+
+----------------------------------------------------------------------
+-- define training and testing functions
+--
+
+-- this matrix records the current confusion across classes
+confusion = optim.ConfusionMatrix(classes)
+
+-- log results to files
+trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
+testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
+
+-- training function
+
+
 paths.dofile('train_bandit.lua')
-paths.dofile('test.lua')
 
-epoch = opt.epochNumber
 
-for i=1,opt.nEpochs do
-   train()
-   test()
+
+function train(dataset)
+   -- epoch tracker
+   epoch = epoch or 1
+
+   -- local vars
+   local time = sys.clock()
+
+   -- do one epoch
+   print('<trainer> on training set:')
+   print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+   for t = 1,dataset:size(),opt.batchSize do
+      -- create mini batch
+      local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
+      local targets = torch.Tensor(opt.batchSize)
+      local k = 1
+      for i = t,math.min(t+opt.batchSize-1,dataset:size()) do
+         -- load new sample
+         local sample = dataset[i]
+         local input = sample[1]:clone()
+         local _,target = sample[2]:clone():max(1)
+         target = target:squeeze()
+         inputs[k] = input
+         targets[k] = target
+         k = k + 1
+      end
+
+      -- create closure to evaluate f(X) and df/dX
+      local feval = function(x)
+         -- just in case:
+         collectgarbage()
+
+         -- get new parameters
+         if x ~= parameters then
+            parameters:copy(x)
+         end
+
+         -- reset gradients
+         gradParameters:zero()
+
+         -- evaluate function for complete mini batch
+         local outputs = model:forward(inputs)
+         local f = criterion:forward(outputs, targets)
+
+         -- estimate df/dW
+         local df_do = criterion:backward(outputs, targets)
+         model:backward(inputs, df_do)
+
+         -- penalties (L1 and L2):
+         if opt.coefL1 ~= 0 or opt.coefL2 ~= 0 then
+            -- locals:
+            local norm,sign= torch.norm,torch.sign
+
+            -- Loss:
+            f = f + opt.coefL1 * norm(parameters,1)
+            f = f + opt.coefL2 * norm(parameters,2)^2/2
+
+            -- Gradients:
+            gradParameters:add( sign(parameters):mul(opt.coefL1) + parameters:clone():mul(opt.coefL2) )
+         end
+
+         -- update confusion
+         for i = 1,opt.batchSize do
+            confusion:add(outputs[i], targets[i])
+         end
+
+         -- return f and df/dX
+         return f,gradParameters
+      end
+
+      -- optimize on current mini-batch
+      if opt.optimization == 'LBFGS' then
+
+         -- Perform LBFGS step:
+         lbfgsState = lbfgsState or {
+            maxIter = opt.maxIter,
+            lineSearch = optim.lswolfe
+         }
+         optim.lbfgs(feval, parameters, lbfgsState)
+       
+         -- disp report:
+         print('LBFGS step')
+         print(' - progress in batch: ' .. t .. '/' .. dataset:size())
+         print(' - nb of iterations: ' .. lbfgsState.nIter)
+         print(' - nb of function evalutions: ' .. lbfgsState.funcEval)
+
+      elseif opt.optimization == 'SGD' then
+
+         -- Perform SGD step:
+         sgdState = sgdState or {
+            learningRate = opt.learningRate,
+            momentum = opt.momentum,
+            learningRateDecay = 5e-7
+         }
+         optim.sgd(feval, parameters, sgdState)
+      
+         -- disp progress
+         xlua.progress(t, dataset:size())
+
+      else
+         error('unknown optimization method')
+      end
+   end
+   
+   -- time taken
+   time = sys.clock() - time
+   time = time / dataset:size()
+   print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
+
+   -- print confusion matrix
+   print(confusion)
+   trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
+   confusion:zero()
+
+   -- save/log current net
+   local filename = paths.concat(opt.save, 'mnist.net')
+   os.execute('mkdir -p ' .. sys.dirname(filename))
+   if paths.filep(filename) then
+      os.execute('mv ' .. filename .. ' ' .. filename .. '.old')
+   end
+   print('<trainer> saving network to '..filename)
+   -- torch.save(filename, model)
+
+   -- next epoch
    epoch = epoch + 1
+end
+
+-- test function
+function test(dataset)
+   -- local vars
+   local time = sys.clock()
+
+   -- test over given dataset
+   print('<trainer> on testing Set:')
+   for t = 1,dataset:size(),opt.batchSize do
+      -- disp progress
+      xlua.progress(t, dataset:size())
+
+      -- create mini batch
+      local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
+      local targets = torch.Tensor(opt.batchSize)
+      local k = 1
+      for i = t,math.min(t+opt.batchSize-1,dataset:size()) do
+         -- load new sample
+         local sample = dataset[i]
+         local input = sample[1]:clone()
+         local _,target = sample[2]:clone():max(1)
+         target = target:squeeze()
+         inputs[k] = input
+         targets[k] = target
+         k = k + 1
+      end
+
+      -- test samples
+      local preds = model:forward(inputs)
+
+      -- confusion:
+      for i = 1,opt.batchSize do
+         confusion:add(preds[i], targets[i])
+      end
+   end
+
+   -- timing
+   time = sys.clock() - time
+   time = time / dataset:size()
+   print("<trainer> time to test 1 sample = " .. (time*1000) .. 'ms')
+
+   -- print confusion matrix
+   print(confusion)
+   testLogger:add{['% mean class accuracy (test set)'] = confusion.totalValid * 100}
+   confusion:zero()
+end
+
+----------------------------------------------------------------------
+-- and train!
+--
+while true do
+   -- train/test
+   train(trainData)
+   test(testData)
+
+   -- plot errors
+   if opt.plot then
+      trainLogger:style{['% mean class accuracy (train set)'] = '-'}
+      testLogger:style{['% mean class accuracy (test set)'] = '-'}
+      trainLogger:plot()
+      testLogger:plot()
+   end
 end
