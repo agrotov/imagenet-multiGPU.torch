@@ -11,7 +11,7 @@ require 'cutorch'
 torch.setdefaulttensortype('torch.FloatTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
 
-paths.dofile('train.lua')
+
 
 ----------------------------------------------------------------------
 -- parse command-line options
@@ -110,6 +110,9 @@ else
    print('<trainer> reloading previously trained network')
    model = torch.load(opt.network)
 end
+
+
+paths.dofile('train.lua')
 
 -- retrieve parameters and gradients
 --parameters,gradParameters = model:getParameters()
