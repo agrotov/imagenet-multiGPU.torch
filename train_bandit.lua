@@ -271,7 +271,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
-
       size_output = outputs:size()
       actions = sample_action(outputs)
 
@@ -352,7 +351,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    print("optimState")
    print(optimState)
 
---   optim.sgd(feval, parameters, optimState)
+   optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
