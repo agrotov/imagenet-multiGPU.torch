@@ -67,8 +67,8 @@ end
 
 
 local function sample_action(model_output)
---    return torch.multinomial(model_output,1):long()
-    result = torch.Tensor(10,1):random(0,9):long()
+    result =  torch.multinomial(model_output,1):long()
+--    result = torch.Tensor(10,1):random(0,9):long()
     print(result)
     return result
 end
