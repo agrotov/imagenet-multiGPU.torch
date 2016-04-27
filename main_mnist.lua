@@ -11,7 +11,7 @@ require 'pl'
 ----------------------------------------------------------------------
 -- parse command-line options
 --
-local opt = lapp[[
+opt = lapp[[
    -s,--save          (default "logs")      subdirectory to save logs
    -n,--network       (default "")          reload pretrained network
    -m,--model         (default "convnet")   type of model tor train: convnet | mlp | linear
