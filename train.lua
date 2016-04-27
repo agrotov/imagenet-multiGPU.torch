@@ -194,6 +194,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --          optimState.learningRate, dataLoadingTime))
 --
    dataTimer:reset()
---   exit()
+   exit()
    return outputs
 end
