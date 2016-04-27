@@ -32,6 +32,9 @@ opt = lapp[[
    -t,--threads       (default 4)           number of threads
 ]]
 
+
+opt.epochSize = 1
+
 -- fix seed
 torch.manualSeed(1)
 
