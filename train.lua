@@ -142,6 +142,7 @@ local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
 function trainBatch(inputsCPU, labelsCPU)
+   print(model)
    batchNumber = batchNumber or 1
    cutorch.synchronize()
    collectgarbage()
@@ -162,7 +163,7 @@ function trainBatch(inputsCPU, labelsCPU)
       return err, gradParameters
    end
    print(labels)
---   optim.sgd(feval, parameters, optimState)
+   optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
