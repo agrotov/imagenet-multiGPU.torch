@@ -367,7 +367,8 @@ function trainBatch(inputsCPU, labelsCPU)
       return err, gradParameters
    end
 
-
+   print("optimState")
+   print(optimState)
 
    optim.sgd(feval, parameters, optimState)
 
