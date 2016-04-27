@@ -1,6 +1,7 @@
 require 'torch'
 -- require 'nn'
 require 'nnx'
+require 'cunn'
 require 'optim'
 require 'image'
 -- require 'dataset-mnist'
