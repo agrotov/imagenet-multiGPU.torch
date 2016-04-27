@@ -5,7 +5,7 @@ require 'optim'
 require 'image'
 -- require 'dataset-mnist'
 require 'paths'
-paths.dofile('dataset-mnist')
+paths.dofile('dataset-mnist.lua')
 require 'pl'
 
 ----------------------------------------------------------------------
