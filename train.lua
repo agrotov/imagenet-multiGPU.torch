@@ -162,7 +162,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       outputs = model:cuda():forward(inputs)
       err = criterion:cuda():forward(outputs, labels)
       local gradOutputs = criterion:cuda():backward(outputs, labels)
-      model:cuda():backward(inputs, gradOutputs)
+      model:cuda():backward(inputs, gradOutputs:cuda())
 --      return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
