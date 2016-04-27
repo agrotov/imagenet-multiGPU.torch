@@ -3,7 +3,7 @@ require 'nn'
 require 'nnx'
 require 'optim'
 require 'image'
--- require 'dataset-mnist'
+require 'dataset-mnist'
 require 'pl'
 require 'paths'
 
