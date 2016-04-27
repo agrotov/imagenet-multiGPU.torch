@@ -265,7 +265,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-   local err, outputs, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
+   local err, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
 
 
    feval = function(x)
@@ -382,6 +382,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 
    dataTimer:reset()
 
-
-    return outputs
+   print(outputs)
+   return outputs
 end
