@@ -162,6 +162,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       outputs = model:forward(inputsCPU)
       err = criterion:forward(outputs, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labelsCPU)
+      print(gradOutputs)
       model:backward(inputsCPU, gradOutputs)
       return err, gradParameters
    end
