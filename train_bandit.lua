@@ -140,6 +140,9 @@ local optimState = {
     weightDecay = opt.weightDecay
 }
 
+print("opt.optimState")
+print(opt.optimState)
+
 if opt.optimState ~= 'none' then
     assert(paths.filep(opt.optimState), 'File not found: ' .. opt.optimState)
     print('Loading optimState from file: ' .. opt.optimState)
