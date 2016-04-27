@@ -134,7 +134,11 @@ cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
 criterion:cuda()
 
-paths.dofile('train.lua')
+--paths.dofile('train.lua')
+paths.dofile('train_bandit.lua')
+
+
+
 print(model)
 ----------------------------------------------------------------------
 -- get/create dataset
