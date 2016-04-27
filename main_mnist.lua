@@ -235,7 +235,7 @@ function train_mnist_bandit(dataset)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
-      trainBatch(inputs,targets)
+      trainBatch(inputs,targets, optimState)
 
       -- disp progress
       xlua.progress(t, dataset:size())
