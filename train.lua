@@ -158,10 +158,10 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 
    feval = function(x)
       model:zeroGradParameters()
-      outputs = model:forward(inputsCPU)
-      err = criterion:forward(outputs, labelsCPU)
-      local gradOutputs = criterion:backward(outputs, labelsCPU)
-      model:backward(inputsCPU, gradOutputs)
+      outputs_gpu = model:forward(inputs)
+      err = criterion:forward(outputs_gpu, labels)
+      local gradOutputs = criterion:backward(outputs_gpu, labels)
+      model:backward(inputs, gradOutputs)
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
@@ -192,6 +192,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --          optimState.learningRate, dataLoadingTime))
 --
    dataTimer:reset()
-
-   return outputs
+   outputs_cpu:resize(outputs:size()):copy(outputs)
+   return outputs_cpu
 end
