@@ -132,7 +132,7 @@ print(model)
 model:add(nn.LogSoftMax())
 model:cuda()
 criterion = nn.ClassNLLCriterion()
-
+criterion:cuda()
 ----------------------------------------------------------------------
 -- get/create dataset
 --
