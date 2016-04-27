@@ -112,6 +112,8 @@ if opt.network == '' then
 else
    print('<trainer> reloading previously trained network')
    model = torch.load(opt.network)
+
+   model:cuda()
 end
 
 
