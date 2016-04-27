@@ -135,7 +135,8 @@ end -- of train()
 local inputs = torch.CudaTensor()
 local labels = torch.CudaTensor()
 
-local outputs = torch.Tensor()
+local outputs = torch.CudaTensor()
+local outputs_cpu = torch.Tensor()
 
 local timer = torch.Timer()
 local dataTimer = torch.Timer()
@@ -158,9 +159,9 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 
    feval = function(x)
       model:zeroGradParameters()
-      outputs_gpu = model:forward(inputs)
+      outputs = model:forward(inputs)
       err = criterion:forward(outputs_gpu, labels)
-      local gradOutputs = criterion:backward(outputs_gpu, labels)
+      local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs)
       return err, gradParameters
    end
