@@ -12,6 +12,7 @@ require("os")
 
 
 function load_rewards_mnist()
+    print(torch.eye(10))
     return torch.eye(10)
 end
 
@@ -66,7 +67,7 @@ end
 
 
 local function sample_action(model_output)
-    return torch.multinomial(model_output,10):long()
+    return torch.multinomial(model_output,1):long()
 end
 
 
