@@ -195,6 +195,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --
    dataTimer:reset()
    outputs_cpu:resize(outputs:size()):copy(outputs)
-   print(outputs)
+--   print(outputs)
    return outputs_cpu
 end

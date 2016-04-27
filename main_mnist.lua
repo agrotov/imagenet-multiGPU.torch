@@ -131,6 +131,7 @@ print(model)
 --
 model:add(nn.LogSoftMax())
 model:cuda()
+cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
 criterion:cuda()
 ----------------------------------------------------------------------
