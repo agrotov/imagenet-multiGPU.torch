@@ -9,6 +9,7 @@ paths.dofile('dataset-mnist.lua')
 require 'pl'
 require 'cutorch'
 torch.setdefaulttensortype('torch.FloatTensor')
+cutorch.setDevice(1) -- by default, use GPU 1
 
 ----------------------------------------------------------------------
 -- parse command-line options
