@@ -160,12 +160,12 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
-      err = criterion:forward(outputs_gpu, labels)
+      err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs)
       return err, gradParameters
    end
---   optim.sgd(feval, parameters, optimState)
+   optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
