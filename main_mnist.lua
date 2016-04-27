@@ -10,9 +10,7 @@ require 'image'
 require 'paths'
 paths.dofile('dataset-mnist.lua')
 require 'pl'
-torch.setdefaulttensortype('torch.FloatTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
-
 
 
 ----------------------------------------------------------------------
@@ -132,7 +130,7 @@ print(model)
 --
 model:add(nn.LogSoftMax())
 model:cuda()
-criterion = nn.ClassNLLCriterion():cuda()
+criterion = nn.ClassNLLCriterion()
 
 ----------------------------------------------------------------------
 -- get/create dataset
