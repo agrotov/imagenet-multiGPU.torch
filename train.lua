@@ -160,7 +160,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputsCPU)
-      print(inputsCPU)
       err = criterion:forward(outputs, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labelsCPU)
       model:backward(inputsCPU, gradOutputs)
@@ -194,5 +193,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --          optimState.learningRate, dataLoadingTime))
 --
    dataTimer:reset()
+   exit()
    return outputs
 end
