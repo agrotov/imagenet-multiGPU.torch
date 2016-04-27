@@ -116,7 +116,7 @@ else
 end
 
 
-paths.dofile('train.lua')
+
 
 -- retrieve parameters and gradients
 --parameters,gradParameters = model:getParameters()
@@ -134,6 +134,7 @@ cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
 criterion:cuda()
 
+paths.dofile('train.lua')
 print(model)
 ----------------------------------------------------------------------
 -- get/create dataset
