@@ -131,9 +131,9 @@ print('<mnist> using model:')
 --
 model:add(nn.LogSoftMax())
 --model:cuda()
---cudnn.convert(model, cudnn)
+cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
---criterion:cuda()
+criterion:cuda()
 
 print(model)
 ----------------------------------------------------------------------
