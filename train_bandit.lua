@@ -143,7 +143,7 @@ local optimState = {
 print("opt.optimState")
 print(opt.optimState)
 
-if opt.optimState ~= 'none' then
+if opt.optimState ~= nil and opt.optimState ~= 'none' then
     assert(paths.filep(opt.optimState), 'File not found: ' .. opt.optimState)
     print('Loading optimState from file: ' .. opt.optimState)
     optimState = torch.load(opt.optimState)
