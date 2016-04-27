@@ -156,10 +156,10 @@ function trainBatch(inputsCPU, labelsCPU)
    local err, outputs
    feval = function(x)
       model:zeroGradParameters()
-      outputs = model:forward(inputs)
-      err = criterion:forward(outputs, labels)
-      local gradOutputs = criterion:backward(outputs, labels)
-      model:backward(inputs, gradOutputs)
+      outputs = model:forward(inputsCPU)
+      err = criterion:forward(outputs, labelsCPU)
+      local gradOutputs = criterion:backward(outputs, labelsCPU)
+      model:backward(inputsCPU, gradOutputs)
       return err, gradParameters
    end
    print(labels)
