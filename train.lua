@@ -160,6 +160,7 @@ function trainBatch(inputsCPU, labelsCPU)
       model:backward(inputs, gradOutputs)
       return err, gradParameters
    end
+   print(labelsCPU)
    optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
