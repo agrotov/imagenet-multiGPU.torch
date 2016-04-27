@@ -140,8 +140,6 @@ local optimState = {
     weightDecay = opt.weightDecay
 }
 
-print("opt.optimState")
-print(opt.optimState)
 
 if opt.optimState ~= nil and opt.optimState ~= 'none' then
     assert(paths.filep(opt.optimState), 'File not found: ' .. opt.optimState)
