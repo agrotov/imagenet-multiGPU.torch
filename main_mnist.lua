@@ -206,14 +206,16 @@ function train_mnist_bandit(dataset)
       -- disp progress
       xlua.progress(t, dataset:size())
 
+      -- update confusion
+      for i = 1,opt.batchSize do
+         confusion:add(outputs[i], targets[i])
+      end
+
+
    end
 
 
 
-   -- update confusion
-   for i = 1,opt.batchSize do
-      confusion:add(outputs[i], targets[i])
-   end
 
 
    -- time taken
