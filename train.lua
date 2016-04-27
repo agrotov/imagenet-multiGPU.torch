@@ -159,8 +159,8 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 
 
    feval = function(x)
-      model:zeroGradParameters()
-      outputs = model:cuda():forward(inputs)
+      model:cuda():zeroGradParameters()
+      outputs = model:forward(inputs)
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs:cuda())
