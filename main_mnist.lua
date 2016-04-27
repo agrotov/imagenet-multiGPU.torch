@@ -3,9 +3,10 @@ require 'nn'
 require 'nnx'
 require 'optim'
 require 'image'
-require 'dataset-mnist'
-require 'pl'
+-- require 'dataset-mnist'
 require 'paths'
+paths.dofile('dataset-mnist')
+require 'pl'
 
 ----------------------------------------------------------------------
 -- parse command-line options
