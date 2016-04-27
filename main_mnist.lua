@@ -1,5 +1,5 @@
 require 'torch'
-require 'nn'
+-- require 'nn'
 require 'nnx'
 require 'optim'
 require 'image'
