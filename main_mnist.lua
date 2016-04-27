@@ -115,7 +115,6 @@ else
    print('<trainer> reloading previously trained network')
    model = torch.load(opt.network)
 
-model:cuda()
 end
 
 
@@ -132,6 +131,7 @@ print(model)
 -- loss function: negative log-likelihood
 --
 model:add(nn.LogSoftMax())
+model:cuda()
 criterion = nn.ClassNLLCriterion()
 
 ----------------------------------------------------------------------
