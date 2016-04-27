@@ -172,7 +172,6 @@ function trainBatch(inputsCPU, labelsCPU)
 
    cutorch.synchronize()
    batchNumber = batchNumber + 1
-   loss_epoch = loss_epoch + err
    -- top-1 error
    local top1 = 0
    do
