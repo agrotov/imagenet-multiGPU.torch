@@ -61,7 +61,7 @@ classes = {'1','2','3','4','5','6','7','8','9','10'}
 -- geometry: width and height of input images
 geometry = {32,32 }
 
-opt.model = 'linear'
+--opt.model = 'linear'
 
 if opt.network == '' then
    -- define model to train
