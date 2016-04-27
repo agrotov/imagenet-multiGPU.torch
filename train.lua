@@ -157,13 +157,12 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-   print(labels)
 
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
       err = criterion:forward(outputs, labels)
-      local gradOutputs = criterion:backward(outputs, labels)
+      local gradOutputs = criterion:cuda():backward(outputs, labels)
       model:backward(inputs, gradOutputs:cuda())
       return err, gradParameters
    end
