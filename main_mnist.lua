@@ -233,6 +233,7 @@ function train_mnist_bandit(dataset)
 --      }
 --      optim.sgd(feval, parameters, sgdState)
 
+      cutorch.synchronize()
       optimState = sgdState or {
          learningRate = opt.learningRate,
          momentum = opt.momentum,
