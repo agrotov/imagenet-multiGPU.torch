@@ -151,7 +151,7 @@ testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 -- training function
 
 
---paths.dofile('train_bandit.lua')
+paths.dofile('train_bandit.lua')
 
 
 
