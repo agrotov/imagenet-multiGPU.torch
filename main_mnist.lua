@@ -181,54 +181,54 @@ function train_mnist_bandit(dataset)
       end
 
       -- create closure to evaluate f(X) and df/dX
-      local feval = function(x)
-         -- just in case:
-         collectgarbage()
-
-         -- get new parameters
-         if x ~= parameters then
-            parameters:copy(x)
-         end
-
-         -- reset gradients
-         gradParameters:zero()
-
-         -- evaluate function for complete mini batch
-         local outputs = model:forward(inputs)
-         local f = criterion:forward(outputs, targets)
-
-         -- estimate df/dW
-         local df_do = criterion:backward(outputs, targets)
-         model:backward(inputs, df_do)
-
-         -- penalties (L1 and L2):
-         if opt.coefL1 ~= 0 or opt.coefL2 ~= 0 then
-            -- locals:
-            local norm,sign= torch.norm,torch.sign
-
-            -- Loss:
-            f = f + opt.coefL1 * norm(parameters,1)
-            f = f + opt.coefL2 * norm(parameters,2)^2/2
-
-            -- Gradients:
-            gradParameters:add( sign(parameters):mul(opt.coefL1) + parameters:clone():mul(opt.coefL2) )
-         end
-
-         -- update confusion
-         for i = 1,opt.batchSize do
-            confusion:add(outputs[i], targets[i])
-         end
-
-         -- return f and df/dX
-         return f,gradParameters
-      end
-
-      sgdState = sgdState or {
-         learningRate = opt.learningRate,
-         momentum = opt.momentum,
-         learningRateDecay = 5e-7
-      }
-      optim.sgd(feval, parameters, sgdState)
+--      local feval = function(x)
+--         -- just in case:
+--         collectgarbage()
+--
+--         -- get new parameters
+--         if x ~= parameters then
+--            parameters:copy(x)
+--         end
+--
+--         -- reset gradients
+--         gradParameters:zero()
+--
+--         -- evaluate function for complete mini batch
+--         local outputs = model:forward(inputs)
+--         local f = criterion:forward(outputs, targets)
+--
+--         -- estimate df/dW
+--         local df_do = criterion:backward(outputs, targets)
+--         model:backward(inputs, df_do)
+--
+--         -- penalties (L1 and L2):
+--         if opt.coefL1 ~= 0 or opt.coefL2 ~= 0 then
+--            -- locals:
+--            local norm,sign= torch.norm,torch.sign
+--
+--            -- Loss:
+--            f = f + opt.coefL1 * norm(parameters,1)
+--            f = f + opt.coefL2 * norm(parameters,2)^2/2
+--
+--            -- Gradients:
+--            gradParameters:add( sign(parameters):mul(opt.coefL1) + parameters:clone():mul(opt.coefL2) )
+--         end
+--
+--         -- update confusion
+--         for i = 1,opt.batchSize do
+--            confusion:add(outputs[i], targets[i])
+--         end
+--
+--         -- return f and df/dX
+--         return f,gradParameters
+--      end
+--
+--      sgdState = sgdState or {
+--         learningRate = opt.learningRate,
+--         momentum = opt.momentum,
+--         learningRateDecay = 5e-7
+--      }
+--      optim.sgd(feval, parameters, sgdState)
 
       -- disp progress
       xlua.progress(t, dataset:size())
