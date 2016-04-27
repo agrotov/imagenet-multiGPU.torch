@@ -144,6 +144,7 @@ local parameters, gradParameters = model:getParameters()
 function trainBatch(inputsCPU, labelsCPU)
    print(criterion)
    batchNumber = batchNumber or 1
+   top1_epoch = top1_epoch or 1;
    cutorch.synchronize()
    collectgarbage()
    local dataLoadingTime = dataTimer:time().real
