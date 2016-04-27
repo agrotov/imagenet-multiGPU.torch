@@ -223,38 +223,16 @@ function train_mnist_bandit(dataset)
          return f,gradParameters
       end
 
-      -- optimize on current mini-batch
-      if opt.optimization == 'LBFGS' then
+      sgdState = sgdState or {
+         learningRate = opt.learningRate,
+         momentum = opt.momentum,
+         learningRateDecay = 5e-7
+      }
+      optim.sgd(feval, parameters, sgdState)
 
-         -- Perform LBFGS step:
-         lbfgsState = lbfgsState or {
-            maxIter = opt.maxIter,
-            lineSearch = optim.lswolfe
-         }
-         optim.lbfgs(feval, parameters, lbfgsState)
+      -- disp progress
+      xlua.progress(t, dataset:size())
 
-         -- disp report:
-         print('LBFGS step')
-         print(' - progress in batch: ' .. t .. '/' .. dataset:size())
-         print(' - nb of iterations: ' .. lbfgsState.nIter)
-         print(' - nb of function evalutions: ' .. lbfgsState.funcEval)
-
-      elseif opt.optimization == 'SGD' then
-
-         -- Perform SGD step:
-         sgdState = sgdState or {
-            learningRate = opt.learningRate,
-            momentum = opt.momentum,
-            learningRateDecay = 5e-7
-         }
-         optim.sgd(feval, parameters, sgdState)
-
-         -- disp progress
-         xlua.progress(t, dataset:size())
-
-      else
-         error('unknown optimization method')
-      end
    end
 
    -- time taken
