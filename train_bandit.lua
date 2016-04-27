@@ -349,7 +349,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    print("optimState")
    print(optimState)
 
-   optim.sgd(feval, parameters, optimState)
+--   optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
