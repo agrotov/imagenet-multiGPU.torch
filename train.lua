@@ -160,19 +160,18 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputsCPU)
-      print(outputs)
       err = criterion:forward(outputs, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labelsCPU)
+
+      print(gradOutputs)
       model:backward(inputsCPU, gradOutputs)
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
-   if model.needsSync then
-      model:syncParameters()
-   end
-   
+   model:syncParameters()
+
 
    cutorch.synchronize()
    batchNumber = batchNumber + 1
