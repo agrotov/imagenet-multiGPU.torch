@@ -124,7 +124,7 @@ paths.dofile('train.lua')
 
 -- verbose
 print('<mnist> using model:')
-print(model)
+
 
 ----------------------------------------------------------------------
 -- loss function: negative log-likelihood
@@ -134,6 +134,8 @@ model:cuda()
 cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
 criterion:cuda()
+
+print(model)
 ----------------------------------------------------------------------
 -- get/create dataset
 --
