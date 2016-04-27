@@ -295,7 +295,7 @@ end
 while true do
    -- train/test
    train_mnist_bandit(trainData)
---   test(testData)
+   test(testData)
 
    -- plot errors
    if opt.plot then
