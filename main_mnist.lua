@@ -229,6 +229,12 @@ function train_mnist_bandit(dataset)
 --         learningRateDecay = 5e-7
 --      }
 --      optim.sgd(feval, parameters, sgdState)
+
+      optimState = sgdState or {
+         learningRate = opt.learningRate,
+         momentum = opt.momentum,
+         learningRateDecay = 5e-7
+      }
       trainBatch(inputs,targets)
 
       -- disp progress
