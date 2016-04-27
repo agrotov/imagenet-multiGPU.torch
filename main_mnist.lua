@@ -130,7 +130,7 @@ print('<mnist> using model:')
 -- loss function: negative log-likelihood
 --
 model:add(nn.LogSoftMax())
---model:cuda()
+model:cuda()
 cudnn.convert(model, cudnn)
 criterion = nn.ClassNLLCriterion()
 criterion:cuda()
