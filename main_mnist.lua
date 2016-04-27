@@ -10,7 +10,7 @@ require 'image'
 require 'paths'
 paths.dofile('dataset-mnist.lua')
 require 'pl'
-torch.setdefaulttensortype('torch.GpuTensor')
+torch.setdefaulttensortype('torch.CudaTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
 
 
