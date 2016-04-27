@@ -8,6 +8,7 @@ require 'paths'
 paths.dofile('dataset-mnist.lua')
 require 'pl'
 require 'cutorch'
+torch.setdefaulttensortype('torch.FloatTensor')
 
 ----------------------------------------------------------------------
 -- parse command-line options
