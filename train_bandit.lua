@@ -272,107 +272,106 @@ local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
 function trainBatch(inputsCPU, labelsCPU, optimState)
-   cutorch.synchronize()
-   collectgarbage()
-   local dataLoadingTime = dataTimer:time().real
-   timer:reset()
-
-   -- transfer over to GPU
-   inputs:resize(inputsCPU:size()):copy(inputsCPU)
-   labels:resize(labelsCPU:size()):copy(labelsCPU)
-
-   local err, outputs, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
-
-
-   feval = function(x)
-      model:zeroGradParameters()
-      outputs = model:forward(inputs)
-
-      size_output = outputs:size()
-      actions = sample_action(outputs)
-
-      print("target")
-      print(target)
-
-
-      if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
-          print("NaN in actions")
-          print("target")
-          print(target)
-      end
-
-      if torch.min(outputs) ~= torch.min(outputs) or torch.sum(outputs:ne(outputs)) > 0 then
-          print("NaN in outputs")
-      end
-
-      if torch.min(inputs) ~= torch.min(inputs) or torch.sum(inputs:ne(inputs)) > 0 then
-          print("NaN in inputs")
-      end
 
 
 
-
-
-      p_of_actions_teacher = probability_of_actions(outputs, actions)
+--   cutorch.synchronize()
+--   collectgarbage()
+--   local dataLoadingTime = dataTimer:time().real
+--   timer:reset()
 --
---      print(p_of_actions_teacher)
---      print("outputs")
---      print(outputs:size())
-
-
-      p_of_actions_student = probability_of_actions(outputs, actions)
-      rewards = reward_for_actions(loss_matrix, actions, labels)
-      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
-
-
---      print(target)
-
-      gpu_target = target:cuda()
-
-      if torch.sum(target:ne(target)) > 0 then
-          print("NaN in target")
---          os.exit()
-      end
-
-
-      err = rewards:mean()
-
-
-
+--   -- transfer over to GPU
+--   inputs:resize(inputsCPU:size()):copy(inputsCPU)
+--   labels:resize(labelsCPU:size()):copy(labelsCPU)
 --
+--   local err, outputs, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
+--
+--
+--   feval = function(x)
+--      model:zeroGradParameters()
+--      outputs = model:forward(inputs)
+--
+--      size_output = outputs:size()
+--      actions = sample_action(outputs)
+--
+--      if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
+--          print("NaN in actions")
+--          print("target")
+--          print(target)
+--      end
+--
+--      if torch.min(outputs) ~= torch.min(outputs) or torch.sum(outputs:ne(outputs)) > 0 then
+--          print("NaN in outputs")
+--      end
+--
+--      if torch.min(inputs) ~= torch.min(inputs) or torch.sum(inputs:ne(inputs)) > 0 then
+--          print("NaN in inputs")
+--      end
+--
+--
+--
+--
+--
+--      p_of_actions_teacher = probability_of_actions(outputs, actions)
+----
+----      print(p_of_actions_teacher)
+----      print("outputs")
+----      print(outputs:size())
+--
+--
+--      p_of_actions_student = probability_of_actions(outputs, actions)
+--      rewards = reward_for_actions(loss_matrix, actions, labels)
+--      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
+--
+--
+----      print(target)
+--
+--      gpu_target = target:cuda()
+--
+--      if torch.sum(target:ne(target)) > 0 then
+--          print("NaN in target")
+----          os.exit()
+--      end
+--
+--
+--      err = rewards:mean()
+--
+--
+--
+----
+----      print("rewards")
+----      print(rewards)
+----      print("mean_reward")
+----      print(mean_reward)
+----
+----
+----      local my_grads = torch.Tensor(gradOutputs)
+--      print("target")
+----      print(target)
+--      print(torch.max(target))
+--      print(torch.min(target))
+--      print("probs")
+--      print(torch.max(p_of_actions_student))
+--      print(torch.min(p_of_actions_student))
 --      print("rewards")
---      print(rewards)
---      print("mean_reward")
---      print(mean_reward)
+----      print(rewards)
+--      print(torch.max(rewards))
+--      print(torch.min(rewards))
+--      print("outputs")
+--      print(torch.max(outputs))
+--      print(torch.min(outputs))
 --
 --
---      local my_grads = torch.Tensor(gradOutputs)
-      print("target")
---      print(target)
-      print(torch.max(target))
-      print(torch.min(target))
-      print("probs")
-      print(torch.max(p_of_actions_student))
-      print(torch.min(p_of_actions_student))
-      print("rewards")
---      print(rewards)
-      print(torch.max(rewards))
-      print(torch.min(rewards))
-      print("outputs")
-      print(torch.max(outputs))
-      print(torch.min(outputs))
-
-
-      model:backward(inputs, gpu_target)
-
-
-      return err, gradParameters
-   end
-
-   print("optimState")
-   print(optimState)
-
-   optim.sgd(feval, parameters, optimState)
+--      model:backward(inputs, gpu_target)
+--
+--
+--      return err, gradParameters
+--   end
+--
+--   print("optimState")
+--   print(optimState)
+--
+--   optim.sgd(feval, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
