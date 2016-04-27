@@ -9,7 +9,7 @@
 require 'optim'
 require("csvigo")
 require("os")
-
+require 'cutorch'
 
 
 
@@ -184,7 +184,7 @@ function train()
 
    -- set the dropouts to training mode
    model:training()
-   
+
    loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
