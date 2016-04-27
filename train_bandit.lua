@@ -274,37 +274,10 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       size_output = outputs:size()
       actions = sample_action(outputs)
 
---      if torch.min(actions) < 1 or torch.min(actions) ~= torch.min(actions) then
---          print("NaN in actions")
---          print("target")
---          print(target)
---      end
---
---      if torch.min(outputs) ~= torch.min(outputs) or torch.sum(outputs:ne(outputs)) > 0 then
---          print("NaN in outputs")
---      end
---
---      if torch.min(inputs) ~= torch.min(inputs) or torch.sum(inputs:ne(inputs)) > 0 then
---          print("NaN in inputs")
---      end
-
-
-
-
-
       p_of_actions_teacher = probability_of_actions(outputs, actions)
---
---      print(p_of_actions_teacher)
---      print("outputs")
---      print(outputs:size())
-
-
       p_of_actions_student = probability_of_actions(outputs, actions)
       rewards = reward_for_actions(loss_matrix, actions, labels)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
-
-
---      print(target)
 
       gpu_target = target:cuda()
 
@@ -315,41 +288,9 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 
 
       err = rewards:mean()
-
-
-
---
---      print("rewards")
---      print(rewards)
---      print("mean_reward")
---      print(mean_reward)
---
---
---      local my_grads = torch.Tensor(gradOutputs)
---      print("target")
---      print(target)
---      print(torch.max(target))
---      print(torch.min(target))
---      print("probs")
---      print(torch.max(p_of_actions_student))
---      print(torch.min(p_of_actions_student))
---      print("rewards")
---      print(rewards)
---      print(torch.max(rewards))
---      print(torch.min(rewards))
---      print("outputs")
---      print(torch.max(outputs))
---      print(torch.min(outputs))
-
-
       model:backward(inputs, gpu_target)
-
-
       return err, gradParameters
    end
-
---   print("optimState")
---   print(optimState)
 
    optim.sgd(feval, parameters, optimState)
 
