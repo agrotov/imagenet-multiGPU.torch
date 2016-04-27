@@ -1,4 +1,5 @@
 require 'torch'
+require 'cutorch'
 -- require 'nn'
 require 'nnx'
 require 'cunn'
@@ -9,7 +10,6 @@ require 'image'
 require 'paths'
 paths.dofile('dataset-mnist.lua')
 require 'pl'
-require 'cutorch'
 torch.setdefaulttensortype('torch.FloatTensor')
 cutorch.setDevice(1) -- by default, use GPU 1
 
