@@ -97,7 +97,7 @@ function probability_of_actions(model_output, actions,temperature)
 
 
 
-    softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:view(normalization:nElement(), 1):expandAs(probabilities))
+    softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:expandAs(probabilities))
 
     print(softmax_probabilities)
 
