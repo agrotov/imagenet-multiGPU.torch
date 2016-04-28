@@ -104,7 +104,7 @@ function probability_of_actions(model_output, actions,temperature)
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    return -torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
+    return torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
 end
 
 function load_rewards(file_name)
