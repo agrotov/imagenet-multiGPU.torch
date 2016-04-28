@@ -6,7 +6,7 @@
 -- To change this template use File | Settings | File Templates.
 --
 
-require('train_bandit')
+require('train_bandit.lua')
 
 
 function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
