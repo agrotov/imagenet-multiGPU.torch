@@ -122,7 +122,7 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
     print(target)
 
 
-    target:scatter(2,actions:long():view(opt.actions.size(1)),weight:float())
+    target:scatter(2,actions:long():view(actions.size(1)),weight:float())
 
     return target
 end
