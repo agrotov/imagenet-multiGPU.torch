@@ -77,13 +77,13 @@ end
 local function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
-    print("actions")
-    print(actions)
-    print("labels")
-    print(labels)
     rewards = (1-loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
-    print("rewards")
-    print(rewards)
+--    print("actions")
+--    print(actions)
+--    print("labels")
+--    print(labels)
+--    print("rewards")
+--    print(rewards)
     return  rewards
 end
 
@@ -334,6 +334,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    dataTimer:reset()
 
 --   print(outputs)
-   exit()
+--   exit()
    return outputs
 end
