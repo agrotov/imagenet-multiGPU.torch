@@ -49,8 +49,6 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     -- index of input, action , reward, probability
     result = torch.cat(input_indexes,actions:float(),2):cat(rewards, 2):cat(p_of_actions,2)
 
-    print(bandit_dataset)
-    exit()
 
     if bandit_dataset ~= nil then
         bandit_dataset:cat(result,1)
