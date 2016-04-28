@@ -69,7 +69,7 @@ end
 function sample_action(model_output, temperature)
     temperature = temperature or 1
 --    print(model_output)
-    result =  torch.multinomial(torch.exp(model_output/temperature),1):long()
+    result =  torch.multinomial(torch.exp(model_output/10),1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
     return result
