@@ -6,9 +6,18 @@
 -- To change this template use File | Settings | File Templates.
 --
 
+local inputs = torch.CudaTensor()
+local labels = torch.CudaTensor()
+local outputs = torch.CudaTensor()
+
+local timer = torch.Timer()
+local dataTimer = torch.Timer()
+
 
 
 function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
+    local parameters, gradParameters = model:getParameters()
+
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
