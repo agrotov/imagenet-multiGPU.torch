@@ -277,13 +277,13 @@ function train_mnist_bandit(dataset,logged_data)
       indexes = torch.Tensor(opt.batchSize,1)
 
       for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-         print(i)
-         print(logged_data[i])
+--         print(i)
+--         print(logged_data[i])
          local index_of_input = logged_data[i][1]
          local action = logged_data[i][2]
          local reward = logged_data[i][3]
          local probability_of_action = logged_data[i][4]
-         print(index_of_input)
+--         print(index_of_input)
          -- load new sample
          local sample = dataset[index_of_input]
          local input = sample[1]:clone()
@@ -294,7 +294,9 @@ function train_mnist_bandit(dataset,logged_data)
          k = k + 1
       end
 
-
+      print(action)
+      print(reward)
+      print(probability_of_actions)
 --      opt.learningRate = 0.01
 
 --      cutorch.synchronize()
