@@ -143,7 +143,7 @@ local dataTimer = torch.Timer()
 local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
-function trainBatch(inputsCPU, labelsCPU, optimState)
+function trainBatch_full(inputsCPU, labelsCPU, optimState)
    batchNumber = batchNumber or 1
    top1_epoch = top1_epoch or 1;
    dataLoadingTime = dataLoadingTime or 0
