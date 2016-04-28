@@ -88,8 +88,15 @@ function probability_of_actions(model_output, actions,temperature)
 --    print(torch.exp(model_output:float()/temperature))
 --    print(torch.sum(torch.exp(model_output/temperature)))
     print(torch.exp(model_output))
+
+    probabilities = torch.exp(model_output)
+
+    softmax_probabilities = torch.exp(probabilities/temperature) / torch.sum(torch.exp(probabilities/temperature))
+
+    print(softmax_probabilities)
+
     exit()
-    return torch.exp(model_output:float():gather(2,actions)/temperature)/torch.sum(torch.exp(model_output/temperature))
+    return torch.exp(model_output:float():gather(2,actions)/temperature)
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
