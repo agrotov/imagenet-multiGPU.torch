@@ -85,6 +85,10 @@ end
 
 function probability_of_actions(model_output, actions,temperature)
     temperature = temperature or 1
+    print(torch.exp(model_output:float()/temperature))
+    print(torch.sum(torch.exp(model_output/temperature)))
+    print(torch.exp(model_output:float()/temperature)/torch.sum(torch.exp(model_output/temperature)))
+    exit()
     return torch.exp(model_output:float():gather(2,actions)/temperature)/torch.sum(torch.exp(model_output/temperature))
 end
 
