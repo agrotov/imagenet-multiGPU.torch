@@ -84,14 +84,14 @@ function reward_for_actions(loss_matrix, actions, labels)
 end
 
 function probability_of_actions(model_output, actions,temperature)
-    temperature = temperature or 1
+    temperature = temperature or 0.1
 --    print(torch.exp(model_output:float()/temperature))
 --    print(torch.sum(torch.exp(model_output/temperature)))
     print(torch.exp(model_output))
 
     probabilities = torch.exp(model_output)
 
-    normalization = torch.sum(torch.exp(probabilities/temperature),1)
+    normalization = torch.sum(torch.exp(probabilities/temperature),2)
 
     print(normalization)
 
