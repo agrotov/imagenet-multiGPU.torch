@@ -276,6 +276,9 @@ function train_mnist_bandit(dataset,logged_data)
 
       for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
             print(i)
+            print(logged_data[i])
+            index_of_input = logged_data[i][1]
+            print(index_of_input)
          -- load new sample
 --         local sample = dataset[i]
 --         local input = sample[1]:clone()
