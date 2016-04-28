@@ -306,12 +306,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
       gpu_target = target:cuda()
-
-      if torch.sum(target:ne(target)) > 0 then
-          print("NaN in target")
---          os.exit()
-      end
-
+      
 
       err = rewards:mean()
       model:backward(inputs, gpu_target)
