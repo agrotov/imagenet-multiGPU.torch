@@ -221,7 +221,7 @@ function train_mnist_bandit(dataset)
 
 --      outputs = trainBatch(inputs,targets, optimState)
 
-      outputs = materialize_datase(indexes,inputs,targets, optimState)
+      outputs = materialize_datase(indexes,inputs,targets, model)
 
 
 
