@@ -104,7 +104,7 @@ function probability_of_actions(model_output, actions,temperature)
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
-    return torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
+    return -torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
 end
 
 function load_rewards(file_name)
@@ -113,10 +113,10 @@ end
 
 function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size):fill(0)
-    print(probability_actions_student_model)
-    print(probability_actions_teacher_model)
-    print(rewards)
-    exit()
+--    print(probability_actions_student_model)
+--    print(probability_actions_teacher_model)
+--    print(rewards)
+--    exit()
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
 
