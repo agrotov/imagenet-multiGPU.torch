@@ -37,6 +37,14 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     cutorch.synchronize()
     batchNumber = batchNumber + 1
 
+    result = torch.Tensor()
+
+    result = input_indexes
+
+    result.cat(actions)
+
+    print(result)
+
     return outputs
 end
 

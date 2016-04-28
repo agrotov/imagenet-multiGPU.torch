@@ -208,7 +208,6 @@ function train_mnist_bandit(dataset)
          k = k + 1
       end
 
-      print(indexes)
 
       opt.learningRate = 0.01
 
