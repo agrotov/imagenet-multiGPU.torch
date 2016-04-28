@@ -254,7 +254,6 @@ end
 
 function train_mnist_bandit(dataset,logged_data)
    epoch = epoch or 1
-   print(dataset)
    -- local vars
    local time = sys.clock()
 
@@ -399,7 +398,7 @@ end
 while true do
    -- train/test
    logged_data = torch.load("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
-   train_mnist_bandit(dataset,logged_data)
+   train_mnist_bandit(trainData,logged_data)
    if (epoch > 1) then
 --      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
 --      print(bandit_dataset)
