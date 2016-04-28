@@ -257,7 +257,6 @@ function train_mnist_bandit(dataset,logged_data)
    -- local vars
    local time = sys.clock()
 
-   local batch_size = 100
 
 
    -- do one epoch
