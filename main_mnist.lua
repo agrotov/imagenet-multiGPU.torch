@@ -309,7 +309,7 @@ function train_mnist_bandit(dataset,logged_data)
 --      for i = 1,opt.batchSize do
 --         confusion:add(outputs[i], targets[i])
 --      end
---   end
+   end
 --
 --   -- time taken
 --
