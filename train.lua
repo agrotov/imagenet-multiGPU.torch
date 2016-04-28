@@ -98,7 +98,7 @@ function train()
          -- the job callback (runs in data-worker thread)
          function()
             local inputs, labels = trainLoader:sample(opt.batchSize)
-            return inputs, labels, optimState
+            return inputs, labels
          end,
          -- the end callback (runs in the main thread)
          trainBatch_full
@@ -143,7 +143,7 @@ local dataTimer = torch.Timer()
 local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
-function trainBatch_full(inputsCPU, labelsCPU, optimState)
+function trainBatch_full(inputsCPU, labelsCPU)
 --   print("trainBatch_full")
    batchNumber = batchNumber or 1
    top1_epoch = top1_epoch or 1;
