@@ -382,7 +382,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       size_output = outputs:size()
       print(outputs)
       print(actions)
-      p_of_actions_student = probability_of_actions(outputs, actions)
+      p_of_actions_student = probability_of_actions(outputs, actions, 1)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
       gpu_target = target:cuda()
