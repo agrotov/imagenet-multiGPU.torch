@@ -71,7 +71,7 @@ function sample_action(model_output, temperature)
 
 --    print(model_output)
 
-    probabilities_all= probabilities_from_output(model_output, temperature)
+    local probabilities_all= probabilities_from_output(model_output, temperature)
     result =  torch.multinomial(probabilities_all,1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
@@ -88,7 +88,7 @@ end
 
 function probabilities_from_output(model_output, temperature)
 
-    probabilities = torch.exp(model_output)
+    local probabilities = torch.exp(model_output)
 
 --    return probabilities
 
@@ -97,9 +97,9 @@ function probabilities_from_output(model_output, temperature)
     end
 
 
-    normalization = torch.sum(torch.exp(probabilities/temperature),2)
+    local normalization = torch.sum(torch.exp(probabilities/temperature),2)
 
-    softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:expandAs(probabilities))
+    local softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:expandAs(probabilities))
 
     return softmax_probabilities
 
@@ -109,7 +109,7 @@ function probability_of_actions(model_output, actions,temperature)
     print(model_output)
     print(temperature)
     print(actions)
-    probabilities_all = probabilities_from_output(model_output, temperature)
+    local probabilities_all = probabilities_from_output(model_output, temperature)
     print("print(probabilities_all)")
     print(probabilities_all)
     print("pritn(probabilities_all:gather(2,actions))")
