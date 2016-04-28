@@ -123,7 +123,7 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
     print(actions:long())
     print(weight:float())
 
-    target:scatter(2,actions:long(),actions:float())
+    target:scatter(2,actions:long(),weight:float())
 
     return target
 end
@@ -357,8 +357,8 @@ end
 
 
 local actions = torch.CudaTensor(opt.batchSize,1)
-local rewards= torch.CudaTensor()
-local probabilities_logged= torch.CudaTensor()
+local rewards= torch.CudaTensor(opt.batchSize,1)
+local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState)
@@ -373,8 +373,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
    -- transfer over to GPU
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    actions:copy(actions_cpu)
-   rewards:resize(rewards_cpu:size()):copy(rewards_cpu)
-   probabilities_logged:resize(probabilities_logged_cpu:size()):copy(probabilities_logged_cpu)
+   rewards:copy(rewards_cpu)
+   probabilities_logged:copy(probabilities_logged_cpu)
 
 
    local err, target, p_of_actions_student, size_output
