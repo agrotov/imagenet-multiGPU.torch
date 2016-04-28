@@ -123,7 +123,7 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
     print(actions:long())
     print(weight:float())
 
-    target:scatter(2,actions:long(),weight:float())
+    target:scatter(2,actions:long(),actions:float())
 
     return target
 end
