@@ -306,7 +306,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
 
       gpu_target = target:cuda()
-      
+
 
       err = rewards:mean()
       model:backward(inputs, gpu_target)
