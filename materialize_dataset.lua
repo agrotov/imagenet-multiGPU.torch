@@ -56,7 +56,7 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
         bandit_dataset = result:clone()
     end
 
-
+    print(bandit_dataset)
 
     return outputs
 end
