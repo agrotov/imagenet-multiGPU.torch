@@ -90,6 +90,8 @@ function probabilities_from_output(model_output, temperature)
 
     if temperature ~= nil then
         return probabilities:gather(2,actions)
+    end
+    
 
     normalization = torch.sum(torch.exp(probabilities/temperature),2)
 
