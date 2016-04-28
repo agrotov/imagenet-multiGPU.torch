@@ -101,7 +101,7 @@ function train()
             return inputs, labels
          end,
          -- the end callback (runs in the main thread)
-         trainBatch
+         trainBatch_full
       )
    end
 
