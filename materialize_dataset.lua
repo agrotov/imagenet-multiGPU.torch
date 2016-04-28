@@ -41,7 +41,7 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
 
     result = input_indexes
 
-    result.cat(actions)
+    result.cat(actions:float())
 
     print(result)
 
