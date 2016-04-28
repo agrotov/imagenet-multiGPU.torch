@@ -67,8 +67,8 @@ end
 
 
 local function sample_action(model_output)
---    result =  torch.multinomial(model_output,1):long()
-    result = torch.Tensor(10,1):random(1,10):long()
+    result =  torch.multinomial(model_output,1):long()
+--    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
     return result
 end
@@ -78,12 +78,6 @@ local function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
     rewards = (1-loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
---    print("actions")
---    print(actions)
---    print("labels")
---    print(labels)
---    print("rewards")
---    print(rewards)
     return  rewards
 end
 
