@@ -116,10 +116,10 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
 
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
-    print(weight)
+--    print(weight)
 
 --    local weight =  torch.cmul(rewards,probability_actions_student_model)
-
+    print(target)
 
 
     target:scatter(2,actions:cuda(),weight)
