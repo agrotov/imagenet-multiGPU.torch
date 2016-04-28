@@ -43,7 +43,7 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
 
     result = input_indexes
 
-    print(result)
+--    print(result)
     print(actions:float())
 
     -- index of input, action , reward, probability
@@ -56,7 +56,7 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     end
 
 
-    print(result)
+    print(bandit_dataset)
 
     return outputs
 end
