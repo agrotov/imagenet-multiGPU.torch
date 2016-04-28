@@ -254,7 +254,7 @@ end
 
 function train_mnist_bandit(dataset,logged_data)
    epoch = epoch or 1
-
+   print(dataset)
    -- local vars
    local time = sys.clock()
 
