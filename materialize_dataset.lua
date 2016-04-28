@@ -32,9 +32,9 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model, temperat
 
     local outputs = model:forward(inputs)
     local size_output = outputs:size()
-    local actions = sample_action(outputs)
+    local actions = sample_action(outputs,temperature)
 
-    local p_of_actions= probability_of_actions(outputs, actions)
+    local p_of_actions= probability_of_actions(outputs, actions, temperature)
     local rewards = reward_for_actions(loss_matrix, actions, labels)
 
     cutorch.synchronize()

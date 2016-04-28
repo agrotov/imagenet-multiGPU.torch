@@ -69,7 +69,7 @@ end
 function sample_action(model_output, temperature)
     temperature = temperature or 1
 --    print(model_output)
-    result =  torch.multinomial(torch.exp(model_output/10),1):long()
+    result =  torch.multinomial(torch.exp(model_output/temperature),1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
     return result
@@ -83,8 +83,9 @@ function reward_for_actions(loss_matrix, actions, labels)
     return  rewards
 end
 
-function probability_of_actions(model_output, actions)
-    return torch.exp(model_output:float():gather(2,actions))
+function probability_of_actions(model_output, actions,temperature)
+    temperature = temperature or 1
+    return torch.exp(model_output:float():gather(2,actions)/temperature)
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
