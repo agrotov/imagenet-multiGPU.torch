@@ -250,6 +250,7 @@ function train_mnist_bandit(dataset)
    print(confusion)
    trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
    confusion:zero()
+   print(bandit_dataset)
 
    -- save/log current net
    local filename = paths.concat(opt.save, 'mnist.net')
