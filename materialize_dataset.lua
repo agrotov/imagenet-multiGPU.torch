@@ -50,6 +50,7 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     result = torch.cat(input_indexes,actions:float(),2):cat(rewards, 2):cat(p_of_actions,2)
 
     prin(bandit_dataset)
+    exit()
 
     if bandit_dataset ~= nil then
         bandit_dataset:cat(result,1)
