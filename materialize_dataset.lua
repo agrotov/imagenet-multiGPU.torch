@@ -42,9 +42,9 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     result = input_indexes
 
     print(result)
-    print(actions)
+    print(actions:float())
 
-    result = torch:cat(input_indexes,actions:float(),1)
+    result = torch.cat(input_indexes,actions:float(),1)
 
     print(result)
 
