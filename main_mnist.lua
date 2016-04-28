@@ -298,11 +298,10 @@ function train_mnist_bandit(dataset,logged_data)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
---
---
-      outputs = trainBatch_bandit(inputs,targets, optimState)
---      outputs = materialize_datase(indexes,inputs,targets, model)
---
+
+
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
+
       -- disp progress
       xlua.progress(t, dataset:size())
 
