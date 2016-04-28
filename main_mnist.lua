@@ -260,9 +260,6 @@ function train_mnist_bandit(dataset,logged_data)
 
    local batch_size = 10
 
-   print("print(logged_data:size(1))")
-   print(logged_data:size(1))
-   print(logged_data:size(2))
 
    -- do one epoch
    print('<trainer> on training set:')
@@ -277,7 +274,7 @@ function train_mnist_bandit(dataset,logged_data)
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
 
-      for i = t,math.min(t+opt.batchSize-1,logged_data:size()) do
+      for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
             print(i)
          -- load new sample
 --         local sample = dataset[i]
