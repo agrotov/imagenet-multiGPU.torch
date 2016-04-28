@@ -63,5 +63,5 @@ end
 
 
 function save_bandit_dataset(filename)
-    torch.save(bandit_dataset,filename)
+    torch.save(filename,bandit_dataset)
 end
