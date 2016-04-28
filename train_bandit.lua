@@ -88,7 +88,7 @@ end
 
 function probabilities_from_output(model_output, temperature)
 
---    local probabilities = torch.exp(model_output)
+    local probabilities = torch.exp(model_output)
 --
 ----    return probabilities
 --
