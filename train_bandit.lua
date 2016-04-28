@@ -88,13 +88,13 @@ end
 
 function probabilities_from_output(model_output, temperature)
 
-    local probabilities = torch.exp(model_output)
-
---    return probabilities
-
-    if temperature ~= nil then
-        return probabilities
-    end
+--    local probabilities = torch.exp(model_output)
+--
+----    return probabilities
+--
+--    if temperature ~= nil then
+--        return probabilities
+--    end
 
 
     local normalization = torch.sum(torch.exp(probabilities/temperature),2)
