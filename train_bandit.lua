@@ -91,7 +91,7 @@ function probabilities_from_output(model_output, temperature)
     if temperature ~= nil then
         return probabilities:gather(2,actions)
     end
-    
+
 
     normalization = torch.sum(torch.exp(probabilities/temperature),2)
 
@@ -102,7 +102,8 @@ function probabilities_from_output(model_output, temperature)
 end
 
 function probability_of_actions(model_output, actions,temperature)
-
+    print(model_output)
+    print(temperature)
     probabilities = probabilities_from_output(model_output, temperature)
     return softmax_probabilities:gather(2,actions)
 end
