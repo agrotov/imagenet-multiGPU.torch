@@ -135,10 +135,10 @@ criterion = nn.ClassNLLCriterion()
 criterion:cuda()
 
 
-paths.dofile('train.lua')
---paths.dofile('train_bandit.lua')
---paths.dofile('materialize_dataset.lua')
---loss_matrix = load_rewards_mnist()
+--paths.dofile('train.lua')
+paths.dofile('train_bandit.lua')
+paths.dofile('materialize_dataset.lua')
+loss_matrix = load_rewards_mnist()
 
 
 print(model)
@@ -320,8 +320,9 @@ end
 while true do
    -- train/test
    train_mnist_bandit(trainData)
---   save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
---   exit()
+   save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
+   print(bandit_dataset)
+   exit()
 --   test(testData)
 
    -- plot errors
