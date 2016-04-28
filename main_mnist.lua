@@ -397,11 +397,11 @@ while true do
    -- train/test
    logged_data = torch.load("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
    train_mnist_bandit(trainData,logged_data)
-   if (epoch > 1) then
+--   if (epoch > 1) then
 --      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
 --      print(bandit_dataset)
-      exit()
-   end
+--      exit()
+--   end
 
 --   test(testData)
 
