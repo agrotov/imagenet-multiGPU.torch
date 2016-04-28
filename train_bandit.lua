@@ -87,9 +87,7 @@ end
 function probabilities_from_output(model_output, temperature)
 
     probabilities = torch.exp(model_output)
-
-    return probabilities
-
+    
     if temperature ~= nil then
         return probabilities
     end
