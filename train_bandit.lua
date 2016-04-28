@@ -113,7 +113,10 @@ end
 
 function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size):fill(0)
-
+    print(probability_actions_student_model)
+    print(probability_actions_teacher_model)
+    print(rewards)
+    exit()
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
 
@@ -374,7 +377,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       outputs = model:forward(inputs)
       size_output = outputs:size()
       p_of_actions_student = probability_of_actions(outputs, actions)
-      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_student)
+      target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
       gpu_target = target:cuda()
 
