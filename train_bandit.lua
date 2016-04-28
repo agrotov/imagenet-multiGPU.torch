@@ -114,13 +114,13 @@ end
 function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size):fill(0)
 
---    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
-    local weight =  torch.cmul(rewards,probability_actions_student_model)
+--    local weight =  torch.cmul(rewards,probability_actions_student_model)
 
 
 
-    target:scatter(2,actions,weight)
+    target:scatter(2,actions:cuda(),weight)
 
     return target
 end
