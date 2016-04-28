@@ -294,9 +294,9 @@ function train_mnist_bandit(dataset,logged_data)
          k = k + 1
       end
 
-      print(action)
-      print(reward)
-      print(probability_of_actions)
+      print(actions)
+--      print(reward)
+--      print(probability_of_actions)
 --      opt.learningRate = 0.01
 
 --      cutorch.synchronize()
