@@ -66,7 +66,7 @@ end
 
 
 
-local function sample_action(model_output)
+function sample_action(model_output)
 --    print(model_output)
     result =  torch.multinomial(torch.exp(model_output/100),1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
@@ -75,26 +75,26 @@ local function sample_action(model_output)
 end
 
 
-local function reward_for_actions(loss_matrix, actions, labels)
+function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
     rewards = (1-loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
     return  rewards
 end
 
-local function probability_of_actions(model_output, actions)
+function probability_of_actions(model_output, actions)
     return torch.exp(model_output:float():gather(2,actions))
 end
 
-local function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
+function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
     return torch.cmul(rewards,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
 end
 
-local function load_rewards(file_name)
+function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
-local function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
+function compute_target(size, actions, rewards, probability_actions_student_model, probability_actions_teacher_model)
     target = torch.Tensor(size):fill(0)
 
 --    weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)

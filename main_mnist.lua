@@ -138,7 +138,7 @@ criterion:cuda()
 paths.dofile('train.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
---loss_matrix = load_rewards_mnist()
+loss_matrix = load_rewards_mnist()
 
 
 print(model)
