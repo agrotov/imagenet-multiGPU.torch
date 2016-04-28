@@ -57,8 +57,11 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     end
 
 
-    print(bandit_dataset)
 
     return outputs
 end
 
+
+function save_bandit_dataset(filename)
+    torch.save(bandit_dataset,filename)
+end
