@@ -144,7 +144,7 @@ local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
 function trainBatch_full(inputsCPU, labelsCPU, optimState)
-
+   print("trainBatch_full")
    batchNumber = batchNumber or 1
    top1_epoch = top1_epoch or 1;
    dataLoadingTime = dataLoadingTime or 0
@@ -157,9 +157,6 @@ function trainBatch_full(inputsCPU, labelsCPU, optimState)
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-
-   print("labels")
-   print(labels)
 
    feval = function(x)
       model:zeroGradParameters()
