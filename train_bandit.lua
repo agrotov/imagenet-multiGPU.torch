@@ -85,7 +85,7 @@ end
 
 function probability_of_actions(model_output, actions,temperature)
     temperature = temperature or 1
-    return torch.exp(model_output:float():gather(2,actions)/temperature)
+    return torch.exp(model_output:float():gather(2,actions)/temperature)/torch.sum(torch.exp(model_output/temperature))
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
