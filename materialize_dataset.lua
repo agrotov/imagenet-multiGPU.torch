@@ -51,6 +51,8 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
 
     if bandit_dataset ~= nil then
         bandit_dataset:cat(result,1)
+        print("cat")
+        exit()
     else
         bandit_dataset = result:clone()
     end
