@@ -350,3 +350,62 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 --    end
    return outputs
 end
+
+
+local actions = torch.CudaTensor()
+local rewards= torch.CudaTensor()
+local probabilities_logged= torch.CudaTensor()
+
+
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState)
+
+   batchNumber = batchNumber or 1
+
+   cutorch.synchronize()
+   collectgarbage()
+   local dataLoadingTime = dataTimer:time().real
+   timer:reset()
+
+   -- transfer over to GPU
+   actions:resize(actions_cpu:size()):copy(actions_cpu)
+   rewards:resize(rewards_cpu:size()):copy(rewards_cpu)
+   probabilities_logged:resize(probabilities_logged_cpu:size()):copy(probabilities_logged_cpu)
+
+
+   local err, target, p_of_actions_student, size_output
+
+
+   feval = function(x)
+      model:zeroGradParameters()
+      outputs = model:forward(inputs)
+      size_output = outputs:size()
+      p_of_actions_student = probability_of_actions(outputs, actions)
+      target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
+
+      gpu_target = target:cuda()
+
+      if torch.sum(target:ne(target)) > 0 then
+          print("NaN in target")
+--          os.exit()
+      end
+
+
+      err = rewards:mean()
+      model:backward(inputs, gpu_target)
+      return err, gradParameters
+   end
+
+   optim.sgd(feval, parameters, optimState)
+
+   -- DataParallelTable's syncParameters
+   if model.needsSync then
+      model:syncParameters()
+   end
+
+
+   cutorch.synchronize()
+
+   dataTimer:reset()
+
+   return outputs
+end

@@ -300,16 +300,16 @@ function train_mnist_bandit(dataset,logged_data)
       }
 --
 --
-----      outputs = trainBatch_full(inputs,targets, optimState)
+      outputs = trainBatch_bandit(inputs,targets, optimState)
 --      outputs = materialize_datase(indexes,inputs,targets, model)
 --
---      -- disp progress
---      xlua.progress(t, dataset:size())
---
---      -- update confusion
---      for i = 1,opt.batchSize do
---         confusion:add(outputs[i], targets[i])
---      end
+      -- disp progress
+      xlua.progress(t, dataset:size())
+
+      -- update confusion
+      for i = 1,opt.batchSize do
+         confusion:add(outputs[i], targets[i])
+      end
    end
 --
 --   -- time taken
