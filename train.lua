@@ -98,7 +98,7 @@ function train()
          -- the job callback (runs in data-worker thread)
          function()
             local inputs, labels = trainLoader:sample(opt.batchSize)
-            return inputs, labels
+            return inputs, labels, optimState
          end,
          -- the end callback (runs in the main thread)
          trainBatch_full
