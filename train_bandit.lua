@@ -91,7 +91,7 @@ function probability_of_actions(model_output, actions,temperature)
 
     probabilities = torch.exp(model_output)
 
-    normalization = torch.sum(torch.exp(probabilities/temperature),2)
+    normalization = torch.sum(torch.exp(probabilities/temperature),1)
 
     print(normalization)
 
