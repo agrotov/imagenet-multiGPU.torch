@@ -201,7 +201,7 @@ function train_mnist_bandit(dataset)
          k = k + 1
       end
 
---      opt.learningRate = 0.001
+      opt.learningRate = 0.001
 
       cutorch.synchronize()
       optimState = sgdState or {
