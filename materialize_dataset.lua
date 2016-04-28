@@ -13,7 +13,6 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
 
     cutorch.synchronize()
     collectgarbage()
-    timer:reset()
 
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
@@ -28,7 +27,6 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
 
     cutorch.synchronize()
     batchNumber = batchNumber + 1
-    dataTimer:reset()
 
     return outputs
 end
