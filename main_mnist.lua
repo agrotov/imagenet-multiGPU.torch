@@ -203,6 +203,7 @@ function train_mnist_bandit(dataset)
          inputs[k] = input
          targets[k] = target
          k = k + 1
+         print(k)
          indexes[1][k] = i + k
       end
 
