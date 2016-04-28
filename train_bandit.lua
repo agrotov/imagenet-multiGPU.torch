@@ -67,14 +67,8 @@ end
 
 
 function sample_action(model_output, temperature)
-
-
---    print(model_output)
-
     local probabilities_all= probabilities_from_output(model_output, temperature)
     result =  torch.multinomial(probabilities_all,1):long()
---    result = torch.Tensor(10,1):random(1,10):long()
---    print(result)
     return result
 end
 
@@ -89,9 +83,7 @@ end
 function probabilities_from_output(model_output, temperature)
 
     local probabilities = torch.exp(model_output)
---
-----    return probabilities
---
+
     if temperature == nil then
         return probabilities
     end
@@ -106,14 +98,7 @@ function probabilities_from_output(model_output, temperature)
 end
 
 function probability_of_actions(model_output, actions,temperature)
-    print(model_output)
-    print(temperature)
-    print(actions)
     local probabilities_all = probabilities_from_output(model_output, temperature)
-    print("print(probabilities_all)")
-    print(probabilities_all)
-    print("pritn(probabilities_all:gather(2,actions))")
-    print(probabilities_all:gather(2,actions:cuda()))
     return probabilities_all:gather(2,actions:cuda())
 end
 
