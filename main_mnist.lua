@@ -218,9 +218,9 @@ function train_mnist_bandit(dataset)
          learningRateDecay = 5e-7
       }
 
-      outputs = trainBatch_full(inputs,targets, optimState)
+--      outputs = trainBatch_full(inputs,targets, optimState)
 
---      outputs = materialize_datase(indexes,inputs,targets, model)
+      outputs = materialize_datase(indexes,inputs,targets, model)
 
 
 
