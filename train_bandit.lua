@@ -99,6 +99,8 @@ end
 
 function probability_of_actions(model_output, actions,temperature)
     local probabilities_all = probabilities_from_output(model_output, temperature)
+    print("probabilities_all")
+    print(probabilities_all)
     return probabilities_all:gather(2,actions:cuda())
 end
 
@@ -382,7 +384,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       size_output = outputs:size()
       print(outputs)
       print(actions)
-      p_of_actions_student = probability_of_actions(outputs, actions, 1)
+      p_of_actions_student = probability_of_actions(outputs, actions)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
       gpu_target = target:cuda()
