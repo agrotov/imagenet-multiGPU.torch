@@ -144,7 +144,7 @@ local parameters, gradParameters = model:getParameters()
 
 -- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
 function trainBatch_full(inputsCPU, labelsCPU, optimState)
-   print("trainBatch_full")
+--   print("trainBatch_full")
    batchNumber = batchNumber or 1
    top1_epoch = top1_epoch or 1;
    dataLoadingTime = dataLoadingTime or 0
@@ -174,23 +174,23 @@ function trainBatch_full(inputsCPU, labelsCPU, optimState)
 
    cutorch.synchronize()
    batchNumber = batchNumber + 1
-   -- top-1 error
---   local top1 = 0
---   do
---      local _,prediction_sorted = outputs:float():sort(2, true) -- descending
---      for i=1,opt.batchSize do
---	 if prediction_sorted[i][1] == labelsCPU[i] then
---	    top1_epoch = top1_epoch + 1;
---	    top1 = top1 + 1
---	 end
---      end
---      top1 = top1 * 100 / opt.batchSize;
---   end
---   -- Calculate top-1 error, and print information
---   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
---          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
---          optimState.learningRate, dataLoadingTime))
---
+--    top-1 error
+   local top1 = 0
+   do
+      local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+      for i=1,opt.batchSize do
+	 if prediction_sorted[i][1] == labelsCPU[i] then
+	    top1_epoch = top1_epoch + 1;
+	    top1 = top1 + 1
+	 end
+      end
+      top1 = top1 * 100 / opt.batchSize;
+   end
+   -- Calculate top-1 error, and print information
+   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
+          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
+          optimState.learningRate, dataLoadingTime))
+
    dataTimer:reset()
 --   exit()
    return outputs
