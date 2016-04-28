@@ -206,7 +206,7 @@ function train_mnist(dataset)
       end
 
 
---      opt.learningRate = 0.01
+      opt.learningRate = 0.01
 
       cutorch.synchronize()
       optimState = sgdState or {
