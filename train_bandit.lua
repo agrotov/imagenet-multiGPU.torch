@@ -71,8 +71,8 @@ function sample_action(model_output, temperature)
 
 --    print(model_output)
 
-    probabilities = probabilities_from_output(model_output)
-    result =  torch.multinomial(probabilities,1):long()
+    probabilities_all= probabilities_from_output(model_output, temperature)
+    result =  torch.multinomial(probabilities_all,1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
     return result
