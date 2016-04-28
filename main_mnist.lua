@@ -245,7 +245,7 @@ function train_mnist_bandit(dataset)
       os.execute('mv ' .. filename .. ' ' .. filename .. '.old')
    end
    print('<trainer> saving network to '..filename)
-   -- torch.save(filename, model)
+   torch.save(filename, model)
 
    -- next epoch
    epoch = epoch + 1
@@ -297,6 +297,8 @@ function test(dataset)
    print(confusion)
    testLogger:add{['% mean class accuracy (test set)'] = confusion.totalValid * 100}
    confusion:zero()
+
+
 end
 
 ----------------------------------------------------------------------
