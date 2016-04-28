@@ -192,7 +192,7 @@ function train_mnist_bandit(dataset)
       local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
       local targets = torch.Tensor(opt.batchSize)
       local k = 1
-      indexes = torch.Tensor(batchSize,1)
+      indexes = torch.Tensor(opt.batchSize,1)
 
       for i = t,math.min(t+opt.batchSize-1,dataset:size()) do
          -- load new sample
