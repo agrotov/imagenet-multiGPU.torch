@@ -202,13 +202,13 @@ function train_mnist_bandit(dataset)
          target = target:squeeze()
          inputs[k] = input
          targets[k] = target
-         print(k)
-         indexes[k][1] = i + k
+--         print(k)
+         indexes[k][1] = i
 
          k = k + 1
       end
 
-      print(indexes)
+--      print(indexes)
 
       opt.learningRate = 0.01
 
