@@ -329,7 +329,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    dataTimer:reset()
 
 --   print(outputs)
-   if batchNumber > 3 then
+   if batchNumber > 30 then
        exit()
     end
    return outputs
