@@ -101,7 +101,10 @@ function probability_of_actions(model_output, actions,temperature)
     local probabilities_all = probabilities_from_output(model_output, temperature)
     print("probabilities_all")
     print(probabilities_all)
-    return probabilities_all:gather(2,actions:cuda())
+    result =  probabilities_all:gather(2,actions:cuda())
+    print("result")
+    print(result)
+    return result
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
