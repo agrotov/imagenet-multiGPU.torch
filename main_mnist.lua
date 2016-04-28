@@ -220,7 +220,7 @@ function train_mnist_bandit(dataset)
 
       outputs = trainBatch_full(inputs,targets, optimState)
 
-      outputs = materialize_datase(indexes,inputs,targets, model)
+--      outputs = materialize_datase(indexes,inputs,targets, model)
 
 
 
@@ -250,7 +250,6 @@ function train_mnist_bandit(dataset)
    print(confusion)
    trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
    confusion:zero()
-   print(bandit_dataset)
 
    -- save/log current net
    local filename = paths.concat(opt.save, 'mnist.net')
@@ -321,7 +320,7 @@ end
 while true do
    -- train/test
    train_mnist_bandit(trainData)
-   save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
+--   save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
 --   exit()
 --   test(testData)
 
