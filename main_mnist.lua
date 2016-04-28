@@ -290,17 +290,14 @@ function train_mnist_bandit(dataset,logged_data)
          k = k + 1
       end
 
---      print(actions)
---      print(rewards)
-      print(probability_of_actions)
 --      opt.learningRate = 0.01
 
---      cutorch.synchronize()
---      optimState = sgdState or {
---         learningRate = opt.learningRate,
---         momentum = opt.momentum,
---         learningRateDecay = 5e-7
---      }
+      cutorch.synchronize()
+      optimState = sgdState or {
+         learningRate = opt.learningRate,
+         momentum = opt.momentum,
+         learningRateDecay = 5e-7
+      }
 --
 --
 ----      outputs = trainBatch_full(inputs,targets, optimState)
