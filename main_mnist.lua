@@ -322,7 +322,7 @@ while true do
    -- train/test
    train_mnist_bandit(trainData)
    save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
-   exit()
+--   exit()
 --   test(testData)
 
    -- plot errors
