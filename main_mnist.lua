@@ -135,10 +135,10 @@ criterion = nn.ClassNLLCriterion()
 criterion:cuda()
 
 
-paths.dofile('train.lua')
---paths.dofile('train_bandit.lua')
---paths.dofile('materialize_dataset.lua')
---loss_matrix = load_rewards_mnist()
+--paths.dofile('train.lua')
+paths.dofile('train_bandit.lua')
+paths.dofile('materialize_dataset.lua')
+loss_matrix = load_rewards_mnist()
 
 
 print(model)
@@ -218,9 +218,9 @@ function train_mnist_bandit(dataset)
          learningRateDecay = 5e-7
       }
 
-      outputs = trainBatch_full(inputs,targets, optimState)
+--      outputs = trainBatch_full(inputs,targets, optimState)
 
---      outputs = materialize_datase(indexes,inputs,targets, model)
+      outputs = materialize_datase(indexes,inputs,targets, model)
 
 
 
@@ -321,8 +321,8 @@ while true do
    -- train/test
    train_mnist_bandit(trainData)
    if (epoch > 1) then
---      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
---      print(bandit_dataset)
+      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
+      print(bandit_dataset)
       exit()
    end
 
