@@ -329,6 +329,6 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    dataTimer:reset()
 
 --   print(outputs)
---   exit()
+   exit()
    return outputs
 end
