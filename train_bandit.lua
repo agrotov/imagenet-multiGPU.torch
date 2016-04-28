@@ -99,13 +99,7 @@ end
 
 function probability_of_actions(model_output, actions,temperature)
     local probabilities_all = probabilities_from_output(model_output, temperature)
-    print("probabilities_all")
-    print("actions:cuda():view(actions:size(),1)")
-    print(actions)
-    print(probabilities_all)
     result =  probabilities_all:gather(2,actions:cuda())
-    print("result")
-    print(result)
     return result
 end
 
