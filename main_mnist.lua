@@ -308,6 +308,7 @@ end
 while true do
    -- train/test
    train_mnist_bandit(trainData)
+   exit()
 --   test(testData)
 
    -- plot errors
