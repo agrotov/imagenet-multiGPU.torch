@@ -175,10 +175,7 @@ testLogger = optim.Logger(paths.concat(opt.save, 'test.log'))
 
 -- training function
 
-
-
-
-function train_mnist_bandit(dataset)
+function train_mnist(dataset)
       epoch = epoch or 1
 
    -- local vars
@@ -218,13 +215,10 @@ function train_mnist_bandit(dataset)
          learningRateDecay = 5e-7
       }
 
---      outputs = trainBatch_full(inputs,targets, optimState)
 
+--      outputs = trainBatch_full(inputs,targets, optimState)
       outputs = materialize_datase(indexes,inputs,targets, model)
 
-
-
---      print(outputs)
       -- disp progress
       xlua.progress(t, dataset:size())
 
@@ -232,13 +226,7 @@ function train_mnist_bandit(dataset)
       for i = 1,opt.batchSize do
          confusion:add(outputs[i], targets[i])
       end
-
-
    end
-
-
-
-
 
    -- time taken
 
@@ -263,6 +251,90 @@ function train_mnist_bandit(dataset)
    -- next epoch
    epoch = epoch + 1
 end
+
+function train_mnist_bandit(dataset,logged_data)
+   epoch = epoch or 1
+
+   -- local vars
+   local time = sys.clock()
+
+   local batch_size = 10
+
+   -- do one epoch
+   print('<trainer> on training set:')
+   print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+   for t = 1,logged_data:size(2),opt.batchSize do
+
+      print("t")
+      print(t)
+      -- create mini batch
+      local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
+      local targets = torch.Tensor(opt.batchSize)
+      local k = 1
+      indexes = torch.Tensor(opt.batchSize,1)
+
+      for i = t,math.min(t+opt.batchSize-1,logged_data:size(2)) do
+            print(i)
+         -- load new sample
+--         local sample = dataset[i]
+--         local input = sample[1]:clone()
+--         local _,target = sample[2]:clone():max(1)
+--         target = target:squeeze()
+--         inputs[k] = input
+--         targets[k] = target
+----         print(k)
+--         indexes[k][1] = i
+--
+--         k = k + 1
+      end
+
+
+--      opt.learningRate = 0.01
+
+--      cutorch.synchronize()
+--      optimState = sgdState or {
+--         learningRate = opt.learningRate,
+--         momentum = opt.momentum,
+--         learningRateDecay = 5e-7
+--      }
+--
+--
+----      outputs = trainBatch_full(inputs,targets, optimState)
+--      outputs = materialize_datase(indexes,inputs,targets, model)
+--
+--      -- disp progress
+--      xlua.progress(t, dataset:size())
+--
+--      -- update confusion
+--      for i = 1,opt.batchSize do
+--         confusion:add(outputs[i], targets[i])
+--      end
+--   end
+--
+--   -- time taken
+--
+--   time = sys.clock() - time
+--   time = time / dataset:size()
+--   print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
+--
+--   -- print confusion matrix
+--   print(confusion)
+--   trainLogger:add{['% mean class accuracy (train set)'] = confusion.totalValid * 100}
+--   confusion:zero()
+--
+--   -- save/log current net
+--   local filename = paths.concat(opt.save, 'mnist.net')
+--   os.execute('mkdir -p ' .. sys.dirname(filename))
+--   if paths.filep(filename) then
+--      os.execute('mv ' .. filename .. ' ' .. filename .. '.old')
+--   end
+--   print('<trainer> saving network to '..filename)
+--   torch.save(filename, model)
+--
+--   -- next epoch
+--   epoch = epoch + 1
+end
+
 
 
 
@@ -319,10 +391,11 @@ end
 --
 while true do
    -- train/test
-   train_mnist_bandit(trainData)
-   if (epoch > 10) then
-      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
-      print(bandit_dataset)
+   logged_data = torch.load("/var/scratch/agrotov/bandit_mnist/mnist_bandit_datas")
+   train_mnist_bandit(logged_data)
+   if (epoch > 1) then
+--      save_bandit_dataset("/var/scratch/agrotov/bandit_mnist/mnist_bandit_dataset")
+--      print(bandit_dataset)
       exit()
    end
 
