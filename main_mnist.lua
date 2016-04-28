@@ -270,26 +270,29 @@ function train_mnist_bandit(dataset,logged_data)
       print(t)
       -- create mini batch
       local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
-      local targets = torch.Tensor(opt.batchSize)
+      local actions = torch.Tensor(opt.batchSize)
+      local rewards = torch.Tensor(opt.batchSize)
+      local probability_of_actions = torch.Tensor(opt.batchSize)
+
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
 
       for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-            print(i)
-            print(logged_data[i])
-            index_of_input = logged_data[i][1]
-            print(index_of_input)
+         print(i)
+         print(logged_data[i])
+         local index_of_input = logged_data[i][1]
+         local action = logged_data[i][2]
+         local reward = logged_data[i][3]
+         local probability_of_action = logged_data[i][4]
+         print(index_of_input)
          -- load new sample
---         local sample = dataset[i]
---         local input = sample[1]:clone()
---         local _,target = sample[2]:clone():max(1)
---         target = target:squeeze()
---         inputs[k] = input
---         targets[k] = target
-----         print(k)
---         indexes[k][1] = i
---
---         k = k + 1
+         local sample = dataset[index_of_input]
+         local input = sample[1]:clone()
+         inputs[k] = input
+         actions[k] = action
+         rewards[k] = reward
+         probability_of_actions[k] = probability_of_action
+         k = k + 1
       end
 
 
