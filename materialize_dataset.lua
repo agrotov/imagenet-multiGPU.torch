@@ -15,6 +15,8 @@ local dataTimer = torch.Timer()
 
 
 
+bandit_dataset = nil
+
 function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     local parameters, gradParameters = model:getParameters()
 
@@ -47,7 +49,14 @@ function materialize_datase(input_indexes, inputsCPU, labelsCPU, model)
     -- index of input, action , reward, probability
     result = torch.cat(input_indexes,actions:float(),2):cat(rewards, 2):cat(p_of_actions)
 
-    print(result)
+    if bandit_dataset ~= nil then
+        bandit_dataset:cat(result,1)
+    else
+        bandit_dataset = result:clone()
+    end
+
+
+    print(bandit_dataset)
 
     return outputs
 end
