@@ -101,9 +101,9 @@ function probability_of_actions(model_output, actions,temperature)
     local probabilities_all = probabilities_from_output(model_output, temperature)
     print("probabilities_all")
     print("actions:cuda():view(actions:size(),1)")
-    print(actions:cuda():view(1,10))
+    print(actions)
     print(probabilities_all)
-    result =  probabilities_all:gather(2,actions:cuda():view(actions:size(),1))
+    result =  probabilities_all:gather(2,actions:cuda())
     print("result")
     print(result)
     return result
@@ -359,7 +359,7 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
 end
 
 
-local actions = torch.CudaTensor()
+local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor()
 local probabilities_logged= torch.CudaTensor()
 
@@ -375,7 +375,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
    -- transfer over to GPU
    inputs:resize(inputsCPU:size()):copy(inputsCPU)
-   actions:resize(actions_cpu:size()):copy(actions_cpu)
+   actions:copy(actions_cpu)
    rewards:resize(rewards_cpu:size()):copy(rewards_cpu)
    probabilities_logged:resize(probabilities_logged_cpu:size()):copy(probabilities_logged_cpu)
 
