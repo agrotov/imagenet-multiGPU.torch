@@ -307,7 +307,7 @@ function train_mnist_bandit(dataset,logged_data)
       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
 
       -- disp progress
-      xlua.progress(t, dataset:size())
+      xlua.progress(t, logged_data:size(1))
 
       -- update confusion
       for i = 1,opt.batchSize do
