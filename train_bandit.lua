@@ -108,6 +108,7 @@ function probability_of_actions(model_output, actions,temperature)
     print(temperature)
     print(actions)
     probabilities_all = probabilities_from_output(model_output, temperature)
+    print(probabilities_all)
     return probabilities_all:gather(2,actions)
 end
 
