@@ -136,6 +136,7 @@ criterion:cuda()
 
 
 paths.dofile('train.lua')
+paths.dofile('materialize_dataset.lua')
 --paths.dofile('train_bandit.lua')
 --loss_matrix = load_rewards_mnist()
 
@@ -191,6 +192,8 @@ function train_mnist_bandit(dataset)
       local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
       local targets = torch.Tensor(opt.batchSize)
       local k = 1
+      indexes = torch.Tensor(batchSize,1)
+
       for i = t,math.min(t+opt.batchSize-1,dataset:size()) do
          -- load new sample
          local sample = dataset[i]
@@ -200,7 +203,10 @@ function train_mnist_bandit(dataset)
          inputs[k] = input
          targets[k] = target
          k = k + 1
+         indexes[k] = i + k
       end
+
+      print(indexes)
 
       opt.learningRate = 0.01
 
@@ -211,7 +217,12 @@ function train_mnist_bandit(dataset)
          learningRateDecay = 5e-7
       }
 
-      outputs = trainBatch(inputs,targets, optimState)
+--      outputs = trainBatch(inputs,targets, optimState)
+
+      outputs = materialize_datase(indexes,inputs,targets, optimState)
+
+
+
 --      print(outputs)
       -- disp progress
       xlua.progress(t, dataset:size())
