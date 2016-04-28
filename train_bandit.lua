@@ -106,7 +106,7 @@ function probability_of_actions(model_output, actions,temperature)
     print(temperature)
     print(actions)
     probabilities_all = probabilities_from_output(model_output, temperature)
-    return softmax_probabilities:gather(2,actions)
+    return probabilities_all:gather(2,actions)
 end
 
 function compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
