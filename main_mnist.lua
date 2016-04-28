@@ -260,10 +260,14 @@ function train_mnist_bandit(dataset,logged_data)
 
    local batch_size = 10
 
+   print("print(logged_data:size(1))")
+   print(logged_data:size(1))
+   print(logged_data:size(2))
+
    -- do one epoch
    print('<trainer> on training set:')
    print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
-   for t = 1,logged_data:size(),opt.batchSize do
+   for t = 1,logged_data:size(1),opt.batchSize do
 
       print("t")
       print(t)
