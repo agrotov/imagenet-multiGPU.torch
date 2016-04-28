@@ -380,6 +380,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       model:zeroGradParameters()
       outputs = model:forward(inputs)
       size_output = outputs:size()
+      print(outputs)
+      print(actions)
       p_of_actions_student = probability_of_actions(outputs, actions)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
