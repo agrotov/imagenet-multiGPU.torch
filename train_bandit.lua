@@ -67,7 +67,7 @@ end
 
 
 local function sample_action(model_output)
-    print(model_output)
+--    print(model_output)
     result =  torch.multinomial(model_output,1):long()
 --    result = torch.Tensor(10,1):random(1,10):long()
 --    print(result)
@@ -329,8 +329,8 @@ function trainBatch(inputsCPU, labelsCPU, optimState)
    dataTimer:reset()
 
 --   print(outputs)
-   if batchNumber > 3000 then
-       exit()
-    end
+--   if batchNumber > 3000 then
+--       exit()
+--    end
    return outputs
 end
