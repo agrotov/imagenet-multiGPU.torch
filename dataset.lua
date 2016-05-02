@@ -307,6 +307,13 @@ function dataset:getByClass(class)
    return self:sampleHookTrain(imgpath), index
 end
 
+
+function dataset:getByClassAndIndex(class,index)
+   local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
+   return self:sampleHookTrain(imgpath), index
+end
+
+
 -- converts a table of samples (and corresponding labels) to a clean tensor
 local function tableToOutput(self, dataTable, scalarTable)
    local data, scalarLabels
