@@ -63,4 +63,6 @@ donkeys:synchronize()
 assert(nTest > 0, "Failed to get nTest")
 print('nTest: ', nTest)
 
+print("trainLoader 2")
+print(trainLoader)
 
