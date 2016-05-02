@@ -29,9 +29,6 @@ do -- start K datathreads (donkeys)
             print(string.format('Starting donkey with id: %d seed: %d', tid, seed))
             paths.dofile('donkey.lua')
 
-            print("trainLoader")
-            print(trainLoader)
-
          end
       );
    else -- single threaded data loading. useful for debugging
