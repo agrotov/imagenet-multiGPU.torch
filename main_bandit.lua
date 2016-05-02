@@ -15,7 +15,7 @@ require 'nn'
 require 'nnx'
 require 'cunn'
 require'cudnn'
-reqire 'math'
+require 'math'
 
 
 torch.setdefaulttensortype('torch.FloatTensor')
