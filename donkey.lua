@@ -201,5 +201,3 @@ else
 end
 
 
-print("trainLoader")
-print(trainLoader)

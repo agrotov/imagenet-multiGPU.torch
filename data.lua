@@ -28,6 +28,10 @@ do -- start K datathreads (donkeys)
             torch.manualSeed(seed)
             print(string.format('Starting donkey with id: %d seed: %d', tid, seed))
             paths.dofile('donkey.lua')
+
+            print("trainLoader")
+            print(trainLoader)
+
          end
       );
    else -- single threaded data loading. useful for debugging
@@ -35,6 +39,10 @@ do -- start K datathreads (donkeys)
       donkeys = {}
       function donkeys:addjob(f1, f2) f2(f1()) end
       function donkeys:synchronize() end
+
+      print("trainLoader")
+      print(trainLoader)
+
    end
 end
 
