@@ -5,6 +5,12 @@
 -- Time: 2:32 AM
 -- To change this template use File | Settings | File Templates.
 --
+require 'cutorch'
+-- require 'nn'
+require 'nnx'
+require 'cunn'
+require'cudnn'
+
 
 local inputs = torch.CudaTensor()
 local labels = torch.CudaTensor()
