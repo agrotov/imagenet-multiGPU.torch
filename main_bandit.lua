@@ -40,9 +40,6 @@ paths.dofile('test.lua')
 
 
 function produce_dataset(model)
-   print('==> doing epoch on training data:')
-   print("==> online epoch # " .. epoch)
-
    local params, newRegime = paramsForEpoch(epoch)
    if newRegime then
       optimState = {
@@ -86,7 +83,7 @@ function produce_dataset(model)
    print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
                           .. 'average loss (per batch): %.2f \t '
                           .. 'accuracy(%%):\t top-1 %.2f\t',
-                       epoch, tm:time().real, loss_epoch, top1_epoch))
+                       1, tm:time().real, loss_epoch, top1_epoch))
    print('\n')
 
    -- save model
@@ -94,9 +91,6 @@ function produce_dataset(model)
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
-   model:clearState()
-   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
-   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 end -- of train()
 
 
