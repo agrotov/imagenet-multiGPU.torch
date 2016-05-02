@@ -304,7 +304,7 @@ end
 function dataset:getByClass(class)
    local index = math.max(1, math.ceil(torch.uniform() * self.classListSample[class]:nElement()))
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
-   return self:sampleHookTrain(imgpath)
+   return self:sampleHookTrain(imgpath), index
 end
 
 -- converts a table of samples (and corresponding labels) to a clean tensor
@@ -327,14 +327,16 @@ function dataset:sample(quantity)
    assert(quantity)
    local dataTable = {}
    local scalarTable = {}
+   local indexes = torch.Tensor(opt.batchSize,1)
    for i=1,quantity do
       local class = torch.random(1, #self.classes)
-      local out = self:getByClass(class)
+      local out, index = self:getByClass(class)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
+      indexes[i][1] = index
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
-   return data, scalarLabels
+   return data, scalarLabels, indexes
 end
 
 function dataset:get(i1, i2)

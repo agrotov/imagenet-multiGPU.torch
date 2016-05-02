@@ -38,10 +38,75 @@ paths.dofile('data.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('test.lua')
 
-epoch = opt.epochNumber
 
-for i=1,opt.nEpochs do
-   train()
-   test()
-   epoch = epoch + 1
-end
+function produce_dataset(model)
+   print('==> doing epoch on training data:')
+   print("==> online epoch # " .. epoch)
+
+   local params, newRegime = paramsForEpoch(epoch)
+   if newRegime then
+      optimState = {
+         learningRate = params.learningRate,
+         learningRateDecay = 0.0,
+         momentum = opt.momentum,
+         dampening = 0.0,
+         weightDecay = params.weightDecay
+      }
+   end
+   batchNumber = 0
+   cutorch.synchronize()
+
+   -- set the dropouts to training mode
+--   model:training()
+
+   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+
+   local tm = torch.Timer()
+   top1_epoch = 0
+   loss_epoch = 0
+
+--   opt.epochSize = 1
+
+   local temperature = 1
+
+   for i=1,opt.epochSize do
+      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+      materialize_datase(indexes, inputs, labels, model, temperature)
+   end
+
+   cutorch.synchronize()
+
+   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
+   loss_epoch = loss_epoch / opt.epochSize
+
+   trainLogger:add{
+      ['% top1 accuracy (train set)'] = top1_epoch,
+      ['avg loss (train set)'] = loss_epoch
+   }
+   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
+                          .. 'average loss (per batch): %.2f \t '
+                          .. 'accuracy(%%):\t top-1 %.2f\t',
+                       epoch, tm:time().real, loss_epoch, top1_epoch))
+   print('\n')
+
+   -- save model
+   collectgarbage()
+
+   -- clear the intermediate states in the model before saving to disk
+   -- this saves lots of disk space
+   model:clearState()
+   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+end -- of train()
+
+
+
+produce_dataset(model)
+
+--epoch = opt.epochNumber
+--
+--for i=1,opt.nEpochs do
+--   train()
+--   test()
+--   epoch = epoch + 1
+--end
