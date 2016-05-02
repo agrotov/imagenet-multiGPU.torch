@@ -64,6 +64,7 @@ function produce_dataset(model)
          -- the job callback (runs in data-worker thread)
          function()
             local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+            print("donkeys:addjob sample")
             return indexes, inputs, labels, model, temperature
          end,
          -- the end callback (runs in the main thread)
