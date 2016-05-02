@@ -106,10 +106,7 @@ end -- of produce_dataset()
 
 function train_imagenet_bandit(model)
 
-   local opts = paths.dofile('donkey.lua')
-   print("trainLoader")
-   print(trainLoader)
-   exit()
+   paths.dofile('donkey.lua')
 
    logged_data = torch.load("/var/scratch/agrotov/bandit_imagenet/logged_dataset_small")
 
