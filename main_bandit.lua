@@ -131,6 +131,8 @@ function train_imagenet_bandit(model)
 
       for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
          local index_of_input = logged_data[i][1]
+         print("index_of_input")
+         print(index_of_input)
          local action = logged_data[i][2]
          local reward = logged_data[i][3]
          local probability_of_action = logged_data[i][4]
