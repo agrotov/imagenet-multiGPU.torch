@@ -99,11 +99,89 @@ function produce_dataset(model)
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
-end -- of train()
+end -- of produce_dataset()
 
 
 
-produce_dataset(model)
+
+function train_imagenet_bandit(model)
+
+   local opts = paths.dofile('donkey.lua')
+   print("trainLoader")
+   print(trainLoader)
+   exit()
+
+   logged_data = torch.load("/var/scratch/agrotov/bandit_imagenet/logged_dataset_small")
+
+   epoch = epoch or 1
+   -- local vars
+   local time = sys.clock()
+
+
+
+   -- do one epoch
+   print('<trainer> on training set:')
+   print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+   for t = 1,logged_data:size(1),opt.batchSize do
+
+      -- create mini batch
+      local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
+      local actions = torch.Tensor(opt.batchSize)
+      local rewards = torch.Tensor(opt.batchSize)
+      local probability_of_actions = torch.Tensor(opt.batchSize)
+      local targets = torch.Tensor(opt.batchSize)
+
+      local k = 1
+      indexes = torch.Tensor(opt.batchSize,1)
+
+      for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+         local index_of_input = logged_data[i][1]
+         local action = logged_data[i][2]
+         local reward = logged_data[i][3]
+         local probability_of_action = logged_data[i][4]
+
+         -- load new sample
+         local sample = dataset[index_of_input]
+         local input = sample[1]:clone()
+         local _,target = sample[2]:clone():max(1)
+         target = target:squeeze()
+         inputs[k] = input
+         targets[k] = target
+         actions[k] = action
+         rewards[k] = reward
+         probability_of_actions[k] = probability_of_action
+         k = k + 1
+      end
+
+      opt.learningRate = 0.01
+
+      cutorch.synchronize()
+      optimState = sgdState or {
+         learningRate = opt.learningRate,
+         momentum = opt.momentum,
+         learningRateDecay = 5e-7
+      }
+
+
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
+
+   end
+
+   -- time taken
+
+   time = sys.clock() - time
+   time = time / dataset:size()
+   print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
+
+end -- of train_imagenet_bandit()
+
+
+
+
+--produce_dataset(model)
+
+train_imagenet_bandit(model)
+
 
 --epoch = opt.epochNumber
 --
