@@ -399,6 +399,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
    cutorch.synchronize()
 
 --    top-1 error
+   local top1_epoch = 0
    local top1 = 0
    do
       local _,prediction_sorted = outputs:float():sort(2, true) -- descending
