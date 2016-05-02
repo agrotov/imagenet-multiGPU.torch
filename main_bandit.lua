@@ -41,7 +41,7 @@ os.execute('mkdir -p ' .. opt.save)
 
 paths.dofile('data.lua')
 paths.dofile('train.lua')
-paths.dofile('train_bandit.lua')
+--paths.dofile('train_bandit.lua')
 paths.dofile('test.lua')
 
 function produce_dataset(model)
@@ -51,7 +51,7 @@ function produce_dataset(model)
    -- set the dropouts to training mode
 --   model:training()
 
-   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+--   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
    top1_epoch = 0
@@ -102,12 +102,12 @@ end -- of train()
 
 
 
---produce_dataset(model)
+produce_dataset(model)
 
-epoch = opt.epochNumber
-
-for i=1,opt.nEpochs do
-   train()
-   test()
-   epoch = epoch + 1
-end
+--epoch = opt.epochNumber
+--
+--for i=1,opt.nEpochs do
+--   train()
+--   test()
+--   epoch = epoch + 1
+--end
