@@ -398,7 +398,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
    cutorch.synchronize()
 
-   loss_epoch = loss_epoch + err
 --    top-1 error
    local top1 = 0
    do
