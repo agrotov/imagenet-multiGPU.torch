@@ -63,7 +63,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU)
         bandit_dataset = result:clone()
     end
 
-
+    save_bandit_dataset("/var/scratch/agrotov/bandit_imagenet/logged_dataset")
     return outputs
 end
 

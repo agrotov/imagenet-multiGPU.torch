@@ -104,7 +104,7 @@ end -- of train()
 
 
 produce_dataset(model)
-save_bandit_dataset("/var/scratch/agrotov/bandit_imagenet/logged_dataset")
+
 --epoch = opt.epochNumber
 --
 --for i=1,opt.nEpochs do
