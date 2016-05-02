@@ -314,7 +314,6 @@ function dataset:getByClassAndIndex(class,index)
    print("index")
    print(index)
    print("classlist")
-   print(self.classListSample)
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
    return self:sampleHookTrain(imgpath), index
 end
