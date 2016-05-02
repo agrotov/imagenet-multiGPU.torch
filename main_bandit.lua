@@ -52,7 +52,7 @@ function produce_dataset(model)
    -- set the dropouts to training mode
 --   model:training()
 
---   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
    top1_epoch = 0
@@ -104,7 +104,7 @@ end -- of train()
 
 
 produce_dataset(model)
-
+save_bandit_dataset("/var/scratch/agrotov/bandit_imagenet/logged_dataset")
 --epoch = opt.epochNumber
 --
 --for i=1,opt.nEpochs do

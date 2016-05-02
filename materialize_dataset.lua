@@ -24,10 +24,9 @@ local dataTimer = torch.Timer()
 --bandit_dataset = nil
 
 function materialize_dataset(input_indexes, inputsCPU, labelsCPU)
-    print("materialize_datase")
-    print(model)
     temperature = temperature or 0.5
     local parameters, gradParameters = model:getParameters()
+    print(loss_matrix)
 
     batchNumber = batchNumber or 1
 
