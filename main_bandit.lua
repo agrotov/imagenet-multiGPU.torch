@@ -140,8 +140,8 @@ function train_imagenet_bandit(model)
 --         print(index_of_input)
 --         print(((index_of_input-1)%1000)+1)
 --         print(math.floor((index_of_input-1)/1000))
-         local class = ((index_of_input-1)%1000)+1
-         local index_of_image = math.floor((index_of_input-1)/1000)
+         local class = ((index_of_input)%1000)
+         local index_of_image = math.floor((index_of_input))
          local input, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
          targets[k] = class
          inputs[k] = input
