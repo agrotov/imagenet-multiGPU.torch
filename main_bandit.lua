@@ -12,6 +12,11 @@ require 'paths'
 require 'xlua'
 require 'optim'
 require 'nn'
+require 'nnx'
+require 'cunn'
+require'cudnn'
+
+
 
 torch.setdefaulttensortype('torch.FloatTensor')
 
