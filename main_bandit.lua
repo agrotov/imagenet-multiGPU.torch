@@ -40,16 +40,6 @@ paths.dofile('test.lua')
 
 
 function produce_dataset(model)
-   local params, newRegime = paramsForEpoch(epoch)
-   if newRegime then
-      optimState = {
-         learningRate = params.learningRate,
-         learningRateDecay = 0.0,
-         momentum = opt.momentum,
-         dampening = 0.0,
-         weightDecay = params.weightDecay
-      }
-   end
    batchNumber = 0
    cutorch.synchronize()
 
