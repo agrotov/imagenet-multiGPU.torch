@@ -398,15 +398,16 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
    cutorch.synchronize()
 
+   print(rewards)
+
 --    top-1 error
    local top1_epoch = 0
    local top1 = 0
-   print(actions)
    do
       local _,prediction_sorted = outputs:float():sort(2, true) -- descending
       for i=1,opt.batchSize do
---         if prediction_sorted[i][1] == labelsCPU[i] then
-        if actions[i] == labelsCPU[i] then
+         if prediction_sorted[i][1] == labelsCPU[i] then
+--        if actions[i] == labelsCPU[i] then
             top1_epoch = top1_epoch + 1;
             top1 = top1 + 1
          end
