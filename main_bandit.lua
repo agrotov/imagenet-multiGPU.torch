@@ -166,7 +166,7 @@ function train_imagenet_bandit(model)
    -- time taken
 
    time = sys.clock() - time
-   time = time / dataset:size()
+   time = time / logged_data:size(1)
    print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
 
 end -- of train_imagenet_bandit()
