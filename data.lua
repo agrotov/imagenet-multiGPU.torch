@@ -54,3 +54,7 @@ donkeys:addjob(function() return testLoader:size() end, function(c) nTest = c en
 donkeys:synchronize()
 assert(nTest > 0, "Failed to get nTest")
 print('nTest: ', nTest)
+
+
+print("trainLoader")
+print(trainLoader)

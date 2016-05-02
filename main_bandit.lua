@@ -39,9 +39,6 @@ paths.dofile('train.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('test.lua')
 
-print("trainLoader")
-print(trainLoader)
-
 function produce_dataset(model)
    batchNumber = 0
    cutorch.synchronize()
