@@ -199,3 +199,7 @@ else
    torch.save(meanstdCache, cache)
    print('Time to estimate:', tm:time().real)
 end
+
+
+print("trainLoader")
+print(trainLoader)
