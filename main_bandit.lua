@@ -77,7 +77,7 @@ function produce_dataset(model)
       )
 
    end
-
+   print("after all")
    cutorch.synchronize()
 
    top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
