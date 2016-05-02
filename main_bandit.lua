@@ -57,7 +57,6 @@ function produce_dataset(model)
    temperature = 1
 
    for i=1,opt.epochSize do
-      print(trainLoader)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob")

@@ -324,6 +324,7 @@ end
 
 -- sampler, samples from the training set.
 function dataset:sample(quantity)
+   print("sample")
    assert(quantity)
    local dataTable = {}
    local scalarTable = {}
