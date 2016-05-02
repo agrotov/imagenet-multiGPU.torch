@@ -35,7 +35,7 @@ print('Saving everything to: ' .. opt.save)
 os.execute('mkdir -p ' .. opt.save)
 
 paths.dofile('data.lua')
-paths.dofile('train_bandit.lua')
+paths.dofile('train.lua')
 paths.dofile('test.lua')
 
 
