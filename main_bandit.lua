@@ -102,12 +102,12 @@ end -- of train()
 
 
 
-produce_dataset(model)
+--produce_dataset(model)
 
---epoch = opt.epochNumber
---
---for i=1,opt.nEpochs do
---   train()
---   test()
---   epoch = epoch + 1
---end
+epoch = opt.epochNumber
+
+for i=1,opt.nEpochs do
+   train()
+   test()
+   epoch = epoch + 1
+end
