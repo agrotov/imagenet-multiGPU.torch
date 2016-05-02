@@ -156,7 +156,8 @@ function train_imagenet_bandit(model)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
-
+      print("trainBatch_bandit")
+      print(t)
 
       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
 
