@@ -139,7 +139,7 @@ function train_imagenet_bandit(model)
          print("class")
          print((index_of_input%1000)+1)
          print(math.floor(index_of_input/1000))
-         local input, index_tmp = trainLoader:getByClassAndIndex((index_of_input%1000)+1, math.floor(index_of_input/1000))
+         local input, index_tmp = trainLoader:getByClassAndIndex((index_of_input%1000)+1, 10)
          inputs[k] = input
          actions[k] = action
          rewards[k] = reward
