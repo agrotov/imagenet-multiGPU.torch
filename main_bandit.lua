@@ -60,6 +60,7 @@ function produce_dataset(model)
       print(trainLoader)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
+      print("donkeys:addjob")
       donkeys:addjob(
          -- the job callback (runs in data-worker thread)
          function()
