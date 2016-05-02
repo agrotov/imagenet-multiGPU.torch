@@ -26,7 +26,6 @@ local dataTimer = torch.Timer()
 function materialize_dataset(input_indexes, inputsCPU, labelsCPU)
     temperature = temperature or 0.5
     local parameters, gradParameters = model:getParameters()
-    print(loss_matrix)
 
     batchNumber = batchNumber or 1
 
