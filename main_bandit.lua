@@ -73,7 +73,7 @@ function produce_dataset(model)
             return indexes, inputs
          end,
          -- the end callback (runs in the main thread)
-         trainBatch_full
+         materialize_datase
       )
 
    end
