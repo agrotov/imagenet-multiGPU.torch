@@ -140,7 +140,10 @@ function train_imagenet_bandit(model)
 --         print(index_of_input)
 --         print(((index_of_input-1)%1000)+1)
 --         print(math.floor((index_of_input-1)/1000))
-         local input, index_tmp = trainLoader:getByClassAndIndex(((index_of_input-1)%1000)+1, math.floor((index_of_input-1)/1000))
+         local class = ((index_of_input-1)%1000)+1
+         local index_of_image = math.floor((index_of_input-1)/1000)
+         local input, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
+         targets[k] = class
          inputs[k] = input
          actions[k] = action
          rewards[k] = reward
@@ -159,7 +162,7 @@ function train_imagenet_bandit(model)
       print("trainBatch_bandit")
       print(t)
 
-      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets)
 
    end
 
