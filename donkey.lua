@@ -72,9 +72,13 @@ local trainHook = function(self, path)
    return out
 end
 
+
+
+
 if paths.filep(trainCache) then
    print('Loading train metadata from cache')
    trainLoader = torch.load(trainCache)
+   print("CREATING TRAIN LOADER")
    trainLoader.sampleHookTrain = trainHook
    assert(trainLoader.paths[1] == paths.concat(opt.data, 'train'),
           'cached files dont have the same path as opt.data. Remove your cached files at: '
@@ -88,6 +92,7 @@ else
       split = 100,
       verbose = true
    }
+   print("CREATING TRAIN LOADER")
    torch.save(trainCache, trainLoader)
    trainLoader.sampleHookTrain = trainHook
 end
