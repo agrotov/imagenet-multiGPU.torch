@@ -71,10 +71,10 @@ function produce_dataset(model)
          function()
             local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
             print("donkeys:addjob sample")
-            return indexes, inputs, labels, model
+            return indexes, inputs, labels
          end,
          -- the end callback (runs in the main thread)
-         materialize_datase
+         materialize_dataset
       )
 
    end
