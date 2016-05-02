@@ -136,10 +136,10 @@ function train_imagenet_bandit(model)
          local probability_of_action = logged_data[i][4]
 
          -- load new sample
-         print("class")
-         print(index_of_input)
-         print(((index_of_input-1)%1000)+1)
-         print(math.floor((index_of_input-1)/1000))
+--         print("class")
+--         print(index_of_input)
+--         print(((index_of_input-1)%1000)+1)
+--         print(math.floor((index_of_input-1)/1000))
          local input, index_tmp = trainLoader:getByClassAndIndex(((index_of_input-1)%1000)+1, math.floor((index_of_input-1)/1000))
          inputs[k] = input
          actions[k] = action
