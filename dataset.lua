@@ -341,7 +341,7 @@ function dataset:sample(quantity)
       local out, index = self:getByClass(class)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
-      indexes[i][1] = index * #self.classes + class
+      indexes[i][1] = index * (#self.classes+1) + class
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
    return data, scalarLabels, indexes
