@@ -122,7 +122,7 @@ function train_imagenet_bandit(model)
    for t = 1,logged_data:size(1),opt.batchSize do
 
       -- create mini batch
-      local inputs = torch.Tensor(opt.batchSize,1,geometry[1],geometry[2])
+      local inputs = torch.Tensor(opt.batchSize,1,opt.imageCrop,opt.imageCrop)
       local actions = torch.Tensor(opt.batchSize)
       local rewards = torch.Tensor(opt.batchSize)
       local probability_of_actions = torch.Tensor(opt.batchSize)
