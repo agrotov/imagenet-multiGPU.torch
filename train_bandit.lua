@@ -398,7 +398,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
    cutorch.synchronize()
 
-   print(rewards)
+   print(probabilities_logged)
 
 --    top-1 error
    local top1_epoch = 0
