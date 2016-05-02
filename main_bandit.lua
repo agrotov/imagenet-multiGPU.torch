@@ -54,12 +54,22 @@ function produce_dataset(model)
 
 --   opt.epochSize = 1
 
-   local temperature = 1
+   temperature = 1
 
    for i=1,opt.epochSize do
       print(trainLoader)
-      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-      materialize_datase(indexes, inputs, labels, model, temperature)
+--      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+--      materialize_datase(indexes, inputs, labels, model, temperature)
+      donkeys:addjob(
+         -- the job callback (runs in data-worker thread)
+         function()
+            local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+            return indexes, inputs, labels, model, temperature
+         end,
+         -- the end callback (runs in the main thread)
+         materialize_datase
+      )
+
    end
 
    cutorch.synchronize()
