@@ -172,6 +172,8 @@ function train_imagenet_bandit(model)
    time = time / logged_data:size(1)
    print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
 
+   exit()
+
 end -- of train_imagenet_bandit()
 
 
