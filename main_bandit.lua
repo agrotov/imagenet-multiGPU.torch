@@ -177,9 +177,9 @@ end -- of train_imagenet_bandit()
 
 
 
-produce_dataset(model)
+--produce_dataset(model)
 
---train_imagenet_bandit(model)
+train_imagenet_bandit(model)
 
 
 --epoch = opt.epochNumber
