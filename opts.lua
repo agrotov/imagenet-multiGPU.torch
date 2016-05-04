@@ -31,7 +31,7 @@ function M.parse(arg)
     cmd:option('-nEpochs',         1,    'Number of total epochs to run')
     cmd:option('-epochSize',       1, 'Number of batches per epoch')
     cmd:option('-epochNumber',     1,     'Manual epoch number (useful on restarts)')
-    cmd:option('-batchSize',       10,   'mini-batch size (1 = pure stochastic)')
+    cmd:option('-batchSize',       1,   'mini-batch size (1 = pure stochastic)')
     ---------- Optimization options ----------------------
     cmd:option('-LR',    0.0, 'learning rate; if set, overrides default LR/WD recipe')
     cmd:option('-momentum',        0.9,  'momentum')
