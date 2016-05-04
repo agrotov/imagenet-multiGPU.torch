@@ -45,7 +45,7 @@ paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
 paths.dofile('test.lua')
 
-function produce_dataset(model)
+function produce_dataset(model, data_path)
    batchNumber = 0
    cutorch.synchronize()
 
@@ -67,7 +67,7 @@ function produce_dataset(model)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob")
       local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-      materialize_dataset(inputs, labels, indexes )
+      materialize_dataset(inputs, labels, indexes, data_path)
    end
    print("after all")
    cutorch.synchronize()
@@ -170,7 +170,7 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
-produce_dataset(data_path)
+produce_dataset(model, data_path)
 
 --train_imagenet_bandit(model,data_path)
 
