@@ -51,53 +51,42 @@ function produce_dataset(model)
 
    -- set the dropouts to training mode
 --   model:training()
-
+   paths.dofile('donkey.lua')
    loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
    top1_epoch = 0
    loss_epoch = 0
 
-      donkeys:addjob(
-      -- the job callback (runs in data-worker thread)
-      function()
-         local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-         print("donkeys:addjob sample")
-         return indexes, inputs, labels
-      end,
-      -- the end callback (runs in the main thread)
-      materialize_dataset
-   )
+--   opt.epochSize = 1
 
---
-----   opt.epochSize = 1
---
---   temperature = 1
---
---   for i=1,opt.epochSize do
-----      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-----      materialize_datase(indexes, inputs, labels, model, temperature)
---      print("donkeys:addjob")
---
---   end
---   print("after all")
---   cutorch.synchronize()
---
---   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
---   loss_epoch = loss_epoch / opt.epochSize
---
---   trainLogger:add{
---      ['% top1 accuracy (train set)'] = top1_epoch,
---      ['avg loss (train set)'] = loss_epoch
---   }
---   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
---                          .. 'average loss (per batch): %.2f \t '
---                          .. 'accuracy(%%):\t top-1 %.2f\t',
---                       1, tm:time().real, loss_epoch, top1_epoch))
---   print('\n')
---
---   -- save model
---   collectgarbage()
+   temperature = 1
+
+   for i=1,opt.epochSize do
+--      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+--      materialize_datase(indexes, inputs, labels, model, temperature)
+      print("donkeys:addjob")
+      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+      materialize_dataset(inputs, labels, indexes )
+   end
+   print("after all")
+   cutorch.synchronize()
+
+   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
+   loss_epoch = loss_epoch / opt.epochSize
+
+   trainLogger:add{
+      ['% top1 accuracy (train set)'] = top1_epoch,
+      ['avg loss (train set)'] = loss_epoch
+   }
+   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
+                          .. 'average loss (per batch): %.2f \t '
+                          .. 'accuracy(%%):\t top-1 %.2f\t',
+                       1, tm:time().real, loss_epoch, top1_epoch))
+   print('\n')
+
+   -- save model
+   collectgarbage()
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
