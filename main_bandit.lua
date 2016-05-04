@@ -100,6 +100,7 @@ function train_imagenet_bandit(model, data_path)
    paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
+   print(logged_data)
 
    epoch = epoch or 1
    -- local vars
@@ -162,8 +163,6 @@ function train_imagenet_bandit(model, data_path)
    time = sys.clock() - time
    time = time / logged_data:size(1)
    print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
-
-   print_bandit_dataset()
 
 end -- of train_imagenet_bandit()
 
