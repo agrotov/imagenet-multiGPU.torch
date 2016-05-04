@@ -304,6 +304,7 @@ end
 function dataset:getByClass(class)
    local index = math.max(1, math.ceil(torch.uniform() * self.classListSample[class]:nElement()))
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
+   print(imgpath)
    return self:sampleHookTrain(imgpath), index
 end
 
@@ -340,8 +341,12 @@ function dataset:sample(quantity)
       local class = torch.random(1, #self.classes)
       local out, index = self:getByClass(class)
       table.insert(dataTable, out)
-      table.insert(scalarTable, class)
+      table.insert(scalarTable, class
       indexes[i][1] = index * (#self.classes+1) + class
+      print("sample image")
+      print(class)
+      print(index)
+      print(indexes[i][1])
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
    return data, scalarLabels, indexes

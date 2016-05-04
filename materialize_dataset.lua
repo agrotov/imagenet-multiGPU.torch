@@ -23,7 +23,7 @@ local dataTimer = torch.Timer()
 
 --bandit_dataset = nil
 
-function materialize_dataset(input_indexes, inputsCPU, labelsCPU)
+function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path)
     temperature = temperature or 0.5
     local parameters, gradParameters = model:getParameters()
 
@@ -62,8 +62,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU)
     else
         bandit_dataset = result:clone()
     end
-
-    save_bandit_dataset("/var/scratch/agrotov/bandit_imagenet/logged_dataset")
+    save_bandit_dataset(path)
     return outputs
 end
 
