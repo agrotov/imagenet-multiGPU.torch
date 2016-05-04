@@ -163,7 +163,7 @@ function train_imagenet_bandit(model, data_path)
    time = time / logged_data:size(1)
    print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
 
---   exit()
+   print_bandit_dataset()
 
 end -- of train_imagenet_bandit()
 
@@ -173,7 +173,7 @@ data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
 --produce_dataset(model, data_path)
 
 train_imagenet_bandit(model,data_path)
-print_bandit_dataset()
+
 
 --epoch = opt.epochNumber
 --
