@@ -104,11 +104,11 @@ end -- of produce_dataset()
 
 
 
-function train_imagenet_bandit(model)
+function train_imagenet_bandit(model, data_path)
 
    paths.dofile('donkey.lua')
 
-   logged_data = torch.load("/var/scratch/agrotov/bandit_imagenet/logged_dataset_small")
+   logged_data = torch.load(data_path)
 
    epoch = epoch or 1
    -- local vars
@@ -138,10 +138,10 @@ function train_imagenet_bandit(model)
          -- load new sample
          local class = ((index_of_input)%1001)
          local index_of_image = math.floor((index_of_input/1001))
---         print('data')
---         print(class)
---         print(index_of_image)
---         print(index_of_input)
+         print('data')
+         print(class)
+         print(index_of_image)
+         print(index_of_input)
          local input, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
          targets[k] = class
          inputs[k] = input
@@ -178,10 +178,10 @@ end -- of train_imagenet_bandit()
 
 
 
-path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
-produce_dataset(path)
+data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
+--produce_dataset(path)
 
---train_imagenet_bandit(model)
+train_imagenet_bandit(model,data_path)
 
 
 --epoch = opt.epochNumber
