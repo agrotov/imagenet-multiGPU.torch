@@ -58,44 +58,46 @@ function produce_dataset(model)
    top1_epoch = 0
    loss_epoch = 0
 
---   opt.epochSize = 1
-
-   temperature = 1
-
-   for i=1,opt.epochSize do
---      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
---      materialize_datase(indexes, inputs, labels, model, temperature)
-      print("donkeys:addjob")
       donkeys:addjob(
-         -- the job callback (runs in data-worker thread)
-         function()
-            local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-            print("donkeys:addjob sample")
-            return indexes, inputs, labels
-         end,
-         -- the end callback (runs in the main thread)
-         materialize_dataset
-      )
+      -- the job callback (runs in data-worker thread)
+      function()
+         local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+         print("donkeys:addjob sample")
+         return indexes, inputs, labels
+      end,
+      -- the end callback (runs in the main thread)
+      materialize_dataset
+   )
 
-   end
-   print("after all")
-   cutorch.synchronize()
-
-   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
-   loss_epoch = loss_epoch / opt.epochSize
-
-   trainLogger:add{
-      ['% top1 accuracy (train set)'] = top1_epoch,
-      ['avg loss (train set)'] = loss_epoch
-   }
-   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
-                          .. 'average loss (per batch): %.2f \t '
-                          .. 'accuracy(%%):\t top-1 %.2f\t',
-                       1, tm:time().real, loss_epoch, top1_epoch))
-   print('\n')
-
-   -- save model
-   collectgarbage()
+--
+----   opt.epochSize = 1
+--
+--   temperature = 1
+--
+--   for i=1,opt.epochSize do
+----      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+----      materialize_datase(indexes, inputs, labels, model, temperature)
+--      print("donkeys:addjob")
+--
+--   end
+--   print("after all")
+--   cutorch.synchronize()
+--
+--   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
+--   loss_epoch = loss_epoch / opt.epochSize
+--
+--   trainLogger:add{
+--      ['% top1 accuracy (train set)'] = top1_epoch,
+--      ['avg loss (train set)'] = loss_epoch
+--   }
+--   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
+--                          .. 'average loss (per batch): %.2f \t '
+--                          .. 'accuracy(%%):\t top-1 %.2f\t',
+--                       1, tm:time().real, loss_epoch, top1_epoch))
+--   print('\n')
+--
+--   -- save model
+--   collectgarbage()
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
