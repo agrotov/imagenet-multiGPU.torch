@@ -23,7 +23,7 @@ local dataTimer = torch.Timer()
 
 --bandit_dataset = nil
 
-function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path)
+function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperature)
     temperature = temperature or 0.5
     local parameters, gradParameters = model:getParameters()
 
@@ -41,6 +41,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path)
     local actions = sample_action(outputs,temperature)
 
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
+    print(p_of_actions)
     local rewards = reward_for_actions(loss_matrix, actions, labels)
 
     cutorch.synchronize()

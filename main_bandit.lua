@@ -67,7 +67,7 @@ function produce_dataset(model, data_path)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob")
       local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
-      materialize_dataset(indexes, inputs, labels, data_path)
+      materialize_dataset(indexes, inputs, labels, data_path, temperature)
    end
    print("after all")
    cutorch.synchronize()
@@ -169,9 +169,8 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
---produce_dataset(model, data_path)
-
-train_imagenet_bandit(model,data_path)
+produce_dataset(model, data_path)
+--train_imagenet_bandit(model,data_path)
 
 
 --epoch = opt.epochNumber
