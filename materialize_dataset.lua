@@ -71,7 +71,7 @@ function save_bandit_dataset(filename)
     torch.save(filename,bandit_dataset)
 end
 
-function print_data()
+function print_bandit_dataset()
     print("bandit_dataset")
     print(bandit_dataset)
 end
