@@ -333,7 +333,7 @@ end
 
 -- sampler, samples from the training set.
 function dataset:sample(quantity)
-   print("sample")
+--   print("sample")
    assert(quantity)
    local dataTable = {}
    local scalarTable = {}
@@ -344,10 +344,10 @@ function dataset:sample(quantity)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
       indexes[i][1] = index * (#self.classes+1) + class
-      print("sample image")
-      print(class)
-      print(index)
-      print(indexes[i][1])
+--      print("sample image")
+--      print(class)
+--      print(index)
+--      print(indexes[i][1])
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
    return data, scalarLabels, indexes
