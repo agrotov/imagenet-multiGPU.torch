@@ -73,7 +73,7 @@ function sample_action(model_output, temperature)
 --        print(result[i])
         if result[i]:eq(0) then
             print(i)
-            print(probabilities_all[i])
+--            print(probabilities_all[i])
         end
 
     end
