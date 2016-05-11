@@ -382,7 +382,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
       gpu_target = target:cuda()
-
+      exit()
 
 
       err = rewards:mean()
