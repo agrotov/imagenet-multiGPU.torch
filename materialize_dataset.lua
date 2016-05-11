@@ -42,8 +42,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     print("probabilities")
     print(probabilities[1])
-    print("print(torch.sum(probabilities))")
-    print(torch.sum(probabilities))
+    print("print(torch.sum(probabilities[1]))")
+    print(torch.sum(probabilities[1]))
 
     local size_output = outputs:size()
     local actions = sample_action(outputs,temperature)
