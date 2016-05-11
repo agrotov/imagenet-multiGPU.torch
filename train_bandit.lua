@@ -69,6 +69,8 @@ end
 function sample_action(model_output, temperature)
     local probabilities_all= probabilities_from_output(model_output, temperature)
     result =  torch.multinomial(probabilities_all,1):long()
+    print("actions")
+    print(result)
     return result
 end
 
@@ -76,8 +78,8 @@ end
 function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
-    print("actions")
-    print(actions)
+--    print("actions")
+--    print(actions)
     rewards = (loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
     return  rewards
 end
