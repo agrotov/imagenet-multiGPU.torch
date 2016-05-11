@@ -78,7 +78,7 @@ function sample_action(model_output, temperature)
     end
 
     print("probabilities_all:size()")
-    print(probabilities_all)
+--    print(probabilities_all)
     print("actions")
     print(result)
     return result
