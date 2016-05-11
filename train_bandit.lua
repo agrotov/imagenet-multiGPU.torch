@@ -71,7 +71,7 @@ function sample_action(model_output, temperature)
     result =  torch.multinomial(probabilities_all,1):long()
     for i=1,result:size()[1] do
 --        print(result[i])
-        if result[i]:eq(0) > 0 then
+        if torch.all(result[i]:eq(0)) then
             print(i)
 --            print(probabilities_all[i])
         end
