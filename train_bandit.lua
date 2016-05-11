@@ -69,8 +69,10 @@ end
 function sample_action(model_output, temperature)
     local probabilities_all= probabilities_from_output(model_output, temperature)
     result =  torch.multinomial(probabilities_all,1):long()
+
+
     print("probabilities_all:size()")
-    print(probabilities_all:size())
+    print(probabilities_all)
     print("actions")
     print(result)
     return result
