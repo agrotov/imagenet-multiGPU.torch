@@ -40,17 +40,17 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     probabilities = probabilities_from_output(outputs, temperature)
 
-    print("probabilities")
-    print(probabilities[1])
-    print("print(torch.sum(probabilities[1]))")
-    print(torch.sum(probabilities[1]))
+--    print("probabilities")
+--    print(probabilities[1])
+--    print("print(torch.sum(probabilities[1]))")
+--    print(torch.sum(probabilities[1]))
 
     local size_output = outputs:size()
     local actions = sample_action(outputs,temperature)
 
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
-    print("p_of_actions")
-    print(p_of_actions)
+--    print("p_of_actions")
+--    print(p_of_actions)
 
 
     local rewards = reward_for_actions(loss_matrix, actions, labels)
