@@ -242,8 +242,8 @@ function dataset:__init(...)
    if self.split == 100 then
       self.testIndicesSize = 0
    else
-----      print('Splitting training and test sets to a ratio of '
-               .. self.split .. '/' .. (100-self.split))
+------      print('Splitting training and test sets to a ratio of '
+--               .. self.split .. '/' .. (100-self.split))
       self.classListTrain = {}
       self.classListTest  = {}
       self.classListSample = self.classListTrain
