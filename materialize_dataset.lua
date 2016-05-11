@@ -38,7 +38,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     local outputs = model:forward(inputs)
     print("outputs")
-    print(outputs)
+    print(outputs[1])
     local size_output = outputs:size()
     local actions = sample_action(outputs,temperature)
 
