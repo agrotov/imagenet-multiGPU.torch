@@ -60,7 +60,7 @@ function produce_dataset(model, data_path)
 
 --   opt.epochSize = 1
 
-   temperature = 0.0001
+   temperature = 0.001
 
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
