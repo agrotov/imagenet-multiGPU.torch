@@ -372,7 +372,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
    local err, target, p_of_actions_student, size_output
 
 
-   feval = function(x)
+   feval_bandit = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
       size_output = outputs:size()
@@ -389,8 +389,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       model:backward(inputs, gpu_target)
       return err, gradParameters
    end
-
-   optim.sgd(feval, parameters, optimState)
+   print("BANDITBANDITBANDITBANDITBANDITBANDIT")
+   optim.sgd(feval_bandit, parameters, optimState)
 
    -- DataParallelTable's syncParameters
    if model.needsSync then
