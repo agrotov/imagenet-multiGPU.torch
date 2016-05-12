@@ -152,8 +152,6 @@ function train_imagenet_bandit(model, data_path)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
-      print("trainBatch_bandit")
-      print(t)
 
       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets)
 
@@ -169,7 +167,7 @@ end -- of train_imagenet_bandit()
 
 
 
-data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_tiny"
+data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new"
 produce_dataset(model, data_path)
 --train_imagenet_bandit(model,data_path)
 
