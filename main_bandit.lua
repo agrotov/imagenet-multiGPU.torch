@@ -131,10 +131,10 @@ function train_imagenet_bandit(model, data_path)
          -- load new sample
          local class = ((index_of_input)%1001)
          local index_of_image = math.floor((index_of_input/1001))
-         print('data')
-         print(class)
-         print(index_of_image)
-         print(index_of_input)
+--         print('data')
+--         print(class)
+--         print(index_of_image)
+--         print(index_of_input)
          local input, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
          targets[k] = class
          inputs[k] = input
@@ -154,6 +154,8 @@ function train_imagenet_bandit(model, data_path)
       }
 
       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets)
+
+      exit()
 
    end
 
