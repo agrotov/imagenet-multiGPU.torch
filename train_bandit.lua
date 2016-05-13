@@ -355,7 +355,7 @@ local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU)
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature)
 
    batchNumber = batchNumber or 1
 
@@ -378,7 +378,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       model:zeroGradParameters()
       outputs = model:forward(inputs)
       size_output = outputs:size()
-      p_of_actions_student = probability_of_actions(outputs, actions)
+      p_of_actions_student = probability_of_actions(outputs, actions, temperature)
       print("p_of_actions_student")
       print(p_of_actions_student)
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)

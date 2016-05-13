@@ -107,6 +107,8 @@ function train_imagenet_bandit(model, data_path)
    -- local vars
    local time = sys.clock()
 
+   temperature = 0.05
+
    -- do one epoch
    print('<trainer> on training set:')
    print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
@@ -155,7 +157,7 @@ function train_imagenet_bandit(model, data_path)
       print("probability_of_actions")
       print(probability_of_actions)
 
-      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets)
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
 
       exit()
 
