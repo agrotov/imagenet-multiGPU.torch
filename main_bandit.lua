@@ -101,7 +101,7 @@ function train_imagenet_bandit(model, data_path)
    paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
---   print(logged_data)
+   print(logged_data)
 
    epoch = epoch or 1
    -- local vars
@@ -173,8 +173,8 @@ end -- of train_imagenet_bandit()
 
 
 
-data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new"
---produce_dataset(model, data_path)
+data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new_tiny"
+produce_dataset(model, data_path)
 train_imagenet_bandit(model,data_path)
 
 
