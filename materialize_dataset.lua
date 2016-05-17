@@ -52,6 +52,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 --    print("p_of_actions")
 --    print(p_of_actions)
 
+--    print(torch.cat(a,a,2):cat(p_of_actions,2))
+
 
     local rewards = reward_for_actions(loss_matrix, actions, labels)
 

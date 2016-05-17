@@ -76,7 +76,7 @@ end
 function reward_for_actions(loss_matrix, actions, labels)
 --    temp = loss_matrix:index(1,actions:view(actions:nElement()))
 --    result = temp:gather(2,labels:long():view(labels:nElement(),1))
---    print("actions")
+--    print("actions,labels")
 --    print(actions)
 --    print("labels")
 --    print(labels)
@@ -381,8 +381,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       outputs = model:forward(inputs)
       size_output = outputs:size()
       p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-      print("p_of_actions_student")
-      print(p_of_actions_student)
+--      print("p_of_actions_student")
+--      print(p_of_actions_student)
+
+      print(torch.cat(p_of_actions_student,probabilities_logged,2))
 
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
