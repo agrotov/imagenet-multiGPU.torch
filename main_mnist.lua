@@ -305,7 +305,7 @@ function train_mnist_bandit(dataset,logged_data)
       }
 
 
-      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets)
 
       -- disp progress
       xlua.progress(t, logged_data:size(1))
