@@ -62,6 +62,8 @@ function produce_dataset(model, data_path)
 
    temperature = 0.01
 
+   model:testing()
+
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
@@ -106,6 +108,8 @@ function train_imagenet_bandit(model, data_path)
    epoch = epoch or 1
    -- local vars
    local time = sys.clock()
+
+   model:testing()
 
    temperature = 0.01
 
@@ -182,8 +186,8 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new_tiny"
---produce_dataset(model, data_path)
-train_imagenet_bandit(model,data_path)
+produce_dataset(model, data_path)
+--train_imagenet_bandit(model,data_path)
 
 
 --epoch = opt.epochNumber
