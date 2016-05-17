@@ -426,9 +426,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
       top1 = top1 * 100 / opt.batchSize;
    end
    -- Calculate top-1 error, and print information
-   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
-          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
-          optimState.learningRate, dataLoadingTime))
+--   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
+--          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
+--          optimState.learningRate, dataLoadingTime))
 
 
    dataTimer:reset()
