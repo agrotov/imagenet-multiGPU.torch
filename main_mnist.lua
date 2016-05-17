@@ -259,7 +259,7 @@ function train_mnist_bandit(dataset,logged_data)
    -- local vars
    local time = sys.clock()
 
-   temperature = 0.1
+   temperature = 1000
 
    -- do one epoch
    print('<trainer> on training set:')
