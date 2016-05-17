@@ -107,7 +107,7 @@ function train_imagenet_bandit(model, data_path)
    -- local vars
    local time = sys.clock()
 
-   temperature = 0.05
+   temperature = 0.01
 
    -- do one epoch
    print('<trainer> on training set:')
@@ -174,8 +174,8 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new_tiny"
-produce_dataset(model, data_path)
---train_imagenet_bandit(model,data_path)
+--produce_dataset(model, data_path)
+train_imagenet_bandit(model,data_path)
 
 
 --epoch = opt.epochNumber
