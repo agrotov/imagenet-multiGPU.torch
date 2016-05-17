@@ -384,7 +384,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --      print("p_of_actions_student")
 --      print(p_of_actions_student)
 
-      print(torch.cat(p_of_actions_student,probabilities_logged,2))
+--      print(torch.cat(p_of_actions_student,probabilities_logged,2))
 
       target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
