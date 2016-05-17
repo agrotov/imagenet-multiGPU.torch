@@ -157,7 +157,7 @@ function train_imagenet_bandit(model, data_path)
          k = k + 1
       end
 
-      opt.learningRate = 0.01
+--      opt.learningRate = 0.01
 
       cutorch.synchronize()
       optimState = sgdState or {
