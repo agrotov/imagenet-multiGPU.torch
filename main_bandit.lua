@@ -109,7 +109,8 @@ function train_imagenet_bandit(model, data_path)
    -- local vars
    local time = sys.clock()
 
-   model:evaluate()
+--   model:evaluate()
+   model:training()
 
    temperature = 0.03
 
