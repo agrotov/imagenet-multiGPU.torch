@@ -414,7 +414,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --    top-1 error
    local top1_epoch = 0
    local top1 = 0
-   local actions_eva = torch.Tensor(opt.batchSize)
+   local actions_eva = torch.LongTensor(opt.batchSize)
    local rewards_model = 0
    do
       outputs = model:forward(inputs)
