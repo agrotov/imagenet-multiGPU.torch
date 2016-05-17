@@ -62,7 +62,7 @@ function produce_dataset(model, data_path)
 
    temperature = 0.01
 
-   model:testing()
+   model:evaluate()
 
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
@@ -109,7 +109,7 @@ function train_imagenet_bandit(model, data_path)
    -- local vars
    local time = sys.clock()
 
-   model:testing()
+   model:evaluate()
 
    temperature = 0.01
 
