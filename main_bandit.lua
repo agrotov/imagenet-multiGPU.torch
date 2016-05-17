@@ -104,6 +104,8 @@ function train_imagenet_bandit(model, data_path)
    paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
+
+   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
 --   print(logged_data)
 
    epoch = epoch or 1
