@@ -414,7 +414,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --    top-1 error
    local top1_epoch = 0
    local top1 = 0
+   local actions_eva = torch.Tensor(opt.batchSize)
+   local rewards_model = 0
    do
+      outputs = model:forward(inputs)
       local _,prediction_sorted = outputs:float():sort(2, true) -- descending
       for i=1,opt.batchSize do
          if prediction_sorted[i][1] == labelsCPU[i] then
@@ -422,12 +425,18 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
             top1_epoch = top1_epoch + 1;
             top1 = top1 + 1
          end
+         actions_eva[i] = prediction_sorted[i][1]
       end
       top1 = top1 * 100 / opt.batchSize;
    end
+
+   rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+
+   diff_rewards = rewards_eva:mean() - rewards:mean()
+
    -- Calculate top-1 error, and print information
    print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
-          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
+          epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
           optimState.learningRate, dataLoadingTime))
 
 
