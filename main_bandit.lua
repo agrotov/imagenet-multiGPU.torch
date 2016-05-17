@@ -161,7 +161,7 @@ function train_imagenet_bandit(model, data_path)
 
       cutorch.synchronize()
       optimState = sgdState or {
-         learningRate = opt.learningRate,
+         learningRate = opt.LR,
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
