@@ -181,6 +181,8 @@ function train_mnist(dataset)
    -- local vars
    local time = sys.clock()
 
+   temperature = 0.03
+
    -- do one epoch
    print('<trainer> on training set:')
    print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
@@ -257,7 +259,7 @@ function train_mnist_bandit(dataset,logged_data)
    -- local vars
    local time = sys.clock()
 
-
+   temperature = 0.03
 
    -- do one epoch
    print('<trainer> on training set:')
@@ -303,7 +305,7 @@ function train_mnist_bandit(dataset,logged_data)
       }
 
 
-      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState)
+      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
 
       -- disp progress
       xlua.progress(t, logged_data:size(1))
