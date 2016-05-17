@@ -50,10 +50,6 @@ local mean,std
 -- function to load the image, jitter it appropriately (random crops etc.)
 local trainHook = function(self, path, h1, w1, flip)
    collectgarbage()
-   if load_saved then
-      path = path.."load"
-      local input = loadImage(path)
-
    local input = loadImage(path)
    local iW = input:size(3)
    local iH = input:size(2)
@@ -74,6 +70,7 @@ local trainHook = function(self, path, h1, w1, flip)
       if mean then out[{{i},{},{}}]:add(-mean[i]) end
       if std then out[{{i},{},{}}]:div(std[i]) end
    end
+   print(h1, w1, flip)
    return out, h1, w1, flip
 end
 

@@ -357,7 +357,7 @@ function dataset:sample(quantity)
 ------      print(indexes[i][1])
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
-   return data, scalarLabels,h1s,w1s,flips, indexes
+   return data, scalarLabels, h1s, w1s, flips, indexes
 end
 
 function dataset:get(i1, i2)

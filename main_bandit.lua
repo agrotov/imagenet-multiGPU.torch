@@ -66,8 +66,8 @@ function produce_dataset(model, data_path)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob")
-      local inputs, labels, indexes, h1s, w1s, flips = trainLoader:sample(opt.batchSize)
-      materialize_dataset(indexes, inputs, labels, data_path, temperature)
+      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize)
+      materialize_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
    end
    print("after all")
    cutorch.synchronize()
@@ -120,6 +120,9 @@ function train_imagenet_bandit(model, data_path)
       local rewards = torch.Tensor(opt.batchSize)
       local probability_of_actions = torch.Tensor(opt.batchSize)
       local targets = torch.Tensor(opt.batchSize)
+      local h1s = torch.Tensor(opt.batchSize)
+      local w1s= torch.Tensor(opt.batchSize)
+      local flips = torch.Tensor(opt.batchSize)
 
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
@@ -130,6 +133,11 @@ function train_imagenet_bandit(model, data_path)
          local reward = logged_data[i][3]
          local probability_of_action = logged_data[i][4]
 
+         local h1 = logged_data[i][5]
+         local w1 = logged_data[i][6]
+         local flip = logged_data[i][7]
+
+
          -- load new sample
          local class = ((index_of_input)%1001)
          local index_of_image = math.floor((index_of_input/1001))
@@ -137,7 +145,7 @@ function train_imagenet_bandit(model, data_path)
 --         print(class)
 --         print(index_of_image)
 --         print(index_of_input)
-         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
+         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image,h1, w1, flip)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
