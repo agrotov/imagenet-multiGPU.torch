@@ -60,7 +60,7 @@ function produce_dataset(model, data_path)
 
 --   opt.epochSize = 1
 
-   temperature = 0.01
+   temperature = 0.03
 
    model:evaluate()
 
