@@ -346,8 +346,8 @@ function dataset:sample(quantity)
    for i=1,quantity do
       local class = torch.random(1, #self.classes)
       local out, h1, w1, flip, index = self:getByClass(class)
-      print("h1, w1, flip, index")
-      print(h1, w1, flip, index)
+--      print("h1, w1, flip, index")
+--      print(h1, w1, flip, index)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
       indexes[i][1] = index * (#self.classes+1) + class
