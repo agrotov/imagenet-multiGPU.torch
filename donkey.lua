@@ -70,7 +70,7 @@ local trainHook = function(self, path, h1, w1, flip)
       if mean then out[{{i},{},{}}]:add(-mean[i]) end
       if std then out[{{i},{},{}}]:div(std[i]) end
    end
-   print(h1, w1, flip)
+--   print(h1, w1, flip)
    return out, h1, w1, flip
 end
 

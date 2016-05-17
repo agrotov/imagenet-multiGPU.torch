@@ -68,7 +68,7 @@ function produce_dataset(model, data_path)
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
-      print("donkeys:addjob")
+      print("donkeys:addjob",i)
       local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize)
       materialize_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
    end
@@ -90,7 +90,7 @@ function produce_dataset(model, data_path)
 
    -- save model
    collectgarbage()
-   print_bandit_dataset()
+--   print_bandit_dataset()
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
@@ -184,9 +184,9 @@ end -- of train_imagenet_bandit()
 
 
 
-data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_new_tiny"
---produce_dataset(model, data_path)
-train_imagenet_bandit(model,data_path)
+data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_with_offsets"
+produce_dataset(model, data_path)
+--train_imagenet_bandit(model,data_path)
 
 
 --epoch = opt.epochNumber
