@@ -115,7 +115,7 @@ function train_imagenet_bandit(model, data_path)
 --   model:evaluate()
    model:training()
 
-   temperature = 0.001
+   temperature = 1
 
    -- do one epoch
    print('<trainer> on training set:')
