@@ -66,7 +66,7 @@ function produce_dataset(model, data_path)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob")
-      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
+      local inputs, labels, indexes, h1s, w1s, flips = trainLoader:sample(opt.batchSize)
       materialize_dataset(indexes, inputs, labels, data_path, temperature)
    end
    print("after all")
@@ -137,7 +137,7 @@ function train_imagenet_bandit(model, data_path)
 --         print(class)
 --         print(index_of_image)
 --         print(index_of_input)
-         local input, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
+         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
          targets[k] = class
          inputs[k] = input
          actions[k] = action

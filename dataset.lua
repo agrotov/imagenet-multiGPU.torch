@@ -338,19 +338,26 @@ function dataset:sample(quantity)
    local dataTable = {}
    local scalarTable = {}
    local indexes = torch.Tensor(opt.batchSize,1)
+   local indexes = torch.Tensor(opt.batchSize,1)
+   local h1s = torch.Tensor(opt.batchSize,1)
+   local w1s= torch.Tensor(opt.batchSize,1)
+   local flips = torch.Tensor(opt.batchSize,1)
    for i=1,quantity do
       local class = torch.random(1, #self.classes)
-      local out, index = self:getByClass(class)
+      local out, h1, w1, flip, index = self:getByClass(class)
       table.insert(dataTable, out)
       table.insert(scalarTable, class)
       indexes[i][1] = index * (#self.classes+1) + class
+      h1s[i][1] = h1
+      w1s[i][1] = w1
+      flips[i][1] = flip
 --      print("sample image")
 --      print(class)
 --      print(index)
 ------      print(indexes[i][1])
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)
-   return data, scalarLabels, indexes
+   return data, scalarLabels,h1s,w1s,flips, indexes
 end
 
 function dataset:get(i1, i2)
