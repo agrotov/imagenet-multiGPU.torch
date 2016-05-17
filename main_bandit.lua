@@ -147,7 +147,7 @@ function train_imagenet_bandit(model, data_path)
 --         print(class)
 --         print(index_of_image)
 --         print(index_of_input)
-         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image,h1, w1, flip)
+         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
