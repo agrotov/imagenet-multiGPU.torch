@@ -310,10 +310,11 @@ function dataset:getByClass(class)
 end
 
 
-function dataset:getByClassAndIndex(class,index)
+function dataset:getByClassAndIndex(class,index,h1, w1, flip)
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
    print(imgpath)
-   return self:sampleHookTrain(imgpath), index
+   local out, h1, w1, flip =self:sampleHookTrain(imgpath, h1, w1, flip)
+   return out, h1, w1, flip, index
 end
 
 

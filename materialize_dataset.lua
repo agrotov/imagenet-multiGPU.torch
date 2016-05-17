@@ -66,7 +66,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 --    print(actions:float())
 
     -- index of input, action , reward, probability
-    result = torch.cat(input_indexes,actions:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(w1s:float(),2):cat(h1s:float(),2):cat(flips:float(),2)
+    result = torch.cat(input_indexes,actions:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s:float(),2):cat(w1s:float(),2):cat(flips:float(),2)
 
 
     if bandit_dataset ~= nil then

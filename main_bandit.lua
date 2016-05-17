@@ -124,9 +124,6 @@ function train_imagenet_bandit(model, data_path)
       local rewards = torch.Tensor(opt.batchSize)
       local probability_of_actions = torch.Tensor(opt.batchSize)
       local targets = torch.Tensor(opt.batchSize)
-      local h1s = torch.Tensor(opt.batchSize)
-      local w1s= torch.Tensor(opt.batchSize)
-      local flips = torch.Tensor(opt.batchSize)
 
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
