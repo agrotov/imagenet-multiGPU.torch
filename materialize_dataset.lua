@@ -92,10 +92,6 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
     num_actions = 1000
 
-    print("inputsCPU:size()")
-    print(inputsCPU:size())
-    exit()
-
     num_inputs = input_indexes:size()[1]
 
     full_size = input_indexes:size()
