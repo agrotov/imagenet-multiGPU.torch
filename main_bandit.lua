@@ -90,12 +90,11 @@ function produce_dataset(model, data_path)
 
    -- save model
    collectgarbage()
---   print_bandit_dataset()
+   print_bandit_dataset()
 
    -- clear the intermediate states in the model before saving to disk
    -- this saves lots of disk space
 end -- of produce_dataset()
-
 
 
 
