@@ -112,8 +112,6 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
     for input_index=1,num_inputs do
         local image_index = input_indexes[input_index][1]
-        print("image_index")
-        print(image_index)
         local input_indexes_full = torch.Tensor(num_actions):fill(image_index)
 
         local label_of_input = labelsCPU[input_index]
@@ -127,7 +125,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
         result_for_input = torch.cat(input_indexes_full,actions_taken:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s_full:float(),2):cat(w1s_full:float(),2):cat(flips1s_full:float(),2)
 
-        print(result_for_input[{1,4}])
+        print(result_for_input[{{1,4}}])
 
         if bandit_dataset ~= nil then
             bandit_dataset = bandit_dataset:cat(result_for_input,1)
