@@ -106,16 +106,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
     -- fill in with 1,2,3
     local incrementor = 0
     actions_taken:apply(function() incrementor  = incrementor  + 1; return incrementor  end)
-
-
-    local  size_outputs = outputs:size()
-    local size_outputs_one_input = size_outputs
-
-    print("size_outputs_one_input")
-    print(size_outputs_one_input)
-
-    size_outputs_one_input[1] = num_actions
-
+    
     local p_of_action = 1.0/num_actions
     local p_of_actions= torch.Tensor(num_actions):fill(p_of_action)
 
