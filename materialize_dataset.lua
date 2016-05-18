@@ -121,9 +121,9 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
         local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
 
-        local h1s_full= torch.Tensor(num_actions):fill(h1s[input_index])
-        local w1s_full= torch.Tensor(num_actions):fill(w1s[input_index])
-        local flips1s_full= torch.Tensor(num_actions):fill(flips[input_index])
+        local h1s_full= torch.Tensor(num_actions):fill(h1s[input_index][1])
+        local w1s_full= torch.Tensor(num_actions):fill(w1s[input_index][1])
+        local flips1s_full= torch.Tensor(num_actions):fill(flips[input_index][1])
 
         result_for_input = torch.cat(input_indexes_full,actions_taken:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s_full:float(),2):cat(w1s_full:float(),2):cat(flips1s_full:float(),2)
         if bandit_dataset ~= nil then
