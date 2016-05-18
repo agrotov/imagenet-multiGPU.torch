@@ -96,13 +96,32 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
     print(inputsCPU:size())
     exit()
 
+    num_inputs = input_indexes:size()[1]
+
+    full_size = input_indexes:size()
+    full_size[1] = full_size[1] * num_actions
+
+    input_indexes_full = torch.Tensor(full_size)
+
+
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     labels:resize(labelsCPU:size()):copy(labelsCPU)
 
     local outputs = model:forward(inputs)
-
     probabilities = probabilities_from_output(outputs, temperature)
+
+    print("probabilities:size()")
+    print(probabilities:size())
+
+    for input_index=1,num_actions do
+        exit()
+    end
+
+
+
+
+
 
 --    print("probabilities")
 --    print(probabilities[1])
