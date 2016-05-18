@@ -112,6 +112,8 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
     for input_index=1,num_inputs do
         local image_index = input_indexes[input_index]
+        print("image_index")
+        print(image_index)
         local input_indexes_full = torch.Tensor(num_actions):fill(image_index)
 
         local label_of_input = labelsCPU[input_index]
