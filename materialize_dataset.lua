@@ -127,7 +127,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
         result_for_input = torch.cat(input_indexes_full,actions_taken:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s_full:float(),2):cat(w1s_full:float(),2):cat(flips1s_full:float(),2)
 
-        print(result_for_input)
+        print(result_for_input[{1,4}])
 
         if bandit_dataset ~= nil then
             bandit_dataset = bandit_dataset:cat(result_for_input,1)
