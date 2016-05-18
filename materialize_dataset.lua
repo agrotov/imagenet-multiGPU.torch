@@ -104,7 +104,8 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
     local actions_taken = torch.Tensor(num_actions)
 
     -- fill in with 1,2,3
-    actions_taken:apply(function() i = i + 1; return i end)
+    local incrementor = 0
+    actions_taken:apply(function() incrementor  = incrementor  + 1; return incrementor  end)
 
 
     local  size_outputs = outputs:size()
