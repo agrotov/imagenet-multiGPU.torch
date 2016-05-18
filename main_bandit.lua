@@ -70,7 +70,7 @@ function produce_dataset(model, data_path)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
       local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize)
-      materialize_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
+      materialize_full_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
    end
    print("after all")
    cutorch.synchronize()
