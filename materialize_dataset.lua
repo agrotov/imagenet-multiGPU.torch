@@ -83,80 +83,55 @@ end
 
 
 function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, temperature, h1s, w1s, flips)
-    temperature = temperature or 0.5
 
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
     collectgarbage()
 
-    num_actions = 1000
+    local num_actions = 1000
 
-    num_inputs = input_indexes:size()[1]
+    local num_inputs = input_indexes:size()[1]
 
-    full_size = input_indexes:size()
+    local full_size = input_indexes:size()
     full_size[1] = full_size[1] * num_actions
 
-    input_indexes_full = torch.Tensor(full_size)
+    local input_indexes_full = torch.Tensor(full_size)
 
 
     -- transfer over to GPU
-    inputs:resize(inputsCPU:size()):copy(inputsCPU)
-    labels:resize(labelsCPU:size()):copy(labelsCPU)
 
-    local outputs = model:forward(inputs)
-    probabilities = probabilities_from_output(outputs, temperature)
+    local actions_taken = torch.Tensor(num_actions)
 
-    print("probabilities:size()")
-    print(probabilities:size())
+    -- fill in with 1,2,3
+    actions_taken:apply(function() i = i + 1; return i end)
 
-    for input_index=1,num_actions do
-        exit()
+
+    local  size_outputs = outputs:size()
+    local size_outputs_one_input = size_outputs
+    size_outputs_one_input[1] = num_actions
+
+    local p_of_action = 1.0/num_actions
+    local p_of_actions= torch.Tensor(num_actions):fill(p_of_action)
+
+    for input_index=1,num_inputs do
+        local input_indexes_full = torch.Tensor(num_actions):fill(input_indexes[input_index])
+
+        local label_of_input = labelsCPU[input_index]
+        local label_of_input_tensor = torch.Tensor(num_actions):fill(label_of_input)
+
+        local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
+
+        local h1s_full= torch.Tensor(num_actions):fill(h1s[input_index])
+        local w1s_full= torch.Tensor(num_actions):fill(w1s[input_index])
+        local flips1s_full= torch.Tensor(num_actions):fill(flips[input_index])
+
+        result_for_input = torch.cat(input_indexes_full,actions_taken:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s_full:float(),2):cat(w1s_full:float(),2):cat(flips1s_full:float(),2)
+        if bandit_dataset ~= nil then
+            bandit_dataset = bandit_dataset:cat(result_for_input,1)
+        end
+
     end
-
-
-
-
-
-
---    print("probabilities")
---    print(probabilities[1])
---    print("print(torch.sum(probabilities[1]))")
---    print(torch.sum(probabilities[1]))
-
-    local size_output = outputs:size()
-    local actions = sample_action(outputs,temperature)
-
-    local p_of_actions= probability_of_actions(outputs, actions, temperature)
---    print("p_of_actions")
---    print(p_of_actions)
-
---    print(torch.cat(a,a,2):cat(p_of_actions,2))
-
-
-    local rewards = reward_for_actions(loss_matrix, actions, labels)
-
-    cutorch.synchronize()
-    batchNumber = batchNumber + 1
-
-    result = torch.Tensor()
-
-    result = input_indexes
-
---    print(result)
---    print(actions:float())
-
-    -- index of input, action , reward, probability
-    result = torch.cat(input_indexes,actions:float(),2):cat(rewards:float(), 2):cat(p_of_actions:float(),2):cat(h1s:float(),2):cat(w1s:float(),2):cat(flips:float(),2)
-
-
-    if bandit_dataset ~= nil then
-        bandit_dataset = bandit_dataset:cat(result,1)
-    else
-        bandit_dataset = result:clone()
-    end
-    save_bandit_dataset(path)
-    return outputs
 end
 
 
