@@ -101,7 +101,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
     -- transfer over to GPU
 
-    local actions_taken = torch.Tensor(num_actions)
+    local actions_taken = torch.LongTensor(num_actions)
 
     -- fill in with 1,2,3
     local incrementor = 0
