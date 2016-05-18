@@ -106,12 +106,13 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
     -- fill in with 1,2,3
     local incrementor = 0
     actions_taken:apply(function() incrementor  = incrementor  + 1; return incrementor  end)
-    
+
     local p_of_action = 1.0/num_actions
     local p_of_actions= torch.Tensor(num_actions):fill(p_of_action)
 
     for input_index=1,num_inputs do
-        local input_indexes_full = torch.Tensor(num_actions):fill(input_indexes[input_index])
+        local image_index = input_indexes[input_index]
+        local input_indexes_full = torch.Tensor(num_actions):fill(image_index)
 
         local label_of_input = labelsCPU[input_index]
         local label_of_input_tensor = torch.Tensor(num_actions):fill(label_of_input)
