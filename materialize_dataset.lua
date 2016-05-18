@@ -110,6 +110,10 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
     local  size_outputs = outputs:size()
     local size_outputs_one_input = size_outputs
+
+    print("size_outputs_one_input")
+    print(size_outputs_one_input)
+
     size_outputs_one_input[1] = num_actions
 
     local p_of_action = 1.0/num_actions
