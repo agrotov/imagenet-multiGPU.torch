@@ -27,7 +27,7 @@ function load_rewards_csv(filePath)
       end
       i = i + 1
     end
-
+    print("load_rewards_csv")
     ROWS = i
    --local ROWS = i - 1  -- Minus 1 because of header
 
@@ -36,7 +36,7 @@ function load_rewards_csv(filePath)
 --    local header = csvFile:read()
 
     local data = torch.Tensor(ROWS, COLS)
-    print("data")
+
     local i = 0
     for line in csvFile:lines('*l') do
       i = i + 1
