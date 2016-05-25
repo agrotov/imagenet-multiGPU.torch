@@ -15,6 +15,7 @@ function load_rewards_csv(filePath)
       local sep, fields = sep, {}
       local pattern = string.format("([^%s]+)", sep)
       self:gsub(pattern, function(substr) fields[#fields + 1] = substr end)
+      print("splitsplitsplitsplit")
       return fields
     end
 
