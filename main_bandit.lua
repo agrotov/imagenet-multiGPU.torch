@@ -57,7 +57,7 @@ function produce_dataset(model, data_path)
    print(loss_matrix[2][2])
    print(loss_matrix[3][3])
    print(loss_matrix[4][4])
-   exit()
+--   exit()
 
    local tm = torch.Timer()
    top1_epoch = 0
