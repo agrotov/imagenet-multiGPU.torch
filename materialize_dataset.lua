@@ -118,8 +118,8 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
         local label_of_input_tensor = torch.Tensor(num_actions):fill(label_of_input)
 
         local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
-        print("rewards")
-        print(rewards)
+        print("loss_matrix")
+        print(loss_matrix)
 
         local h1s_full= torch.Tensor(num_actions):fill(h1s[input_index][1])
         local w1s_full= torch.Tensor(num_actions):fill(w1s[input_index][1])
