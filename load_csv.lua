@@ -36,6 +36,7 @@ function load_rewards_csv(filePath)
 --    local header = csvFile:read()
 
     local data = torch.Tensor(ROWS, COLS)
+    print("datadatadatadata")
 
     local i = 0
     for line in csvFile:lines('*l') do
