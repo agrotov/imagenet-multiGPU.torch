@@ -53,6 +53,11 @@ function produce_dataset(model, data_path)
 --   model:training()
    paths.dofile('donkey.lua')
    loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+   print(loss_matrix[1][1])
+   print(loss_matrix[2][2])
+   print(loss_matrix[3][3])
+   print(loss_matrix[4][4])
+   exit()
 
    local tm = torch.Timer()
    top1_epoch = 0
