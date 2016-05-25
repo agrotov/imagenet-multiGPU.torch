@@ -33,7 +33,7 @@ function load_rewards_csv(filePath)
 
     -- Read data from CSV to tensor
     local csvFile = io.open(filePath, 'r')
-    local header = csvFile:read()
+--    local header = csvFile:read()
 
     local data = torch.Tensor(ROWS, COLS)
 
