@@ -29,7 +29,6 @@ function load_rewards_csv_new(filePath)
     end
     print("load_rewards_csvload_rewards_csvload_rewards_csv")
     ROWS = i
-    exit()
    --local ROWS = i - 1  -- Minus 1 because of header
 
     -- Read data from CSV to tensor
