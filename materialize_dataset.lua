@@ -120,6 +120,8 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
         local label_of_input = labelsCPU[input_index]
         local label_of_input_tensor = torch.Tensor(num_actions):fill(label_of_input)
 
+        print(label_of_input_tensors)
+
         local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
 --        print("loss_matrix")
 --        print(loss_matrix)
