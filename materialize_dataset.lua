@@ -113,7 +113,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
     print("materialize_full_dataset",num_inputs)
 
     for input_index=1,num_inputs do
-        print("input_index",input_index)
+--        print("input_index",input_index)
         local image_index = input_indexes[input_index][1]
         local input_indexes_full = torch.Tensor(num_actions):fill(image_index)
 
@@ -123,7 +123,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
         local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
 
-        print("rewards",rewards[label_of_input])
+--        print("rewards",rewards[label_of_input])
 
 --        print("loss_matrix")
 --        print(loss_matrix)
