@@ -9,7 +9,7 @@
 
 function load_rewards_csv(filePath)
     -- Read CSV file
-
+    exit()
     -- Split string
     function string:split(sep)
       local sep, fields = sep, {}
