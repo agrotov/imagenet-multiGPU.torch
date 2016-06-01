@@ -135,7 +135,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
         if bandit_dataset ~= nil then
             bandit_dataset = bandit_dataset:cat(result_for_input,1)
         else
-            bandit_dataset = result:clone()
+            bandit_dataset = result_for_input:clone()
         end
     end
 end
