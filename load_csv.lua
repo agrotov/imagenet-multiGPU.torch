@@ -38,10 +38,8 @@ function load_rewards_csv_new(filePath)
     local i = 0
     for line in csvFile:lines('*l') do
       i = i + 1
-      print(i)
       local l = line:split(',')
       for key, val in ipairs(l) do
---        print(i,key,val)
         data[i][key] = val
       end
     end
