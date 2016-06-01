@@ -143,6 +143,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
             bandit_dataset = result_for_input:clone()
         end
     end
+    exit()
 end
 
 
