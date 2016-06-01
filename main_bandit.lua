@@ -52,7 +52,7 @@ function produce_dataset(model, data_path)
    -- set the dropouts to training mode
 --   model:training()
    paths.dofile('donkey.lua')
-   loss_matrix = load_rewards_cefwfsv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv_new("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
    print(loss_matrix[1][1])
    print(loss_matrix[1][2])
    print(loss_matrix[1][3])

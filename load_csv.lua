@@ -7,7 +7,7 @@
 --
 
 
-function load_rewards_csvddd(filePath)
+function load_rewards_csv_new(filePath)
     -- Read CSV file
     exit()
     -- Split string
