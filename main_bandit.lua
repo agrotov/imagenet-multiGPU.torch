@@ -44,6 +44,7 @@ paths.dofile('data.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
 paths.dofile('test.lua')
+paths.dofile('load_csv.lua')
 
 function produce_dataset(model, data_path)
    batchNumber = 0
