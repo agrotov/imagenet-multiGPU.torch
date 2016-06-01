@@ -356,93 +356,93 @@ local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
-
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature)
+    batchNumber = batchNumber or 1
 
-   batchNumber = batchNumber or 1
+    cutorch.synchronize()
+    collectgarbage()
+    local dataLoadingTime = dataTimer:time().real
+    timer:reset()
 
-   cutorch.synchronize()
-   collectgarbage()
-   local dataLoadingTime = dataTimer:time().real
-   timer:reset()
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+    probabilities_logged:copy(probabilities_logged_cpu)
 
-   -- transfer over to GPU
-   inputs:resize(inputsCPU:size()):copy(inputsCPU)
-   actions:copy(actions_cpu)
-   rewards:copy(rewards_cpu)
-   probabilities_logged:copy(probabilities_logged_cpu)
-
-   print("actions",actions)
-
-
-   local err, target, p_of_actions_student, size_output
+    print("actions_cpu",actions_cpu)
 
 
-   feval = function(x)
-      model:zeroGradParameters()
-      outputs = model:forward(inputs)
-      size_output = outputs:size()
-      p_of_actions_student = probability_of_actions(outputs, actions, temperature)
---      print("p_of_actions_student")
---      print(p_of_actions_student)
-
-      print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
-
---      print(torch.cat(p_of_actions_student,probabilities_logged,2))
-
-      target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
-
-      gpu_target = target:cuda()
+    local err, target, p_of_actions_student, size_output
 
 
+    feval = function(x)
+        model:zeroGradParameters()
+        outputs = model:forward(inputs)
+        size_output = outputs:size()
+        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+        --      print("p_of_actions_student")
+        --      print(p_of_actions_student)
 
-      err = rewards:mean()
-      model:backward(inputs, gpu_target)
-      return err, gradParameters
-   end
+        print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
 
-   optim.sgd(feval, parameters, optimState)
+        --      print(torch.cat(p_of_actions_student,probabilities_logged,2))
 
-   -- DataParallelTable's syncParameters
-   if model.needsSync then
-      model:syncParameters()
-   end
+        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
-
-   cutorch.synchronize()
-
---   print(p_of_actions_student)
-
---    top-1 error
-   local top1_epoch = 0
-   local top1 = 0
-   local actions_eva = torch.LongTensor(opt.batchSize)
-   local rewards_model = 0
-   do
-      outputs = model:forward(inputs)
-      local _,prediction_sorted = outputs:float():sort(2, true) -- descending
-      for i=1,opt.batchSize do
-         if prediction_sorted[i][1] == labelsCPU[i] then
---        if actions[i] == labelsCPU[i] then
-            top1_epoch = top1_epoch + 1;
-            top1 = top1 + 1
-         end
-         actions_eva[i] = prediction_sorted[i][1]
-      end
-      top1 = top1 * 100 / opt.batchSize;
-   end
-
-   rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
-
-   diff_rewards = rewards_eva:mean() - rewards:mean()
-
-   -- Calculate top-1 error, and print information
-   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
-          epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
-          optimState.learningRate, dataLoadingTime))
+        gpu_target = target:cuda()
 
 
-   dataTimer:reset()
 
-   return outputs
+        err = rewards:mean()
+        model:backward(inputs, gpu_target)
+        return err, gradParameters
+    end
+
+    optim.sgd(feval, parameters, optimState)
+
+    -- DataParallelTable's syncParameters
+    if model.needsSync then
+        model:syncParameters()
+    end
+
+
+    cutorch.synchronize()
+
+    --   print(p_of_actions_student)
+
+    --    top-1 error
+    local top1_epoch = 0
+    local top1 = 0
+    local actions_eva = torch.LongTensor(opt.batchSize)
+    local rewards_model = 0
+    do
+        outputs = model:forward(inputs)
+        local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+        for i=1,opt.batchSize do
+            if prediction_sorted[i][1] == labelsCPU[i] then
+                --        if actions[i] == labelsCPU[i] then
+                top1_epoch = top1_epoch + 1;
+                top1 = top1 + 1
+            end
+            actions_eva[i] = prediction_sorted[i][1]
+        end
+        top1 = top1 * 100 / opt.batchSize;
+    end
+
+    rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+
+    diff_rewards = rewards_eva:mean() - rewards:mean()
+
+    -- Calculate top-1 error, and print information
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
+        epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
+        optimState.learningRate, dataLoadingTime))
+
+
+    dataTimer:reset()
+
+    return outputs
 end
+
+
