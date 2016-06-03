@@ -116,76 +116,79 @@ function train_imagenet_bandit(model, data_path)
 
    temperature = 1
 
-   -- do one epoch
-   print("opt.batchSize",opt.batchSize,logged_data:size(1))
-   print('<trainer> on training set:')
-   print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
-   for t = 1,logged_data:size(1),opt.batchSize do
+   for epoch = epoch or 1, opt.nEpochs do
+       -- do one epoch
+       print("opt.batchSize",opt.batchSize,logged_data:size(1))
+       print('<trainer> on training set:')
+       print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+       for t = 1,logged_data:size(1),opt.batchSize do
 
-      -- create mini batch
-      local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
-      local actions = torch.Tensor(opt.batchSize)
-      local rewards = torch.Tensor(opt.batchSize)
-      local probability_of_actions = torch.Tensor(opt.batchSize)
-      local targets = torch.Tensor(opt.batchSize)
+          -- create mini batch
+          local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
+          local actions = torch.Tensor(opt.batchSize)
+          local rewards = torch.Tensor(opt.batchSize)
+          local probability_of_actions = torch.Tensor(opt.batchSize)
+          local targets = torch.Tensor(opt.batchSize)
 
-      local k = 1
-      indexes = torch.Tensor(opt.batchSize,1)
+          local k = 1
+          indexes = torch.Tensor(opt.batchSize,1)
 
---      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
+    --      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
 
-      for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
---         print("i",i,"t",t)
-         local index_of_input = logged_data[i][1]
-         local action = logged_data[i][2]
-         local reward = logged_data[i][3]
-         local probability_of_action = logged_data[i][4]
+          for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+    --         print("i",i,"t",t)
+             local index_of_input = logged_data[i][1]
+             local action = logged_data[i][2]
+             local reward = logged_data[i][3]
+             local probability_of_action = logged_data[i][4]
 
-         local h1 = logged_data[i][5]
-         local w1 = logged_data[i][6]
-         local flip = logged_data[i][7]
+             local h1 = logged_data[i][5]
+             local w1 = logged_data[i][6]
+             local flip = logged_data[i][7]
 
 
-         -- load new sample
-         local class = ((index_of_input)%1001)
-         local index_of_image = math.floor((index_of_input/1001))
---         print('data')
---         print(class)
---         print(index_of_image)
---         print(index_of_input)
-         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
-         targets[k] = class
-         inputs[k] = input
-         actions[k] = action
---         print("action",action)
-         rewards[k] = reward
-         probability_of_actions[k] = probability_of_action
-         k = k + 1
-      end
+             -- load new sample
+             local class = ((index_of_input)%1001)
+             local index_of_image = math.floor((index_of_input/1001))
+    --         print('data')
+    --         print(class)
+    --         print(index_of_image)
+    --         print(index_of_input)
+             local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+             targets[k] = class
+             inputs[k] = input
+             actions[k] = action
+    --         print("action",action)
+             rewards[k] = reward
+             probability_of_actions[k] = probability_of_action
+             k = k + 1
+          end
 
---      opt.learningRate = 0.01
+    --      opt.learningRate = 0.01
 
-      cutorch.synchronize()
-      optimState = sgdState or {
-         learningRate = opt.LR,
-         momentum = opt.momentum,
-         learningRateDecay = 5e-7
-      }
---      print("probability_of_actions")
---      print(probability_of_actions)
---      print("rewards",rewards)
---      exit()
-      outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
+          cutorch.synchronize()
+          optimState = sgdState or {
+             learningRate = opt.LR,
+             momentum = opt.momentum,
+             learningRateDecay = 5e-7
+          }
+    --      print("probability_of_actions")
+    --      print(probability_of_actions)
+    --      print("rewards",rewards)
+    --      exit()
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
 
---      exit()
+    --      exit()
 
+       end
+
+       -- time taken
+
+       time = sys.clock() - time
+       time = time / logged_data:size(1)
+       print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
    end
-
-   -- time taken
-
-   time = sys.clock() - time
-   time = time / logged_data:size(1)
-   print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
+       
 
 end -- of train_imagenet_bandit()
 
