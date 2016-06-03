@@ -421,7 +421,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     --    top-1 error
 
-    full_information_test(inputs, labelsCPU, batchNumber)
+    full_information_test(inputs, labelsCPU, batchNumber, rewards_fake)
     dataTimer:reset()
 
     return outputs
@@ -429,7 +429,7 @@ end
 
 
 
-function full_information_test(inputs, labelsCPU,batchNumber)
+function full_information_test(inputs, labelsCPU,batchNumber, rewards_logged)
     model:evaluate()
     local top1_epoch = 0
     local top1 = 0
@@ -451,7 +451,7 @@ function full_information_test(inputs, labelsCPU,batchNumber)
 
     rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
-    diff_rewards = rewards_eva:mean() - rewards:mean()
+    diff_rewards = rewards_eva:mean() - rewards_logged:mean()
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
