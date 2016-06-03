@@ -106,8 +106,7 @@ function train_imagenet_bandit(model, data_path)
    logged_data = torch.load(data_path)
 
    loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
-   print(logged_data)
-exit()
+
    epoch = epoch or 1
    -- local vars
    local time = sys.clock()
@@ -193,9 +192,10 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_with_offsets_tiny"
---produce_dataset(model, data_path)
-train_imagenet_bandit(model,data_path)
-
+produce_dataset(model, data_path)
+print_bandit_dataset()
+--train_imagenet_bandit(model,data_path)
+--
 
 --epoch = opt.epochNumber
 --
