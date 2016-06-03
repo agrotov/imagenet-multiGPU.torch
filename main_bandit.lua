@@ -118,6 +118,7 @@ function train_imagenet_bandit(model, data_path)
    temperature = 1
 
    -- do one epoch
+   print("opt.batchSize",opt.batchSize)
    print('<trainer> on training set:')
    print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
    for t = 1,logged_data:size(1),opt.batchSize do
