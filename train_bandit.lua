@@ -371,7 +371,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     rewards:copy(rewards_cpu)
     probabilities_logged:copy(probabilities_logged_cpu)
 
-    print("actions_cpu",actions_cpu)
+    print("rewards_cpu",rewards_cpu)
     exit()
 
     local err, target, p_of_actions_student, size_output
