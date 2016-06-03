@@ -192,9 +192,9 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_with_offsets_tiny"
-produce_dataset(model, data_path)
-print_bandit_dataset()
---train_imagenet_bandit(model,data_path)
+--produce_dataset(model, data_path)
+--print_bandit_dataset()
+train_imagenet_bandit(model,data_path)
 --
 
 --epoch = opt.epochNumber
