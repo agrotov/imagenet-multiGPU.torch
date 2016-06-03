@@ -445,9 +445,9 @@ function full_information_test(inputs, labelsCPU)
     diff_rewards = rewards_eva:mean() - rewards:mean()
 
     -- Calculate top-1 error, and print information
-    print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
-        optimState.learningRate, dataLoadingTime))
+        optimState.learningRate, ))
 
 end
 
