@@ -80,7 +80,7 @@ function reward_for_actions(loss_matrix, actions, labels)
 --    print(actions)
 --    print("labels")
 --    print(labels)
-    rewards = 1-(loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
+    rewards = -(loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
     return  rewards
 end
 
