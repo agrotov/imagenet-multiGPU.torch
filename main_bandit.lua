@@ -121,6 +121,9 @@ function train_imagenet_bandit(model, data_path)
 --       print("opt.batchSize",opt.batchSize,logged_data:size(1))
        print('<trainer> on training set:')
        print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+
+       batch_number = 1
+       
        for t = 1,logged_data:size(1),opt.batchSize do
 
           -- create mini batch
@@ -176,8 +179,8 @@ function train_imagenet_bandit(model, data_path)
     --      print(probability_of_actions)
     --      print("rewards",rewards)
     --      exit()
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, t)
-
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number )
+          batch_number = batch_number + 1
 --          exit()
 
        end
