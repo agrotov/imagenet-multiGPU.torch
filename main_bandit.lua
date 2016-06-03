@@ -118,7 +118,7 @@ function train_imagenet_bandit(model, data_path)
 
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
-       print("opt.batchSize",opt.batchSize,logged_data:size(1))
+--       print("opt.batchSize",opt.batchSize,logged_data:size(1))
        print('<trainer> on training set:')
        print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
        for t = 1,logged_data:size(1),opt.batchSize do
@@ -184,20 +184,20 @@ function train_imagenet_bandit(model, data_path)
 
        -- time taken
 
-       time = sys.clock() - time
-       time = time / logged_data:size(1)
-       print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
+--       time = sys.clock() - time
+--       time = time / logged_data:size(1)
+--       print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
    end
-       
+
 
 end -- of train_imagenet_bandit()
 
 
 
 data_path = "/var/scratch/agrotov/bandit_imagenet/logged_dataset_with_offsets_tiny"
---produce_dataset(model, data_path)
+produce_dataset(model, data_path)
 --print_bandit_dataset()
-train_imagenet_bandit(model,data_path)
+--train_imagenet_bandit(model,data_path)
 --
 
 --epoch = opt.epochNumber
