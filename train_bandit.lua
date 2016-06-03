@@ -393,7 +393,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         --      print(torch.cat(p_of_actions_student,probabilities_logged,2))
 
-        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
+        target = -compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
         gpu_target = target:cuda()
 
@@ -450,7 +450,7 @@ function full_information_test(inputs, labelsCPU,batchNumber)
     diff_rewards = rewards_eva:mean() - rewards:mean()
 
     -- Calculate top-1 error, and print information
-    print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f ErrDiff %.4f Top1-%%: %.2f LR %.0e'):format(
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), diff_rewards, top1,
         optimState.learningRate))
 
