@@ -80,7 +80,7 @@ function reward_for_actions(loss_matrix, actions, labels)
 --    print(actions)
 --    print("labels")
 --    print(labels)
-    rewards = 1-(loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
+    rewards = (loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
     return  rewards
 end
 
@@ -125,6 +125,10 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
     print("weight",weight)
+    print("rewards",rewards)
+    print("probability_actions_student_model",probability_actions_student_model)
+    print("probability_actions_teacher_model",probability_actions_teacher_model)
+    print("actions",actions)
     target:scatter(2,actions:long(),weight:float())
 
     return target
