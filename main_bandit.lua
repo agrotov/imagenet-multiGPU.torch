@@ -176,7 +176,7 @@ function train_imagenet_bandit(model, data_path)
     --      print(probability_of_actions)
     --      print("rewards",rewards)
     --      exit()
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature)
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, k)
 
 --          exit()
 

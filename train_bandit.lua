@@ -361,7 +361,7 @@ local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature)
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber)
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
@@ -426,7 +426,7 @@ end
 
 
 
-function full_information_test(inputs, labelsCPU)
+function full_information_test(inputs, labelsCPU,batchNumber)
         local top1_epoch = 0
     local top1 = 0
     local actions_eva = torch.LongTensor(opt.batchSize)
