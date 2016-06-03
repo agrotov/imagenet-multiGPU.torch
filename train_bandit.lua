@@ -132,7 +132,7 @@ function compute_target(size, actions, rewards_arg, probability_actions_student_
 --    print("actions",actions)
     target:scatter(2,actions:long(),weight:float())
 
-    target = target - 0.5
+    target = target + 0.5
 
     return target
 end
@@ -399,7 +399,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
-        target = compute_target(size_output,actions, -rewards, p_of_actions_student, probabilities_logged)
+        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
 
         gpu_target = target:cuda()
 
