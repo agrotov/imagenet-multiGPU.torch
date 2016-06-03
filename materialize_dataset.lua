@@ -55,7 +55,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 --    print(torch.cat(a,a,2):cat(p_of_actions,2))
 
 
-    local rewards = reward_for_actions(loss_matrix, actions, labels)
+    local rewards = 1-reward_for_actions(loss_matrix, actions, labels)
 
     cutorch.synchronize()
     batchNumber = batchNumber + 1
@@ -121,7 +121,7 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
         local label_of_input_tensor = torch.Tensor(num_actions):fill(label_of_input)
 
 
-        local rewards = reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
+        local rewards = 1-reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
 
         print("rewards",rewards)
 exit()

@@ -158,7 +158,7 @@ function train_imagenet_bandit(model, data_path)
          inputs[k] = input
          actions[k] = action
 --         print("action",action)
-         rewards[k] = 1-reward
+         rewards[k] = reward
          probability_of_actions[k] = probability_of_action
          k = k + 1
       end
