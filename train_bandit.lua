@@ -124,7 +124,7 @@ function compute_target(size, actions, rewards, probability_actions_student_mode
 --    print(rewards)
     weight = compute_weight(rewards, probability_actions_student_model, probability_actions_teacher_model)
 
---    print("actions",actions)
+    print("weight",weight)
     target:scatter(2,actions:long(),weight:float())
 
     return target
