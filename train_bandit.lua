@@ -421,7 +421,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     --    top-1 error
 
-    full_information_test(inputs, labelsCPU, batchNumber, rewards_fake)
+    full_information_test(inputs, labelsCPU, batchNumber, rewards_cpu)
     dataTimer:reset()
 
     return outputs
