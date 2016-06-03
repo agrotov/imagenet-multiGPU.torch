@@ -396,7 +396,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
-        target = compute_target(size_output,actions, 1-rewards, p_of_actions_student, probabilities_logged)
+        target = compute_target(size_output,actions, -rewards, p_of_actions_student, probabilities_logged)
 
         gpu_target = target:cuda()
 
