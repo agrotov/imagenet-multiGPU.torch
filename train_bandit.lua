@@ -412,7 +412,17 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     --   print(p_of_actions_student)
 
     --    top-1 error
-    local top1_epoch = 0
+
+    full_information_test(inputs, labelsCPU)
+    dataTimer:reset()
+
+    return outputs
+end
+
+
+
+function full_information_test(inputs, labelsCPU)
+        local top1_epoch = 0
     local top1 = 0
     local actions_eva = torch.LongTensor(opt.batchSize)
     local rewards_model = 0
@@ -439,10 +449,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
         optimState.learningRate, dataLoadingTime))
 
-
-    dataTimer:reset()
-
-    return outputs
 end
 
 
