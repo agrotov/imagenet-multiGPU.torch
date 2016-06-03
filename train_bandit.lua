@@ -447,7 +447,7 @@ function full_information_test(inputs, labelsCPU)
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real, diff_rewards, top1,
-        optimState.learningRate, ))
+        optimState.learningRate))
 
 end
 
