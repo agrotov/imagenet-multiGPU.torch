@@ -114,7 +114,7 @@ function train_imagenet_bandit(model, data_path)
    model:evaluate()
 --   model:training()
 
-   temperature = 0.5
+   temperature = 0.03
 
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
