@@ -132,10 +132,10 @@ function train_imagenet_bandit(model, data_path)
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
 
-      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
+--      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
 
       for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-         print("i",i,"t",t)
+--         print("i",i,"t",t)
          local index_of_input = logged_data[i][1]
          local action = logged_data[i][2]
          local reward = logged_data[i][3]
@@ -157,7 +157,7 @@ function train_imagenet_bandit(model, data_path)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
-         print("action",action)
+--         print("action",action)
          rewards[k] = reward
          probability_of_actions[k] = probability_of_action
          k = k + 1
