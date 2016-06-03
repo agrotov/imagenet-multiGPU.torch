@@ -123,8 +123,8 @@ function materialize_full_dataset(input_indexes, inputsCPU, labelsCPU, path, tem
 
         local rewards = 1-reward_for_actions(loss_matrix, actions_taken, label_of_input_tensor)
 
-        print("rewards",rewards)
-exit()
+--        print("rewards",rewards)
+--exit()
 
 --        print("rewards",rewards[label_of_input])
 
