@@ -123,7 +123,7 @@ function train_imagenet_bandit(model, data_path)
        print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
        batch_number = 1
-       
+
        for t = 1,logged_data:size(1),opt.batchSize do
 
           -- create mini batch
