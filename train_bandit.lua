@@ -132,7 +132,7 @@ function compute_target(size, actions, rewards_arg, probability_actions_student_
 --    print("actions",actions)
     target:scatter(2,actions:long(),weight:float())
 
-    target = target - 0.5
+    target = target + 0.5
 
     return target
 end
