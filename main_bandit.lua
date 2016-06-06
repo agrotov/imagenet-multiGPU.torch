@@ -181,9 +181,9 @@ function train_imagenet_bandit(model, data_path)
     --      exit()
           outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number )
           batch_number = batch_number + 1
-          if batch_number > 2 then
-              exit()
-          end
+--          if batch_number > 2 then
+--              exit()
+--          end
 
 --          exit()
 
