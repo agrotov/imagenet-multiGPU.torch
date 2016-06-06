@@ -417,7 +417,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))
     rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))
 
-    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old)
+    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
 
     -- DataParallelTable's syncParameters
     if model.needsSync then
