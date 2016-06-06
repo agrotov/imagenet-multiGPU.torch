@@ -390,13 +390,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         outputs = model:forward(inputs)
         size_output = outputs:size()
         p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-        --      print("p_of_actions_student")
-        --      print(p_of_actions_student)
 
         print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
-
-        --      print(torch.cat(p_of_actions_student,probabilities_logged,2))
-
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
         target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
@@ -411,6 +406,11 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     end
     print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
+
+    outputs = model:forward(inputs)
+    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
+    print(torch.cat(torch.cat(probabilities_logged,p_of_actions_student,2),p_of_actions_student_new,2))
+    print(rewards)
 
     -- DataParallelTable's syncParameters
     if model.needsSync then

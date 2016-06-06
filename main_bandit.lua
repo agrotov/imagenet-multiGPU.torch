@@ -184,7 +184,7 @@ function train_imagenet_bandit(model, data_path)
           if batch_number > 2 then
               exit()
           end
-          
+
 --          exit()
 
        end
