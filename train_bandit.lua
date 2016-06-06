@@ -123,7 +123,7 @@ function compute_target(size, actions, rewards_arg, probability_actions_student_
 --    print(rewards)
 --    exit()
 --    print(rewards)
-    weight = compute_weight(rewards_arg-1, probability_actions_student_model, probability_actions_teacher_model)
+    weight = compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
 
 --    print("weight",weight)
 --    print("rewards",rewards)
