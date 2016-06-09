@@ -415,9 +415,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
 --    print(rewards)
 
-    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))
-    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))
-    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(rewards_sum_old)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
 
     print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
 
