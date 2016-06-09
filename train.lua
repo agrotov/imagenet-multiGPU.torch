@@ -70,6 +70,7 @@ local top1_epoch, loss_epoch
 -- 3. train - this function handles the high-level training loop,
 --            i.e. load data, train model, save model and state to disk
 function train()
+    percentage = 0.1
    print('==> doing epoch on training data:')
    print("==> online epoch # " .. epoch)
 
@@ -97,7 +98,7 @@ function train()
       donkeys:addjob(
          -- the job callback (runs in data-worker thread)
          function()
-            local inputs, labels = trainLoader:sample(opt.batchSize)
+            local inputs, labels = trainLoader:sample(opt.batchSize, percentage)
             return inputs, labels
          end,
          -- the end callback (runs in the main thread)

@@ -301,8 +301,9 @@ function dataset:size(class, list)
 end
 
 -- getByClass
-function dataset:getByClass(class)
-   local index = math.max(1, math.ceil(torch.uniform() * self.classListSample[class]:nElement()))
+function dataset:getByClass(class, percentage)
+   percentage = percentage or 1
+   local index = math.max(1, math.ceil(torch.uniform() * self.classListSample[class]:nElement()*percentage))
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
 --   print(imgpath)
    local out, h1, w1, flip =self:sampleHookTrain(imgpath)
@@ -334,7 +335,7 @@ local function tableToOutput(self, dataTable, scalarTable)
 end
 
 -- sampler, samples from the training set.
-function dataset:sample(quantity)
+function dataset:sample(quantity, percentage)
 --   print("sample")
    assert(quantity)
    local dataTable = {}
@@ -345,7 +346,7 @@ function dataset:sample(quantity)
    local flips = torch.Tensor(opt.batchSize,1)
    for i=1,quantity do
       local class = torch.random(1, #self.classes)
-      local out, h1, w1, flip, index = self:getByClass(class)
+      local out, h1, w1, flip, index = self:getByClass(class, percentage)
 --      print("h1, w1, flip, index")
 --      print(h1, w1, flip, index)
       table.insert(dataTable, out)
