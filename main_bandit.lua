@@ -47,6 +47,7 @@ paths.dofile('test.lua')
 paths.dofile('load_csv.lua')
 
 function produce_dataset(model, data_path)
+   print("produce_dataset",data_path,opt.epochSize)
    batchNumber = 0
    cutorch.synchronize()
 
@@ -204,7 +205,7 @@ end -- of train_imagenet_bandit()
 data_path = "/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets"
 produce_dataset(model, data_path)
 --print_bandit_dataset()
-train_imagenet_bandit(model,data_path)
+--train_imagenet_bandit(model,data_path)
 --
 
 --epoch = opt.epochNumber
