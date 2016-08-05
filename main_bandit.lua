@@ -66,12 +66,13 @@ function produce_dataset(model, data_path)
 
 --   model:evaluate()
    model:evaluate()
+   percentage = 0.1
 
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
-      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize)
+      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
       materialize_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
    end
    print("after all")
@@ -203,9 +204,9 @@ end -- of train_imagenet_bandit()
 
 
 data_path = "/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets"
---produce_dataset(model, data_path)
+produce_dataset(model, data_path)
 --print_bandit_dataset()
-train_imagenet_bandit(model,data_path)
+--train_imagenet_bandit(model,data_path)
 --
 
 --epoch = opt.epochNumber
