@@ -116,14 +116,14 @@ function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
-function compute_target(size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
+function compute_target(size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
 --    print(probability_actions_student_model)
 --    print(probability_actions_teacher_model)
 --    print(rewards)
 --    exit()
 --    print(rewards)
-    weight = compute_weight(rewards_arg-0.3, probability_actions_student_model, probability_actions_teacher_model)
+    weight = compute_weight(rewards_arg-baseline, probability_actions_student_model, probability_actions_teacher_model)
 
 --    print("weight",weight)
 --    print("rewards",rewards)
@@ -364,7 +364,7 @@ local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber)
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
 --    model:training()
     model:evaluate()
     batchNumber = batchNumber or 1
@@ -395,7 +395,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
-        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged)
+        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
 
         gpu_target = target:cuda()
 

@@ -31,6 +31,8 @@ paths.dofile('model.lua')
 opt.imageSize = model.imageSize or opt.imageSize
 opt.imageCrop = model.imageCrop or opt.imageCrop
 
+baseline = opt.baseline
+
 print(opt)
 
 cutorch.setDevice(opt.GPU) -- by default, use GPU 1
@@ -116,6 +118,8 @@ function train_imagenet_bandit(model, data_path)
 --   model:evaluate()
    model:training()
 
+   print("baseline",baseline)
+
    temperature = 0.03
 
    for epoch = epoch or 1, opt.nEpochs do
@@ -181,7 +185,7 @@ function train_imagenet_bandit(model, data_path)
     --      print(probability_of_actions)
     --      print("rewards",rewards)
     --      exit()
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number )
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
           batch_number = batch_number + 1
 --          if batch_number > 2 then
 --              exit()
