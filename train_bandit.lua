@@ -108,7 +108,9 @@ function probability_of_actions(model_output, actions,temperature)
 end
 
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
-    return -torch.cmul(rewards_arg,torch.cdiv(probability_actions_student_model,probability_actions_teacher_model))
+    local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
+    print("propencity", torch.mean(propencity))
+    return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
 
@@ -399,7 +401,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         gpu_target = target:cuda()
 
-        print("target",torch.mean(target))
+        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
 
 
 
@@ -419,6 +421,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
     rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
 --    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
+    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
     print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
 
     -- DataParallelTable's syncParameters
