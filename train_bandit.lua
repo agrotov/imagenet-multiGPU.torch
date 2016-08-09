@@ -266,6 +266,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         err = rewards:mean()
         model:backward(inputs, gpu_target)
+
+        gradParameters:clamp(-5, 5)
+
         return err, gradParameters
     end
 --    print("optimState",optimState)
