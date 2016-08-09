@@ -109,7 +109,7 @@ end
 
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
-    print("propencity", torch.mean(propencity))
+    print("propencity", torch.mean(propencity),torch.max(propencity),torch.mean(propencity),torch.var(propencity))
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
@@ -394,7 +394,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         size_output = outputs:size()
         p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
-        print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
+        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
         target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
