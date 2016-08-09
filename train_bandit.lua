@@ -109,7 +109,7 @@ end
 
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
-    print("propencity", torch.mean(propencity),torch.max(propencity),torch.mean(propencity),torch.var(propencity))
+    print("propencity", torch.mean(propencity),torch.max(propencity),torch.min(propencity),torch.var(propencity))
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
