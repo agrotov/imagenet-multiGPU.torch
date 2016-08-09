@@ -110,6 +110,8 @@ end
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
     print("propencity", torch.mean(propencity),torch.max(propencity),torch.min(propencity),torch.var(propencity))
+    print("probability_actions_student_model",torch.mean(probability_actions_student_model),torch.max(probability_actions_student_model),torch.min(probability_actions_student_model),torch.var(probability_actions_student_model))
+    print("probability_actions_teacher_model", torch.mean(probability_actions_teacher_model),torch.max(probability_actions_teacher_model),torch.min(probability_actions_teacher_model),torch.var(probability_actions_teacher_model))
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
@@ -202,77 +204,6 @@ trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
 local batchNumber
 local top1_epoch, loss_epoch
 
--- 3. train - this function handles the high-level training loop,
---            i.e. load data, train model, save model and state to disk
-function train()
-   print('==> doing epoch on training data:')
-   print("==> online epoch # " .. epoch)
-
-   local params, newRegime = paramsForEpoch(epoch)
-   if newRegime then
-      optimState = {
-         learningRate = params.learningRate,
-         learningRateDecay = 0.0,
-         momentum = opt.momentum,
-         dampening = 0.0,
-         weightDecay = params.weightDecay
-      }
-   end
-   batchNumber = 0
-   cutorch.synchronize()
-
-   -- set the dropouts to training mode
-   model:training()
-
-   loss_matrix = load_rewards_csv("/home/agrotov/imagenet-multiGPU.torch/loss_matrix.txt")
-
-   local tm = torch.Timer()
-   top1_epoch = 0
-   loss_epoch = 0
-
---   opt.epochSize = 1
-
-   for i=1,opt.epochSize do
-      -- queue jobs to data-workers
-      donkeys:addjob(
-         -- the job callback (runs in data-worker thread)
-         function()
-            local inputs, labels = trainLoader:sample(opt.batchSize)
-            return inputs, labels
-         end,
-         -- the end callback (runs in the main thread)
-         trainBatch
-      )
-   end
-
-   donkeys:synchronize()
-   cutorch.synchronize()
-
-   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
-   loss_epoch = loss_epoch / opt.epochSize
-
-   trainLogger:add{
-      ['% top1 accuracy (train set)'] = top1_epoch,
-      ['avg loss (train set)'] = loss_epoch
-   }
-   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
-                          .. 'average loss (per batch): %.2f \t '
-                          .. 'accuracy(%%):\t top-1 %.2f\t',
-                       epoch, tm:time().real, loss_epoch, top1_epoch))
-   print('\n')
-
-   -- save model
-   collectgarbage()
-
-   -- clear the intermediate states in the model before saving to disk
-   -- this saves lots of disk space
-   model:clearState()
-   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
-   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
-end -- of train()
-
-
-
 
 
 
@@ -288,78 +219,6 @@ local dataTimer = torch.Timer()
 
 local parameters, gradParameters = model:getParameters()
 
--- 4. trainBatch - Used by train() to train a single batch after the data is loaded.
-function trainBatch(inputsCPU, labelsCPU, optimState)
-
-   batchNumber = batchNumber or 1
-
-   cutorch.synchronize()
-   collectgarbage()
-   local dataLoadingTime = dataTimer:time().real
-   timer:reset()
-
-   -- transfer over to GPU
-   inputs:resize(inputsCPU:size()):copy(inputsCPU)
-   labels:resize(labelsCPU:size()):copy(labelsCPU)
-
-   local err, target, p_of_actions_teacher, p_of_actions_student, rewards, gpu_target, actions, size_output
-
-
-   feval = function(x)
-      model:zeroGradParameters()
-      outputs = model:forward(inputs)
-      size_output = outputs:size()
-      actions = sample_action(outputs)
-
-      p_of_actions_teacher = probability_of_actions(outputs, actions)
-      p_of_actions_student = probability_of_actions(outputs, actions)
-      rewards = reward_for_actions(loss_matrix, actions, labels)
-      target = compute_target(size_output,actions, rewards, p_of_actions_student, p_of_actions_teacher)
-
-      gpu_target = target:cuda()
-
-
-      err = rewards:mean()
-      model:backward(inputs, gpu_target)
-      return err, gradParameters
-   end
-
-   optim.sgd(feval, parameters, optimState)
-
-   -- DataParallelTable's syncParameters
-   if model.needsSync then
-      model:syncParameters()
-   end
-   
-
-   cutorch.synchronize()
-   batchNumber = batchNumber + 1
---   loss_epoch = loss_epoch + err
-   -- top-1 error
---   local top1 = 0
---   do
---      local _,prediction_sorted = outputs:float():sort(2, true) -- descending
---      for i=1,opt.batchSize do
---	 if prediction_sorted[i][1] == labelsCPU[i] then
---	    top1_epoch = top1_epoch + 1;
---	    top1 = top1 + 1
---	 end
---      end
---      top1 = top1 * 100 / opt.batchSize;
---   end
---   -- Calculate top-1 error, and print information
---   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
---          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
---          optimState.learningRate, dataLoadingTime))
-
-   dataTimer:reset()
-
---   print(outputs)
---   if batchNumber > 3000 then
---       exit()
---    end
-   return outputs
-end
 
 
 local actions = torch.CudaTensor(opt.batchSize,1)
