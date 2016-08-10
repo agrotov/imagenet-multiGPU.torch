@@ -362,6 +362,9 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     local actions_eva = torch.LongTensor(opt.batchSize)
     local rewards_model = 0
     outputs = model:forward(inputs)
+
+    new_probabilities = probability_of_actions(outputs, actions, temperature)
+
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
         if prediction_sorted[i][1] == labelsCPU[i] then
@@ -377,9 +380,12 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     diff_rewards = rewards_eva:mean() - rewards:mean()
 
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,new_probabilities))/torch.sum(new_probabilities)
+
     -- Calculate top-1 error, and print information
-    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards, top1,
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
+        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
         optimState.learningRate))
 
 end
