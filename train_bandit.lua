@@ -375,11 +375,11 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
-    diff_rewards = rewards_eva:mean() - rewards_logged:mean()
+    diff_rewards = rewards_eva:mean() - rewards:mean()
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards, top1,
+        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards, top1,
         optimState.learningRate))
 
 end
