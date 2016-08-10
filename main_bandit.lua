@@ -270,7 +270,7 @@ function test_imagenet_bandit(model, data_path)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
-      full_information_test(inputs, targets,t, rewards)
+      full_information_full_test(inputs, targets,t, rewards)
    end
 end -- of test_imagenet_bandit()
 

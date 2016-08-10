@@ -333,7 +333,56 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged)
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards, top1,
         optimState.learningRate))
+end
+
+
+function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
+    model:evaluate()
+    batchNumber = batchNumber or 1
+
+    cutorch.synchronize()
+    collectgarbage()
+    local dataLoadingTime = dataTimer:time().real
+    timer:reset()
+
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+    probabilities_logged:copy(probabilities_logged_cpu)
+
+--    print("rewards_cpu",rewards_cpu)
+--    exit()
+
+    local err, target, p_of_actions_student, size_output
+
+    model:evaluate()
+    local top1_epoch = 0
+    local top1 = 0
+    local actions_eva = torch.LongTensor(opt.batchSize)
+    local rewards_model = 0
+    outputs = model:forward(inputs)
+    local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+    for i=1,opt.batchSize do
+        if prediction_sorted[i][1] == labelsCPU[i] then
+            --        if actions[i] == labelsCPU[i] then
+            top1_epoch = top1_epoch + 1;
+            top1 = top1 + 1
+        end
+        actions_eva[i] = prediction_sorted[i][1]
+    end
+    top1 = top1 * 100 / opt.batchSize;
+
+    rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+
+    diff_rewards = rewards_eva:mean() - rewards_logged:mean()
+
+    -- Calculate top-1 error, and print information
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
+        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards, top1,
+        optimState.learningRate))
 
 end
+
 
 
