@@ -271,7 +271,6 @@ function test_imagenet_bandit(model, data_path)
          learningRateDecay = 5e-7
       }
       full_information_test(inputs, targets,t, rewards)
-      batch_number = batch_number + 1
    end
 end -- of test_imagenet_bandit()
 
