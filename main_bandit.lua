@@ -225,6 +225,8 @@ function test_imagenet_bandit(model, data_path)
 
    temperature = 0.03
 
+   epoch = 1
+
    for t = 1,logged_data:size(1),opt.batchSize do
 
       -- create mini batch
