@@ -363,7 +363,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     local rewards_model = 0
     outputs = model:forward(inputs)
 
-    new_probabilities = probability_of_actions(outputs, actions, temperature)
+    new_probabilities = probability_of_actions(outputs, actions, 0.5)
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
@@ -376,7 +376,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     end
     top1 = top1 * 100 / opt.batchSize;
 
-    rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+    rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
     diff_rewards = rewards_eva:mean() - rewards:mean()
 
