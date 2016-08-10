@@ -298,7 +298,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     --    top-1 error
 
-    full_information_test(inputs, labelsCPU, batchNumber, rewards_cpu)
+    full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu)
     dataTimer:reset()
 
     return outputs
@@ -306,7 +306,8 @@ end
 
 
 
-function full_information_test(inputs, labelsCPU,batchNumber, rewards_logged)
+function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged)
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
     model:evaluate()
     local top1_epoch = 0
     local top1 = 0
