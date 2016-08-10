@@ -313,19 +313,17 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged)
     local top1 = 0
     local actions_eva = torch.LongTensor(opt.batchSize)
     local rewards_model = 0
-    do
-        outputs = model:forward(inputs)
-        local _,prediction_sorted = outputs:float():sort(2, true) -- descending
-        for i=1,opt.batchSize do
-            if prediction_sorted[i][1] == labelsCPU[i] then
-                --        if actions[i] == labelsCPU[i] then
-                top1_epoch = top1_epoch + 1;
-                top1 = top1 + 1
-            end
-            actions_eva[i] = prediction_sorted[i][1]
+    outputs = model:forward(inputs)
+    local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+    for i=1,opt.batchSize do
+        if prediction_sorted[i][1] == labelsCPU[i] then
+            --        if actions[i] == labelsCPU[i] then
+            top1_epoch = top1_epoch + 1;
+            top1 = top1 + 1
         end
-        top1 = top1 * 100 / opt.batchSize;
+        actions_eva[i] = prediction_sorted[i][1]
     end
+    top1 = top1 * 100 / opt.batchSize;
 
     rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
