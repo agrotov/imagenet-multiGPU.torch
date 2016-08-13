@@ -281,7 +281,7 @@ end -- of test_imagenet_bandit()
 
 
 
-data_path = "/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7"
+data_path = "/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000"
 produce_dataset(model, data_path)
 --print_bandit_dataset()
 --train_imagenet_bandit(model,data_path)
