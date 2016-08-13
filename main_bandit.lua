@@ -223,7 +223,7 @@ function test_imagenet_bandit(model, data_path)
 
    print("baseline",baseline)
 
-   temperature = 1000
+   temperature = nil
 
    epoch = 1
 
