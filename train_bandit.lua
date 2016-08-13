@@ -363,7 +363,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     local rewards_model = 0
     outputs = model:forward(inputs)
 
-    new_probabilities = probability_of_actions(outputs, actions, 0.5)
+    new_probabilities = probability_of_actions(outputs, actions, temperature)
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
