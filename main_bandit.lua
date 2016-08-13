@@ -64,7 +64,7 @@ function produce_dataset(model, data_path)
 
 --   opt.epochSize = 1
 
-   temperature = 0.03
+   temperature = 0
 
 --   model:evaluate()
    model:evaluate()
@@ -120,7 +120,7 @@ function train_imagenet_bandit(model, data_path)
 
    print("baseline",baseline)
 
-   temperature = 0.03
+   temperature = 0
 
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
@@ -223,7 +223,7 @@ function test_imagenet_bandit(model, data_path)
 
    print("baseline",baseline)
 
-   temperature = 0.03
+   temperature = 0
 
    epoch = 1
 
