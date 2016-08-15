@@ -286,7 +286,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         non_nan_mask = inputs:eq(inputs)
         print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
 
-        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+        print("inputs",torch.mean(inputs[non_nan_mask]),torch.max(inputs[non_nan_mask]),torch.min(inputs[non_nan_mask]))
         gradParameters:clamp(-5, 5)
         print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
 
