@@ -276,7 +276,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         err = rewards:mean()
         --print("target",target)
 --        model:backward(inputs, gpu_target)
-        model:backward(inputs, torch.ones(outputs:size()):cuda())
+        model:backward(inputs, torch.ones(outputs:size()):cuda()+5)
         nan_mask = gradParameters:ne(gradParameters)
         non_nan_mask = gradParameters:eq(gradParameters)
         print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
