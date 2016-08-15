@@ -282,6 +282,9 @@ end -- of test_imagenet_bandit()
 
 
 data_path = opt.bandit_data
+
+print("bandit_data_path",data_path)
+
 if opt.produce_dataset == 1 then
     produce_dataset(model, data_path)
 end
