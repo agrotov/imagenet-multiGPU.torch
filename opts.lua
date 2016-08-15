@@ -46,6 +46,7 @@ function M.parse(arg)
     cmd:option('-train',  0, 'train')
     cmd:option('-test',  0, 'test')
     cmd:option('-bandit_data',  '/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000', 'bandit data')
+    cmd:option('-temperature',  nil, 'temperature')
     cmd:text()
 
     local opt = cmd:parse(arg or {})

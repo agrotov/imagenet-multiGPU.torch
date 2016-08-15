@@ -64,8 +64,6 @@ function produce_dataset(model, data_path)
 
 --   opt.epochSize = 1
 
-   temperature = nil
-
 --   model:evaluate()
    model:evaluate()
    percentage = 0.1
@@ -75,7 +73,7 @@ function produce_dataset(model, data_path)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
       local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
-      materialize_dataset(indexes, inputs, labels, data_path, temperature, h1s, w1s, flips)
+      materialize_dataset(indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips)
    end
    print("after all")
    cutorch.synchronize()
@@ -119,8 +117,6 @@ function train_imagenet_bandit(model, data_path)
    model:training()
 
    print("baseline",baseline)
-
-   temperature = 1
 
    print("logged_data:size(1)",logged_data:size(1))
 
@@ -176,7 +172,7 @@ function train_imagenet_bandit(model, data_path)
              learningRateDecay = 5e-7
           }
 
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, batch_number, baseline )
           batch_number = batch_number + 1
        end
    end
@@ -201,8 +197,6 @@ function test_imagenet_bandit(model, data_path)
    model:training()
 
    print("baseline",baseline)
-
-   temperature = nil
 
    epoch = 1
 
@@ -249,7 +243,7 @@ function test_imagenet_bandit(model, data_path)
          momentum = opt.momentum,
          learningRateDecay = 5e-7
       }
-      full_information_full_test(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, t, baseline )
+      full_information_full_test(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, t, baseline )
    end
 end -- of test_imagenet_bandit()
 
