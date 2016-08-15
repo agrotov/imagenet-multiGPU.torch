@@ -284,7 +284,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 
     cutorch.synchronize()
-
+    outputs = model:forward(inputs)
     p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
 --    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
 --    print(rewards)
