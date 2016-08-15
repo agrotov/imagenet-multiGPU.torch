@@ -122,6 +122,8 @@ function train_imagenet_bandit(model, data_path)
 
    temperature = 0.03
 
+   print("logged_data:size(1)",logged_data:size(1))
+
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
 --       print("opt.batchSize",opt.batchSize,logged_data:size(1))
