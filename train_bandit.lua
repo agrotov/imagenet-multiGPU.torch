@@ -251,6 +251,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     feval = function(x)
         model:zeroGradParameters()
+
+        print("gradParameters",torch.mean(gradParameters))
+
+
         outputs = model:forward(inputs)
 
         print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
