@@ -145,34 +145,33 @@ function train_imagenet_bandit(model, data_path)
     --      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
 
           for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-    --         print("i",i,"t",t)
-             local index_of_input = logged_data[i][1]
-             local action = logged_data[i][2]
-             local reward = logged_data[i][3]
-             local probability_of_action = logged_data[i][4]
+            local index_of_input = logged_data[i][1]
+            local action = logged_data[i][2]
+            local reward = logged_data[i][3]
+            local probability_of_action = logged_data[i][4]
 
-             local h1 = logged_data[i][5]
-             local w1 = logged_data[i][6]
-             local flip = logged_data[i][7]
+            local h1 = logged_data[i][5]
+            local w1 = logged_data[i][6]
+            local flip = logged_data[i][7]
 
 
-             -- load new sample
-             local class = ((index_of_input)%1001)
-             local index_of_image = math.floor((index_of_input/1001))
-    --         print('data')
-    --         print(class)
-    --         print(index_of_image)
-    --         print(index_of_input)
-             local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
-             targets[k] = class
-             inputs[k] = input
-             actions[k] = action
-    --         print("action",action)
-             rewards[k] = reward
-             probability_of_actions[k] = probability_of_action
-             k = k + 1
+            -- load new sample
+            local class = ((index_of_input)%1001)
+            local index_of_image = math.floor((index_of_input/1001))
+            --         print('data')
+            --         print(class)
+            --         print(index_of_image)
+            --         print(index_of_input)
+            local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+            targets[k] = class
+            inputs[k] = input
+            actions[k] = action
+            --         print("action",action)
+            rewards[k] = reward
+            probability_of_actions[k] = probability_of_action
 
-              print("class",class,"k",k,"i",i)
+            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
+            k = k + 1
           end
 
     --      opt.learningRate = 0.01
