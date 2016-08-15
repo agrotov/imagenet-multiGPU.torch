@@ -270,8 +270,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 
         err = rewards:mean()
-        --model:backward(inputs, gpu_target)
-        model:backward(inputs, torch.zeros(outputs:size()):cuda())
+        model:backward(inputs, gpu_target)
+        --model:backward(inputs, torch.zeros(outputs:size()):cuda())
 
         print("gradParameters",torch.mean(gradParameters))
 
