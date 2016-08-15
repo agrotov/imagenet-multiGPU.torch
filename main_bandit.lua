@@ -125,8 +125,8 @@ function train_imagenet_bandit(model, data_path)
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
 --       print("opt.batchSize",opt.batchSize,logged_data:size(1))
-       print('<trainer> on training set:')
-       print("<trainer> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
+       print('<train_imagenet_bandit> on training set:')
+       print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
        batch_number = 1
 
@@ -185,15 +185,10 @@ function train_imagenet_bandit(model, data_path)
     --      print(probability_of_actions)
     --      print("rewards",rewards)
     --      exit()
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
-          batch_number = batch_number + 1
---          if batch_number > 2 then
---              exit()
---          end
-
---          exit()
 
        end
+       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
+       batch_number = batch_number + 1
 
        -- time taken
 
