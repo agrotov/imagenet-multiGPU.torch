@@ -274,17 +274,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --    print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
-    outputs = model:forward(inputs)
-    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
---    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
---    print(rewards)
-
-    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
-    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
-    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
---    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
-    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
-    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
 
     -- DataParallelTable's syncParameters
     if model.needsSync then
@@ -297,8 +286,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     --   print(p_of_actions_student)
 
     --    top-1 error
-
-    full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu)
+    if batchNumber % 10 == 0 then
+        full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu)
+    end
     dataTimer:reset()
 
     return outputs
@@ -314,6 +304,22 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged)
     local actions_eva = torch.LongTensor(opt.batchSize)
     local rewards_model = 0
     outputs = model:forward(inputs)
+
+
+    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
+--    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
+--    print(rewards)
+
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
+--    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
+    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
+    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
+
+
+
+
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
         if prediction_sorted[i][1] == labelsCPU[i] then
@@ -325,7 +331,7 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged)
     end
     top1 = top1 * 100 / opt.batchSize;
 
-    rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+    rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
     diff_rewards = rewards_eva:mean() - rewards_logged:mean()
 
