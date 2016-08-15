@@ -142,8 +142,6 @@ function train_imagenet_bandit(model, data_path)
           local k = 1
           indexes = torch.Tensor(opt.batchSize,1)
 
-    --      print("t",t,math.min(t+opt.batchSize-1,logged_data:size(1)))
-
           for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
             local index_of_input = logged_data[i][1]
             local action = logged_data[i][2]
@@ -158,15 +156,10 @@ function train_imagenet_bandit(model, data_path)
             -- load new sample
             local class = ((index_of_input)%1001)
             local index_of_image = math.floor((index_of_input/1001))
-            --         print('data')
-            --         print(class)
-            --         print(index_of_image)
-            --         print(index_of_input)
             local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
             targets[k] = class
             inputs[k] = input
             actions[k] = action
-            --         print("action",action)
             rewards[k] = reward
             probability_of_actions[k] = probability_of_action
 
@@ -174,23 +167,16 @@ function train_imagenet_bandit(model, data_path)
             k = k + 1
           end
 
-    --      opt.learningRate = 0.01
-
-    --      print("probability_of_actions")
-    --      print(probability_of_actions)
-    --      print("rewards",rewards)
-    --      exit()
-
-       end
-       cutorch.synchronize()
+          cutorch.synchronize()
           optimState = sgdState or {
              learningRate = opt.LR,
              momentum = opt.momentum,
              learningRateDecay = 5e-7
           }
 
-       outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
-       batch_number = batch_number + 1
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
+          batch_number = batch_number + 1
+       end
 
        -- time taken
 
