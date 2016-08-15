@@ -178,6 +178,8 @@ function dataset:__init(...)
    for i=1,#self.classes do
       local command = 'cat "' .. classFindFiles[i] .. '" >>' .. combinedFindList .. ' \n'
       tmphandle:write(command)
+      print("command",command)
+      exit()
    end
    io.close(tmphandle)
    os.execute('bash ' .. tmpfile)
