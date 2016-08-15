@@ -165,7 +165,7 @@ function train_imagenet_bandit(model, data_path)
             rewards[k] = reward
             probability_of_actions[k] = probability_of_action
 
-            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
+--            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
             k = k + 1
           end
 
@@ -179,12 +179,6 @@ function train_imagenet_bandit(model, data_path)
           outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
           batch_number = batch_number + 1
        end
-
-       -- time taken
-
---       time = sys.clock() - time
---       time = time / logged_data:size(1)
---       print("<trainer> time to learn 1 sample = " .. (time*1000) .. 'ms')
    end
 
 
