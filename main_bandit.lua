@@ -120,7 +120,7 @@ function train_imagenet_bandit(model, data_path)
 
    print("baseline",baseline)
 
-   temperature = 0.03
+   temperature = nil
 
    print("logged_data:size(1)",logged_data:size(1))
 
