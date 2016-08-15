@@ -130,7 +130,7 @@ function train_imagenet_bandit(model, data_path)
 
        batch_number = 1
 
-       for t = 1,logged_data:size(1),opt.batchSize do
+       for t = 1,logged_data:size(1),opt.epochSize do
 
           -- create mini batch
           local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
