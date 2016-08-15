@@ -171,22 +171,25 @@ function train_imagenet_bandit(model, data_path)
              rewards[k] = reward
              probability_of_actions[k] = probability_of_action
              k = k + 1
+
+              print("class",class)
           end
 
     --      opt.learningRate = 0.01
 
-          cutorch.synchronize()
-          optimState = sgdState or {
-             learningRate = opt.LR,
-             momentum = opt.momentum,
-             learningRateDecay = 5e-7
-          }
     --      print("probability_of_actions")
     --      print(probability_of_actions)
     --      print("rewards",rewards)
     --      exit()
 
        end
+       cutorch.synchronize()
+          optimState = sgdState or {
+             learningRate = opt.LR,
+             momentum = opt.momentum,
+             learningRateDecay = 5e-7
+          }
+
        outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, temperature, batch_number, baseline )
        batch_number = batch_number + 1
 
