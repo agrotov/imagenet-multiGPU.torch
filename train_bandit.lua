@@ -270,7 +270,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 
         err = rewards:mean()
-        model:backward(inputs, gpu_target)
+        --model:backward(inputs, gpu_target)
+        model:backward(inputs, outputs)
 
         gradParameters:clamp(-5, 5)
 
