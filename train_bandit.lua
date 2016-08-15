@@ -276,8 +276,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         err = rewards:mean()
         --print("target",target)
 --        model:backward(inputs, gpu_target)
-        print("outputs size",outputs:size())
-        model:backward(inputs, torch.ones(1011):cuda())
+        ones_t =  torch.ones(outputs:size()):cuda()
+        print("outputs size",outputs:size(),"ones_t",ones_t:size())
+        model:backward(inputs, ones_t)
 
 --        print("new target",torch.ones(outputs:size()):cuda()+5)
 --        print()
