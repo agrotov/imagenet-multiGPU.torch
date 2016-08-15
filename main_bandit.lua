@@ -172,7 +172,7 @@ function train_imagenet_bandit(model, data_path)
              probability_of_actions[k] = probability_of_action
              k = k + 1
 
-              print("class",class)
+              print("class",class,"k",k,"i",i)
           end
 
     --      opt.learningRate = 0.01
