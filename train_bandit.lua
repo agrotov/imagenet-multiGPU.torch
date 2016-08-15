@@ -273,6 +273,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         --model:backward(inputs, gpu_target)
         model:backward(inputs, torch.zeros(outputs:size()):cuda())
 
+        print("gradParameters",gradParameters)
+
         --gradParameters:clamp(-5, 5)
 
         return err, gradParameters
