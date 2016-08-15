@@ -281,7 +281,7 @@ end -- of test_imagenet_bandit()
 
 
 
-data_path = "/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000"
+data_path = opt.bandit_data
 if opt.produce_dataset == 1 then
     produce_dataset(model, data_path)
 end

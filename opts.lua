@@ -45,6 +45,7 @@ function M.parse(arg)
     cmd:option('-produce_dataset',  0, 'produce_dataset')
     cmd:option('-train',  0, 'train')
     cmd:option('-test',  0, 'test')
+    cmd:option('-bandit_data',  0, '/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000')
     cmd:text()
 
     local opt = cmd:parse(arg or {})
