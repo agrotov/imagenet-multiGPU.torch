@@ -112,6 +112,8 @@ function compute_weight(rewards_arg, probability_actions_student_model, probabil
     print("propencity", torch.mean(propencity),torch.max(propencity),torch.min(propencity),torch.var(propencity))
     print("probability_actions_student_model",torch.mean(probability_actions_student_model),torch.max(probability_actions_student_model),torch.min(probability_actions_student_model),torch.var(probability_actions_student_model))
     print("probability_actions_teacher_model", torch.mean(probability_actions_teacher_model),torch.max(probability_actions_teacher_model),torch.min(probability_actions_teacher_model),torch.var(probability_actions_teacher_model))
+    propencity.clamp(0.01, torch.max(propencity))
+    print("propencity clamped", torch.mean(propencity),torch.max(propencity),torch.min(propencity),torch.var(propencity))
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
