@@ -252,6 +252,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     feval = function(x)
         model:zeroGradParameters()
         outputs = model:forward(inputs)
+
+        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
         size_output = outputs:size()
         p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
@@ -285,6 +288,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     cutorch.synchronize()
     outputs = model:forward(inputs)
+
+    print("outputs new", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
     p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
 --    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
 --    print(rewards)
