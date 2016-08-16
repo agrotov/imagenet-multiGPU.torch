@@ -26,6 +26,9 @@ local dataTimer = torch.Timer()
 function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperature, h1s, w1s, flips)
     local parameters, gradParameters = model:getParameters()
 
+
+    print("materialize_dataset")
+
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
