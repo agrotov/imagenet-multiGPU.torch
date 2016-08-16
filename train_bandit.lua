@@ -259,21 +259,21 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
-        size_output = outputs:size()
-        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+--        size_output = outputs:size()
+--        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
         --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
-        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
+--        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
 
-        gpu_target = target:cuda()
+--        gpu_target = target:cuda()
 
-        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
+--        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
 
 
 
-        err = rewards:mean()
+--        err = rewards:mean()
         --print("target",target)
 --        model:backward(inputs, gpu_target)
         ones_t =  torch.ones(outputs:size()):cuda() * 0.0
