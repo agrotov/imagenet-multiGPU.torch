@@ -228,7 +228,7 @@ local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
+function trainBatch_bandit(inputsCPU, labelsCPU)
     model:evaluate()
     batchNumber = batchNumber or 1
    top1_epoch = top1_epoch or 1;
