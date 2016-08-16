@@ -345,7 +345,7 @@ end
 
 function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged, probabilities_logged, p_of_actions_student)
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
---    model:evaluate()
+    model:evaluate()
     local top1_epoch = 0
     local top1 = 0
     local actions_eva = torch.LongTensor(opt.batchSize)
