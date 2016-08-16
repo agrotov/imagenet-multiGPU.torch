@@ -253,7 +253,7 @@ function trainBatch_bandit(inputsCPU, labelsCPU)
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels) * 0
 
---      print("gradOutputs",gradOutputs)
+      print("gradOutputs",gradOutputs:size(), "outputs",outputs:size())
 
       print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
 
