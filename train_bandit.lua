@@ -227,7 +227,78 @@ local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
+
+function trainBatch_bandit(inputsCPU, labelsCPU)
+    batchNumber = batchNumber or 1
+   top1_epoch = top1_epoch or 1;
+   dataLoadingTime = dataLoadingTime or 0
+   cutorch.synchronize()
+   collectgarbage()
+   local dataLoadingTime = dataTimer:time().real
+   timer:reset()
+
+   -- transfer over to GPU
+   inputs:resize(inputsCPU:size()):copy(inputsCPU)
+   labels:resize(labelsCPU:size()):copy(labelsCPU)
+
+
+   feval = function(x)
+      model:zeroGradParameters()
+      outputs = model:forward(inputs)
+
+      print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
+--      print("outputs",outputs)
+
+      --err = criterion:forward(outputs, labels)
+      --local gradOutputs = criterion:backward(outputs, labels)
+
+--      print("gradOutputs",gradOutputs)
+
+      print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
+
+      --model:backward(inputs, gradOutputs)
+      ones_t =  torch.ones(outputs:size()):cuda() * 0
+      model:backward(inputs, ones_t)
+
+      nan_mask = gradParameters:ne(gradParameters)
+      non_nan_mask = gradParameters:eq(gradParameters)
+      print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
+      print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+
+      return err, gradParameters
+   end
+   optim.sgd(feval, parameters, optimState)
+
+   -- DataParallelTable's syncParameters
+--   model:syncParameters()
+
+
+   cutorch.synchronize()
+   batchNumber = batchNumber + 1
+--    top-1 error
+   local top1 = 0
+   do
+      local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+      for i=1,opt.batchSize do
+	 if prediction_sorted[i][1] == labelsCPU[i] then
+	    top1_epoch = top1_epoch + 1;
+	    top1 = top1 + 1
+	 end
+      end
+      top1 = top1 * 100 / opt.batchSize;
+   end
+   -- Calculate top-1 error, and print information
+   print(('Epoch: [%d][%d/%d]\tTime %.3f Err %.4f Top1-%%: %.2f LR %.0e DataLoadingTime %.3f'):format(
+          epoch, batchNumber, opt.epochSize, timer:time().real, err, top1,
+          optimState.learningRate, dataLoadingTime))
+
+   dataTimer:reset()
+--   exit()
+   return outputs
+end
+
+function trainBatch_bandit_real(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
 --    model:training()
     model:evaluate()
     batchNumber = batchNumber or 1
