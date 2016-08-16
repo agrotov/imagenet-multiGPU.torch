@@ -307,6 +307,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
+    print("parameters",torch.mean(parameters),torch.min(parameters),torch.max(parameters),torch.var(parameters))
+
     -- DataParallelTable's syncParameters
     if model.needsSync then
         model:syncParameters()
