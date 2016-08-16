@@ -310,9 +310,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
-    actions:copy(actions_cpu)
-    rewards:copy(rewards_cpu)
-    probabilities_logged:copy(probabilities_logged_cpu)
+--    actions:copy(actions_cpu)
+--    rewards:copy(rewards_cpu)
+--    probabilities_logged:copy(probabilities_logged_cpu)
 
 --    print("rewards_cpu",rewards_cpu)
 --    exit()
