@@ -92,12 +92,14 @@ function probabilities_from_output(model_output, temperature)
         return probabilities
     end
 
+    return torch.exp(probabilities)
 
-    local normalization = torch.sum(torch.exp(probabilities/temperature),2)
 
-    local softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:expandAs(probabilities))
+--    local normalization = torch.sum(torch.exp(probabilities/temperature),2)
+--
+--    local softmax_probabilities = torch.cdiv(torch.exp(probabilities/temperature),normalization:expandAs(probabilities))
 
-    return softmax_probabilities
+--    return softmax_probabilities
 
 end
 
