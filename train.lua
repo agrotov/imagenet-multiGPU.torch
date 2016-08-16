@@ -167,7 +167,7 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
 --      print("outputs",outputs)
 
-      --err = criterion:forward(outputs, labels)
+--      err = criterion:forward(outputs, labels)
       --local gradOutputs = criterion:backward(outputs, labels)
 
 --      print("gradOutputs",gradOutputs)
