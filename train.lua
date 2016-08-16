@@ -165,16 +165,18 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
       print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
-      print("outputs",outputs)
+--      print("outputs",outputs)
 
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
 
-      print("gradOutputs",gradOutputs)
+--      print("gradOutputs",gradOutputs)
 
       print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
 
-      model:backward(inputs, gradOutputs)
+      --model:backward(inputs, gradOutputs)
+      ones_t =  torch.ones(outputs:size()):cuda() * 0
+      model:backward(inputs, ones_t)
 
       nan_mask = gradParameters:ne(gradParameters)
       non_nan_mask = gradParameters:eq(gradParameters)
