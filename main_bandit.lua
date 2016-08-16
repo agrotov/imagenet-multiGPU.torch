@@ -172,7 +172,7 @@ function train_imagenet_bandit(model, data_path)
 --             learningRateDecay = 5e-7
 --          }
 
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, batch_number, baseline )
+          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
           batch_number = batch_number + 1
        end
    end

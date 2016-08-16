@@ -234,7 +234,7 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
     model:training()
 --    model:evaluate()
     batchNumber = batchNumber or 1
@@ -379,7 +379,7 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged,
 end
 
 
-function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
+function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
     model:evaluate()
     batchNumber = batchNumber or 1
 
