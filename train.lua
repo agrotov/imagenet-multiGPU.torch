@@ -172,7 +172,9 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
       model:backward(inputs, gradOutputs)
 
+      nan_mask = gradParameters:ne(gradParameters)
       non_nan_mask = gradParameters:eq(gradParameters)
+      print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
       print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
 
       return err, gradParameters
