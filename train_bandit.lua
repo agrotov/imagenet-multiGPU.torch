@@ -250,8 +250,8 @@ function trainBatch_bandit(inputsCPU, labelsCPU)
 
 --      print("outputs",outputs)
 
-      err = criterion:forward(outputs, labels)
-      local gradOutputs = criterion:backward(outputs, labels) * 0
+--      err = criterion:forward(outputs, labels)
+--      local gradOutputs = criterion:backward(outputs, labels) * 0
 
       print("gradOutputs",gradOutputs:size(), "outputs",outputs:size())
 
