@@ -238,7 +238,7 @@ function test_imagenet_bandit(model, data_path)
 --      opt.learningRate = 0.01
 
       cutorch.synchronize()
-      full_information_full_test(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, t, baseline )
+      full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
    end
 end -- of test_imagenet_bandit()
 
