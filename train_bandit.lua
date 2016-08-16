@@ -92,7 +92,8 @@ function probabilities_from_output(model_output, temperature)
         return probabilities
     end
 
-    print("probabilities",probabilities)
+    print("probabilities",probabilities,torch.sum(probabilities))
+    print("exp probabilities",torch.exp(probabilities),torch.sum(torch.exp(probabilities)))
 
     return torch.exp(probabilities)
 
