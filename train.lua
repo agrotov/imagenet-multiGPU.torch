@@ -165,8 +165,12 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
       print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
+      print("outputs",outputs)
+
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
+
+      print("gradOutputs",gradOutputs)
 
       print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
 
