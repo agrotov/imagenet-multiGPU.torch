@@ -257,7 +257,7 @@ function trainBatch_bandit(inputsCPU, labelsCPU)
 
       print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
 
-      ones_t =  torch.ones(gradOutputs:size()):cuda() * 0
+      ones_t =  torch.ones(outputs:size()):cuda() * 0
 
       model:backward(inputs, ones_t)
 
