@@ -302,8 +302,8 @@ function trainBatch_bandit_fake(inputsCPU, actions_cpu, rewards_cpu, probabiliti
 end
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, optimState, labelsCPU, temperature, batchNumber, baseline)
---    model:training()
-    model:evaluate()
+    model:training()
+--    model:evaluate()
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
@@ -313,9 +313,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
---    actions:resize(actions_cpu:size()):copy(actions_cpu)
---    rewards:resize(rewards_cpu:size()):copy(rewards_cpu)
---    probabilities_logged:resize(probabilities_logged_cpu:size()):copy(probabilities_logged_cpu)
+    actions:resize(actions_cpu:size()):copy(actions_cpu)
+    rewards:resize(rewards_cpu:size()):copy(rewards_cpu)
+    probabilities_logged:resize(probabilities_logged_cpu:size()):copy(probabilities_logged_cpu)
 
 --    print("rewards_cpu",rewards_cpu)
 --    exit()
