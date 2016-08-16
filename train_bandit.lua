@@ -257,9 +257,9 @@ function trainBatch_bandit(inputsCPU, labelsCPU)
 
 --      print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
 
-      --model:backward(inputs, gradOutputs)
-      ones_t =  torch.ones(outputs:size()):cuda() * 0
-      model:backward(inputs, ones_t)
+      model:backward(inputs, gradOutputs)
+--      ones_t =  torch.ones(outputs:size()):cuda() * 0
+--      model:backward(inputs, ones_t)
 
       nan_mask = gradParameters:ne(gradParameters)
       non_nan_mask = gradParameters:eq(gradParameters)
