@@ -166,11 +166,11 @@ function train_imagenet_bandit(model, data_path)
           end
 
           cutorch.synchronize()
-          optimState = sgdState or {
-             learningRate = opt.LR,
-             momentum = opt.momentum,
-             learningRateDecay = 5e-7
-          }
+--          optimState = sgdState or {
+--             learningRate = opt.LR,
+--             momentum = opt.momentum,
+--             learningRateDecay = 5e-7
+--          }
 
           outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, batch_number, baseline )
           batch_number = batch_number + 1
@@ -238,11 +238,6 @@ function test_imagenet_bandit(model, data_path)
 --      opt.learningRate = 0.01
 
       cutorch.synchronize()
-      optimState = sgdState or {
-         learningRate = opt.LR,
-         momentum = opt.momentum,
-         learningRateDecay = 5e-7
-      }
       full_information_full_test(inputs,actions,rewards,probability_of_actions, optimState, targets, opt.temperature, t, baseline )
    end
 end -- of test_imagenet_bandit()

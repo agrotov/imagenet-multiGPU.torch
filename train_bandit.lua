@@ -304,7 +304,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         return err, gradParameters
     end
---    print("optimState",optimState)
+    print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
     -- DataParallelTable's syncParameters
