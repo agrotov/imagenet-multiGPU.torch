@@ -162,9 +162,18 @@ function trainBatch_full(inputsCPU, labelsCPU)
    feval = function(x)
       model:zeroGradParameters()
       outputs = model:forward(inputs)
+
+      print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
+
+      print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
+
       model:backward(inputs, gradOutputs)
+
+      --print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
