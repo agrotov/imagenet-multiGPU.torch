@@ -49,7 +49,12 @@ function M.parse(arg)
     cmd:option('-temperature',  1, 'temperature')
     cmd:text()
 
+    print("arg",arg);
+
     local opt = cmd:parse(arg or {})
+
+    print("opt",opt);
+
     -- add commandline specified options
     opt.save = paths.concat(opt.cache,
                             cmd:string(opt.netType, opt,
