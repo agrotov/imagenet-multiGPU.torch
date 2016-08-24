@@ -11,72 +11,6 @@ require("csvigo")
 require("os")
 
 
-function agrotov_sgd(opfunc, x, config, state)
-   -- (0) get/update state
-   local config = config or {}
-   local state = state or config
-   local lr = config.learningRate or 1e-3
-   local lrd = config.learningRateDecay or 0
-   local wd = config.weightDecay or 0
-   local mom = config.momentum or 0
-   local damp = config.dampening or mom
-   local nesterov = config.nesterov or false
-   local lrs = config.learningRates
-   local wds = config.weightDecays
-   state.evalCounter = state.evalCounter or 0
-   local nevals = state.evalCounter
-   assert(not nesterov or (mom > 0 and damp == 0), "Nesterov momentum requires a momentum and zero dampening")
-
-   -- (1) evaluate f(x) and df/dx
-   local fx,dfdx = opfunc(x)
-
-   -- (2) weight decay with single or individual parameters
---   if wd ~= 0 then
---      dfdx:add(wd, x)
---   elseif wds then
---      if not state.decayParameters then
---         state.decayParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
---      end
---      state.decayParameters:copy(wds):cmul(x)
---      dfdx:add(state.decayParameters)
---   end
---
---   -- (3) apply momentum
---   if mom ~= 0 then
---      if not state.dfdx then
---         state.dfdx = torch.Tensor():typeAs(dfdx):resizeAs(dfdx):copy(dfdx)
---      else
---         state.dfdx:mul(mom):add(1-damp, dfdx)
---      end
---      if nesterov then
---         dfdx:add(mom, state.dfdx)
---      else
---         dfdx = state.dfdx
---      end
---   end
---
---   -- (4) learning rate decay (annealing)
---   local clr = lr / (1 + nevals*lrd)
---
---   -- (5) parameter update with single or individual learning rates
---   if lrs then
---      if not state.deltaParameters then
---         state.deltaParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
---      end
---      state.deltaParameters:copy(lrs):cmul(dfdx)
---      x:add(-clr, state.deltaParameters)
---   else
---      x:add(-clr, dfdx)
---   end
---
---   -- (6) update evaluation counter
---   state.evalCounter = state.evalCounter + 1
-
-   -- return x*, f(x) before optimization
-   return x,{fx}
-end
-
-
 function load_rewards_mnist()
     print(torch.eye(10))
     return torch.eye(10)
@@ -300,8 +234,8 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
---    model:training()
-    model:evaluate()
+    model:training()
+--    model:evaluate()
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
@@ -329,47 +263,46 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         outputs = model:forward(inputs)
 
---        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
---
---        size_output = outputs:size()
---        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
---
---        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
+        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
+        size_output = outputs:size()
+        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+
+        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
 --        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
 
---        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
+        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
 
---        gpu_target = target:cuda()
---
-----        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
---
---
---
-----        err = rewards:mean()
---        --print("target",target)
-----        model:backward(inputs, gpu_target)
---        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
-----        model:backward(inputs, ones_t)
-----        err = 1
-----        print("new target",torch.ones(outputs:size()):cuda()+5)
-----        print()
---
---
---        nan_mask = gradParameters:ne(gradParameters)
---        non_nan_mask = gradParameters:eq(gradParameters)
---        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
---
---        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+        gpu_target = target:cuda()
+
+--        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
+
+
+
+--        err = rewards:mean()
+        --print("target",target)
+--        model:backward(inputs, gpu_target)
+        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
+        model:backward(inputs, ones_t)
+--        err = 1
+--        print("new target",torch.ones(outputs:size()):cuda()+5)
+--        print()
+
+
+        nan_mask = gradParameters:ne(gradParameters)
+        non_nan_mask = gradParameters:eq(gradParameters)
+        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
+
+        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
 --        gradParameters:clamp(-5, 5)
 --        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
 
         --gradParameters:clamp(-5, 5)
 
-        return 0, 0
+        return err, gradParameters
     end
     print("optimState",optimState)
---    optim.sgd(feval, parameters, optimState)
-    agrotov_sgd(feval, parameters, optimState)
+    optim.sgd(feval, parameters, optimState)
 
     -- DataParallelTable's syncParameters
     if model.needsSync then
@@ -382,21 +315,20 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     model:evaluate()
 
     print("parameters",torch.mean(parameters),torch.max(parameters),torch.min(parameters))
-
     outputs = model:forward(inputs)
 
     print("outputs new", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
---    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
-----    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
-----    print(rewards)
---
---    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
---    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
---    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
-----    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
---    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
---    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
+    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
+--    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
+--    print(rewards)
+
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
+--    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
+    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
+    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
 
 
     --   print(p_of_actions_student)
