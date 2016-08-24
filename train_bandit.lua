@@ -31,46 +31,46 @@ function agrotov_sgd(opfunc, x, config, state)
    local fx,dfdx = opfunc(x)
 
    -- (2) weight decay with single or individual parameters
-   if wd ~= 0 then
-      dfdx:add(wd, x)
-   elseif wds then
-      if not state.decayParameters then
-         state.decayParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
-      end
-      state.decayParameters:copy(wds):cmul(x)
-      dfdx:add(state.decayParameters)
-   end
-
-   -- (3) apply momentum
-   if mom ~= 0 then
-      if not state.dfdx then
-         state.dfdx = torch.Tensor():typeAs(dfdx):resizeAs(dfdx):copy(dfdx)
-      else
-         state.dfdx:mul(mom):add(1-damp, dfdx)
-      end
-      if nesterov then
-         dfdx:add(mom, state.dfdx)
-      else
-         dfdx = state.dfdx
-      end
-   end
-
-   -- (4) learning rate decay (annealing)
-   local clr = lr / (1 + nevals*lrd)
-
-   -- (5) parameter update with single or individual learning rates
-   if lrs then
-      if not state.deltaParameters then
-         state.deltaParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
-      end
-      state.deltaParameters:copy(lrs):cmul(dfdx)
-      x:add(-clr, state.deltaParameters)
-   else
-      x:add(-clr, dfdx)
-   end
-
-   -- (6) update evaluation counter
-   state.evalCounter = state.evalCounter + 1
+--   if wd ~= 0 then
+--      dfdx:add(wd, x)
+--   elseif wds then
+--      if not state.decayParameters then
+--         state.decayParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
+--      end
+--      state.decayParameters:copy(wds):cmul(x)
+--      dfdx:add(state.decayParameters)
+--   end
+--
+--   -- (3) apply momentum
+--   if mom ~= 0 then
+--      if not state.dfdx then
+--         state.dfdx = torch.Tensor():typeAs(dfdx):resizeAs(dfdx):copy(dfdx)
+--      else
+--         state.dfdx:mul(mom):add(1-damp, dfdx)
+--      end
+--      if nesterov then
+--         dfdx:add(mom, state.dfdx)
+--      else
+--         dfdx = state.dfdx
+--      end
+--   end
+--
+--   -- (4) learning rate decay (annealing)
+--   local clr = lr / (1 + nevals*lrd)
+--
+--   -- (5) parameter update with single or individual learning rates
+--   if lrs then
+--      if not state.deltaParameters then
+--         state.deltaParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
+--      end
+--      state.deltaParameters:copy(lrs):cmul(dfdx)
+--      x:add(-clr, state.deltaParameters)
+--   else
+--      x:add(-clr, dfdx)
+--   end
+--
+--   -- (6) update evaluation counter
+--   state.evalCounter = state.evalCounter + 1
 
    -- return x*, f(x) before optimization
    return x,{fx}
@@ -322,50 +322,51 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 
     feval = function(x)
-        model:zeroGradParameters()
-
-        print("gradParameters",torch.mean(gradParameters))
-
-
-        outputs = model:forward(inputs)
-
-        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
-
-        size_output = outputs:size()
-        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-
-        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
---        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
-
-        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
-
-        gpu_target = target:cuda()
-
---        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
-
-
-
---        err = rewards:mean()
-        --print("target",target)
-        model:backward(inputs, gpu_target)
+--        model:zeroGradParameters()
+--
+--        print("gradParameters",torch.mean(gradParameters))
+--
+--
+--        outputs = model:forward(inputs)
+--
+--        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+--
+--        size_output = outputs:size()
+--        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+--
+--        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
+----        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
+--
+--        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
+--
+--        gpu_target = target:cuda()
+--
+----        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
+--
+--
+--
+----        err = rewards:mean()
+--        --print("target",target)
+----        model:backward(inputs, gpu_target)
 --        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
 --        model:backward(inputs, ones_t)
---        err = 1
---        print("new target",torch.ones(outputs:size()):cuda()+5)
---        print()
-
-
-        nan_mask = gradParameters:ne(gradParameters)
-        non_nan_mask = gradParameters:eq(gradParameters)
-        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
-
-        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
---        gradParameters:clamp(-5, 5)
---        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
-
-        --gradParameters:clamp(-5, 5)
-
-        return err, gradParameters
+----        err = 1
+----        print("new target",torch.ones(outputs:size()):cuda()+5)
+----        print()
+--
+--
+--        nan_mask = gradParameters:ne(gradParameters)
+--        non_nan_mask = gradParameters:eq(gradParameters)
+--        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
+--
+--        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+----        gradParameters:clamp(-5, 5)
+----        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
+--
+--        --gradParameters:clamp(-5, 5)
+--
+--        return err, gradParameters
+        return 0,0
     end
     print("optimState",optimState)
 --    optim.sgd(feval, parameters, optimState)
