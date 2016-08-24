@@ -320,7 +320,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     local err, target, p_of_actions_student, size_output
 
-    outputs = model:forward(inputs)
     
     feval = function(x)
         model:zeroGradParameters()
