@@ -357,7 +357,7 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged,
 
 
 
-    print("outputs test", torch.mean(inputs),torch.min(inputs),torch.max(inputs))
+    print("outputs test", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
