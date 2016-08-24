@@ -303,13 +303,14 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         return err, gradParameters
     end
+    optimState.evalCounter = 0
     print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
     -- DataParallelTable's syncParameters
---    if model.needsSync then
---        model:syncParameters()
---    end
+    if model.needsSync then
+        model:syncParameters()
+    end
 
 
     cutorch.synchronize()
