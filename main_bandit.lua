@@ -255,6 +255,7 @@ print("bandit_data_path",data_path)
 
 if opt.produce_dataset == 1 then
     produce_dataset(model, data_path)
+    print_bandit_dataset()
 end
 
 if opt.train == 1 then
