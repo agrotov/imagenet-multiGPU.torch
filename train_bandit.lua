@@ -314,7 +314,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     cutorch.synchronize()
 
-    model:evaluate()
 
 
     outputs = model:forward(inputs)
