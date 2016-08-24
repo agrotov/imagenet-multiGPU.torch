@@ -31,29 +31,6 @@ function agrotov_sgd(opfunc, x, config, state)
    local fx,dfdx = opfunc(x)
 
    -- (2) weight decay with single or individual parameters
-   if wd ~= 0 then
-      dfdx:add(wd, x)
-   elseif wds then
-      if not state.decayParameters then
-         state.decayParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
-      end
-      state.decayParameters:copy(wds):cmul(x)
-      dfdx:add(state.decayParameters)
-   end
-
-   -- (3) apply momentum
-   if mom ~= 0 then
-      if not state.dfdx then
-         state.dfdx = torch.Tensor():typeAs(dfdx):resizeAs(dfdx):copy(dfdx)
-      else
-         state.dfdx:mul(mom):add(1-damp, dfdx)
-      end
-      if nesterov then
-         dfdx:add(mom, state.dfdx)
-      else
-         dfdx = state.dfdx
-      end
-   end
 
    -- (4) learning rate decay (annealing)
    local clr = lr / (1 + nevals*lrd)
