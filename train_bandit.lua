@@ -136,9 +136,6 @@ function compute_target(size, actions, rewards_arg, probability_actions_student_
 --    print(rewards)
     weight = compute_weight(rewards_arg-baseline, probability_actions_student_model, probability_actions_teacher_model)
 
-    print("weight",weight:size())
-    print("target",target:size())
-    print("actions",actions:size())
 --    print("rewards",rewards)
 --    print("probability_actions_student_model",probability_actions_student_model)
 --    print("probability_actions_teacher_model",probability_actions_teacher_model)
