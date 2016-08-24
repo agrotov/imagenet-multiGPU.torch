@@ -33,21 +33,6 @@ function agrotov_sgd(opfunc, x, config, state)
    -- (2) weight decay with single or individual parameters
 
    -- (4) learning rate decay (annealing)
-   local clr = lr / (1 + nevals*lrd)
-
-   -- (5) parameter update with single or individual learning rates
-   if lrs then
-      if not state.deltaParameters then
-         state.deltaParameters = torch.Tensor():typeAs(x):resizeAs(dfdx)
-      end
-      state.deltaParameters:copy(lrs):cmul(dfdx)
-      x:add(-clr, state.deltaParameters)
-   else
-      x:add(-clr, dfdx)
-   end
-
-   -- (6) update evaluation counter
-   state.evalCounter = state.evalCounter + 1
 
    -- return x*, f(x) before optimization
    return x,{fx}
