@@ -300,8 +300,8 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
-    model:training()
---    model:evaluate()
+--    model:training()
+    model:evaluate()
     batchNumber = batchNumber or 1
 
     cutorch.synchronize()
