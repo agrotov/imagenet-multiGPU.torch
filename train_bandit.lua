@@ -365,7 +365,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         --gradParameters:clamp(-5, 5)
 
-        return err, gradParameters
+        return 0, 0
     end
     print("optimState",optimState)
 --    optim.sgd(feval, parameters, optimState)
