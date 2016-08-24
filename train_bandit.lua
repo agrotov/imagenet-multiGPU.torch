@@ -297,13 +297,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --        gradParameters:clamp(-5, 5)
 --        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
 
-        print("parameters",torch.mean(parameters),torch.max(parameters),torch.min(parameters))
-
         --gradParameters:clamp(-5, 5)
 
         return err, gradParameters
     end
-    optimState.evalCounter = 0
     print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
@@ -317,7 +314,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     model:evaluate()
 
-
+    print("parameters",torch.mean(parameters),torch.max(parameters),torch.min(parameters))
+    
     outputs = model:forward(inputs)
 
     print("outputs new", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
