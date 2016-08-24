@@ -339,27 +339,27 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
 
-        gpu_target = target:cuda()
-
---        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
-
-
-
---        err = rewards:mean()
-        --print("target",target)
---        model:backward(inputs, gpu_target)
-        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
---        model:backward(inputs, ones_t)
---        err = 1
---        print("new target",torch.ones(outputs:size()):cuda()+5)
---        print()
-
-
-        nan_mask = gradParameters:ne(gradParameters)
-        non_nan_mask = gradParameters:eq(gradParameters)
-        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
-
-        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+--        gpu_target = target:cuda()
+--
+----        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
+--
+--
+--
+----        err = rewards:mean()
+--        --print("target",target)
+----        model:backward(inputs, gpu_target)
+--        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
+----        model:backward(inputs, ones_t)
+----        err = 1
+----        print("new target",torch.ones(outputs:size()):cuda()+5)
+----        print()
+--
+--
+--        nan_mask = gradParameters:ne(gradParameters)
+--        non_nan_mask = gradParameters:eq(gradParameters)
+--        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
+--
+--        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
 --        gradParameters:clamp(-5, 5)
 --        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
 
