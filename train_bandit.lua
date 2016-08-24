@@ -255,88 +255,88 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     local err, target, p_of_actions_student, size_output
 
 
---    feval = function(x)
---        model:zeroGradParameters()
---
---        print("gradParameters",torch.mean(gradParameters))
---
---
---        outputs = model:forward(inputs)
---
---        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
---
---        size_output = outputs:size()
---        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
---
---        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
-----        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
---
---        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
---
---        gpu_target = target:cuda()
---
-----        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
---
---
---
-----        err = rewards:mean()
---        --print("target",target)
-----        model:backward(inputs, gpu_target)
---        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
---        model:backward(inputs, ones_t)
-----        err = 1
-----        print("new target",torch.ones(outputs:size()):cuda()+5)
-----        print()
---
---
---        nan_mask = gradParameters:ne(gradParameters)
---        non_nan_mask = gradParameters:eq(gradParameters)
---        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
---
---        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
-----        gradParameters:clamp(-5, 5)
-----        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
---
---        print("parameters",torch.mean(parameters),torch.max(parameters),torch.min(parameters))
---
---        --gradParameters:clamp(-5, 5)
---
---        return err, gradParameters
---    end
---    print("optimState",optimState)
---    optim.sgd(feval, parameters, optimState)
---
---    -- DataParallelTable's syncParameters
+    feval = function(x)
+        model:zeroGradParameters()
+
+        print("gradParameters",torch.mean(gradParameters))
+
+
+        outputs = model:forward(inputs)
+
+        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
+        size_output = outputs:size()
+        p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+
+        --print(torch.mean(p_of_actions_student), torch.mean(probabilities_logged))
+--        rewards_fake = torch.rand(p_of_actions_student:size()):cuda()
+
+        target = compute_target(size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
+
+        gpu_target = target:cuda()
+
+--        print("target",torch.mean(target),torch.max(torch.abs(target)),torch.min(torch.abs(target)))
+
+
+
+--        err = rewards:mean()
+        --print("target",target)
+--        model:backward(inputs, gpu_target)
+        ones_t =  torch.ones(outputs:size()):cuda() * 0.0
+        model:backward(inputs, ones_t)
+--        err = 1
+--        print("new target",torch.ones(outputs:size()):cuda()+5)
+--        print()
+
+
+        nan_mask = gradParameters:ne(gradParameters)
+        non_nan_mask = gradParameters:eq(gradParameters)
+        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
+
+        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
+--        gradParameters:clamp(-5, 5)
+--        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
+
+        print("parameters",torch.mean(parameters),torch.max(parameters),torch.min(parameters))
+
+        --gradParameters:clamp(-5, 5)
+
+        return err, gradParameters
+    end
+    print("optimState",optimState)
+    optim.sgd(feval, parameters, optimState)
+
+    -- DataParallelTable's syncParameters
 --    if model.needsSync then
 --        model:syncParameters()
 --    end
---
---
---    cutorch.synchronize()
---
---    model:evaluate()
---
---
---    outputs = model:forward(inputs)
---
---    print("outputs new", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
---
---    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
-----    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
-----    print(rewards)
---
---    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
---    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
---    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
-----    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
---    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
---    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
---
---
---    --   print(p_of_actions_student)
---
---    --    top-1 error
-----    if batchNumber % 10 == 0 then
+
+
+    cutorch.synchronize()
+
+    model:evaluate()
+
+
+    outputs = model:forward(inputs)
+
+    print("outputs new", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
+
+    p_of_actions_student_new = probability_of_actions(outputs, actions, temperature)
+--    print(torch.cat(rewards,torch.cat(torch.cat(probabilities_logged,p_of_actions_student_new,2),p_of_actions_student_new-p_of_actions_student,2),2))
+--    print(rewards)
+
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_old = torch.sum(torch.cmul(rewards,p_of_actions_student))/torch.sum(p_of_actions_student)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
+--    print("p_of_actions_student_new",p_of_actions_student_new[p_of_actions_student_new:gt(0.5)]:size())
+    print("Probabilities", torch.mean(probabilities_logged),torch.mean(p_of_actions_student),torch.mean(p_of_actions_student_new))
+    print("Rewards",rewards_sum_logged,rewards_sum_old,rewards_sum_new ,rewards_sum_new -rewards_sum_old, torch.mean(p_of_actions_student_new-p_of_actions_student))
+
+
+    --   print(p_of_actions_student)
+
+    --    top-1 error
+--    if batchNumber % 10 == 0 then
         full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu, probabilities_logged)
 --    end
     dataTimer:reset()
