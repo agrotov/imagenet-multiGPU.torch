@@ -161,7 +161,7 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
    feval = function(x)
       model:zeroGradParameters()
-      outputs = model:forward(inputs)
+--      outputs = model:forward(inputs)
 
       print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
