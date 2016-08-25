@@ -212,10 +212,13 @@ function dataset:__init(...)
    self.imageClass:resize(self.numSamples)
    local runningIndex = 0
    for i=1,#self.classes do
-      if self.verbose then xlua.progress(i, #(self.classes)) end
+--      if self.verbose then xlua.progress(i, #(self.classes)) end
       local length = tonumber(sys.fexecute(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
+      print(wc .. " -l '"
+                                              .. classFindFiles[i] .. "' |"
+                                              .. cut .. " -f1 -d' '")
       if length == 0 then
          print("length",length,"i",i)
       else
