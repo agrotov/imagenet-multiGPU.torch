@@ -217,7 +217,9 @@ function dataset:__init(...)
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
       if length == 0 then
+         print("length",length,"i",i)
       else
+         print("torch.linspace", i)
          self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + length, length):long()
          self.imageClass[{{runningIndex + 1, runningIndex + length}}]:fill(i)
       end
