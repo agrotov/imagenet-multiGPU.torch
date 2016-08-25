@@ -103,6 +103,10 @@ function dataset:__init(...)
    -- loop over each paths folder, get list of unique class names,
    -- also store the directory paths per class
    -- for each class,
+
+   print("self.paths",self.paths)
+   os.exit()
+
    for k,path in ipairs(self.paths) do
       local dirs = dir.getdirectories(path);
       for k,dirpath in ipairs(dirs) do
@@ -118,9 +122,6 @@ function dataset:__init(...)
          end
       end
    end
-
-   print("self.classes",self.classes)
-   os.exit()
 
    self.classIndices = {}
    for k,v in ipairs(self.classes) do
