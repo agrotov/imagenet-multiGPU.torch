@@ -251,7 +251,7 @@ function dataset:__init(...)
       -- split the classList into classListTrain and classListTest
       for i=1,#self.classes do
          local list = self.classList[i]
-         print("i",i,"self.classList[i]",self.classList[i]:size(1),"self.split",self.split)
+         print("i",i,"self.classList[i]",self.classList[i]:size(1),"#self.classes",#self.classes)
          local count = self.classList[i]:size(1)
          local splitidx = math.floor((count * self.split / 100) + 0.5) -- +round
          local perm = torch.randperm(count)
