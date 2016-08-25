@@ -104,9 +104,6 @@ function dataset:__init(...)
    -- also store the directory paths per class
    -- for each class,
 
-   print("self.paths",self.paths)
-   os.exit()
-
    for k,path in ipairs(self.paths) do
       local dirs = dir.getdirectories(path);
       for k,dirpath in ipairs(dirs) do
