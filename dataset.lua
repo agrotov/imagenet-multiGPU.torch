@@ -248,6 +248,8 @@ function dataset:__init(...)
       self.classListTest  = {}
       self.classListSample = self.classListTrain
       local totalTestSamples = 0
+      print("self.classList",self.classList)
+      os.exit()
       -- split the classList into classListTrain and classListTest
       for i=1,#self.classes do
          local list = self.classList[i]
