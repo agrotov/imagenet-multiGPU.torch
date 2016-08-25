@@ -161,19 +161,9 @@ function trainBatch_full(inputsCPU, labelsCPU)
 
    feval = function(x)
       model:zeroGradParameters()
---      outputs = model:forward(inputs)
-
-      print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
-
---      print("outputs",outputs)
-
+      outputs = model:forward(inputs)
       err = criterion:forward(outputs, labels)
       local gradOutputs = criterion:backward(outputs, labels)
-
---      print("gradOutputs",gradOutputs)
-
---      print("gradOutputs", torch.mean(gradOutputs),torch.min(gradOutputs),torch.max(gradOutputs))
-
       model:backward(inputs, gradOutputs)
 
       return err, gradParameters
