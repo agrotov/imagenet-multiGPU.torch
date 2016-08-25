@@ -248,7 +248,10 @@ function dataset:__init(...)
       self.classListTest  = {}
       self.classListSample = self.classListTrain
       local totalTestSamples = 0
-      print("self.classList",self.classList)
+      print("self.classList [1]",self.classList[1])
+      print("self.classList [196]",self.classList[196])
+      print("self.classList [200]",self.classList[200])
+      print("self.classList [197]",self.classList[197])
       os.exit()
       -- split the classList into classListTrain and classListTest
       for i=1,#self.classes do
