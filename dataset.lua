@@ -162,6 +162,7 @@ function dataset:__init(...)
    for i, class in ipairs(self.classes) do
       -- iterate over classPaths
       for j,path in ipairs(classPaths[i]) do
+         print("i",i,classPaths[i],"path",path)
          local command = find .. ' "' .. path .. '" ' .. findOptions
             .. ' >>"' .. classFindFiles[i] .. '" \n'
          tmphandle:write(command)
