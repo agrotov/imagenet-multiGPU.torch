@@ -216,10 +216,11 @@ function dataset:__init(...)
       local length = tonumber(sys.fexecute(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
-      print(wc .. " -l '"
+
+      if length == 0 then
+         print(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '")
-      if length == 0 then
          print("length",length,"i",i)
       else
          print("torch.linspace", i)
