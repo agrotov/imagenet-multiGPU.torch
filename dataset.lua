@@ -119,6 +119,9 @@ function dataset:__init(...)
       end
    end
 
+   print("self.classes",self.classes)
+   os.exit()
+
    self.classIndices = {}
    for k,v in ipairs(self.classes) do
       self.classIndices[v] = k
