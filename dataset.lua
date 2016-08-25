@@ -103,7 +103,6 @@ function dataset:__init(...)
    -- loop over each paths folder, get list of unique class names,
    -- also store the directory paths per class
    -- for each class,
-
    for k,path in ipairs(self.paths) do
       local dirs = dir.getdirectories(path);
       for k,dirpath in ipairs(dirs) do
@@ -163,7 +162,6 @@ function dataset:__init(...)
    for i, class in ipairs(self.classes) do
       -- iterate over classPaths
       for j,path in ipairs(classPaths[i]) do
-         print("i",i,classPaths[i],"path",path)
          local command = find .. ' "' .. path .. '" ' .. findOptions
             .. ' >>"' .. classFindFiles[i] .. '" \n'
          tmphandle:write(command)
@@ -214,18 +212,12 @@ function dataset:__init(...)
    self.imageClass:resize(self.numSamples)
    local runningIndex = 0
    for i=1,#self.classes do
---      if self.verbose then xlua.progress(i, #(self.classes)) end
+      if self.verbose then xlua.progress(i, #(self.classes)) end
       local length = tonumber(sys.fexecute(wc .. " -l '"
                                               .. classFindFiles[i] .. "' |"
                                               .. cut .. " -f1 -d' '"))
-
       if length == 0 then
-         print(wc .. " -l '"
-                                              .. classFindFiles[i] .. "' |"
-                                              .. cut .. " -f1 -d' '")
-         print("length",length,"i",i)
       else
-         print("torch.linspace", i)
          self.classList[i] = torch.linspace(runningIndex + 1, runningIndex + length, length):long()
          self.imageClass[{{runningIndex + 1, runningIndex + length}}]:fill(i)
       end
@@ -259,7 +251,6 @@ function dataset:__init(...)
       -- split the classList into classListTrain and classListTest
       for i=1,#self.classes do
          local list = self.classList[i]
-         print("i",i,"self.classList[i]",self.classList[i]:size(1),"#self.classes",#self.classes)
          local count = self.classList[i]:size(1)
          local splitidx = math.floor((count * self.split / 100) + 0.5) -- +round
          local perm = torch.randperm(count)
