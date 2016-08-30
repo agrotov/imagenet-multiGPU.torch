@@ -223,6 +223,8 @@ local outputs = torch.CudaTensor()
 local timer = torch.Timer()
 local dataTimer = torch.Timer()
 
+print("model",model)
+
 local parameters, gradParameters = model:getParameters()
 
 
