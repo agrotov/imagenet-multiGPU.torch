@@ -223,8 +223,6 @@ local outputs = torch.CudaTensor()
 local timer = torch.Timer()
 local dataTimer = torch.Timer()
 
-print("model",model)
-
 local parameters, gradParameters = model:getParameters()
 
 
@@ -365,7 +363,7 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged,
     end
     top1 = top1 * 100 / opt.batchSize;
 
-    print("actions_eva",actions_eva)
+--    print("actions_eva",actions_eva)
 
     rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
