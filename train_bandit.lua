@@ -143,7 +143,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 --    print(rewards)
     weight = compute_weight(rewards_arg-baseline, probability_actions_student_model, probability_actions_teacher_model)
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
-    weight = torch.cdiv(weight, log_probability_of_actions_val)
+    weight = -torch.cdiv(weight, log_probability_of_actions_val)
 
 --    print("rewards",rewards)
 --    print("probability_actions_student_model",probability_actions_student_model)
