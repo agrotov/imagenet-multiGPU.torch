@@ -300,7 +300,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --        gradParameters:clamp(-5, 5)
 --        print("gradParameters",torch.mean(gradParameters),torch.max(gradParameters),torch.min(gradParameters))
 
-        --gradParameters:clamp(-5, 5)
+        gradParameters:clamp(-5, 5)
 
         return err, gradParameters
     end
