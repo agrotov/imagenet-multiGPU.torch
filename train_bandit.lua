@@ -338,7 +338,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
     --    top-1 error
 --    if batchNumber % 10 == 0 then
-        full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu, probabilities_logged)
+--        full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
+        full_information_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, p_of_actions_student_new)
+--        full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu, probabilities_logged)
 --    end
     dataTimer:reset()
 
@@ -346,8 +348,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 end
 
 
-
-function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged, probabilities_logged)
+--function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
+function full_information_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, p_of_actions_student_new)
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     model:evaluate()
     local top1_epoch = 0
@@ -378,9 +380,13 @@ function full_information_test(inputsCPU, labelsCPU,batchNumber, rewards_logged,
 
     diff_rewards = rewards_eva:mean() - rewards_logged:mean()
 
+    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
+
+
     -- Calculate top-1 error, and print information
-    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards, top1,
+    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
+        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
         optimState.learningRate))
 end
 
