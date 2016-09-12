@@ -53,6 +53,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     local actions= torch.LongTensor(opt.batchSize)
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+    for i=1,opt.batchSize do
         actions[i] = prediction_sorted[i][1]
     end
 
