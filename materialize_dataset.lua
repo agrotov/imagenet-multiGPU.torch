@@ -47,17 +47,17 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 --    print("print(torch.sum(probabilities[1]))")
 --    print(torch.sum(probabilities[1]))
 
---    local size_output = outputs:size()
---    local actions = sample_action(outputs,temperature)
+    local size_output = outputs:size()
+    local actions = sample_action(outputs,temperature)
 
 
-    local actions= torch.LongTensor(opt.batchSize)
-    local _,prediction_sorted = outputs:float():sort(2, true) -- descending
-    for i=1,opt.batchSize do
-        actions[i] = prediction_sorted[i][1]
-    end
+--    local actions= torch.LongTensor(opt.batchSize)
+--    local _,prediction_sorted = outputs:float():sort(2, true) -- descending
+--    for i=1,opt.batchSize do
+--        actions[i] = prediction_sorted[i][1]
+--    end
 
-    print("opt.batchSize",opt.batchSize,"outputs:size()",outputs:size())
+    print("opt.batchSize",opt.batchSize,"outputs:size()",outputs:size(),"actions:size()",actions:size())
     os.exit()
 
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
