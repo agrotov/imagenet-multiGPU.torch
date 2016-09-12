@@ -224,7 +224,7 @@ function test_imagenet_bandit(model, data_path)
 
 
          -- load new sample
-         local class = ((index_of_input)%1000)
+         local class = ((index_of_input)%1001)
          local index_of_image = math.floor((index_of_input/1001))
          local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
          targets[k] = class
