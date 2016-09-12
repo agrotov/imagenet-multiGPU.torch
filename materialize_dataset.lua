@@ -48,7 +48,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 --    print(torch.sum(probabilities[1]))
 
 --    local size_output = outputs:size()
---    local actions = sample_action(outputs,temperature)
+    local actions = sample_action(outputs,temperature)
 
 
     local actions= torch.LongTensor(actions:size())
