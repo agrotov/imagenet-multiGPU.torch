@@ -339,7 +339,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     --    top-1 error
 --    if batchNumber % 10 == 0 then
 --        full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
-        full_information_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, p_of_actions_student_new)
+        full_information_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, p_of_actions_student_new, batchNumber)
 --        full_information_test(inputsCPU, labelsCPU, batchNumber, rewards_cpu, probabilities_logged)
 --    end
     dataTimer:reset()
@@ -349,7 +349,7 @@ end
 
 
 --function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
-function full_information_test(inputsCPU, actions, rewards_logged, probabilities_logged, labelsCPU, p_of_actions_student_new)
+function full_information_test(inputsCPU, actions, rewards_logged, probabilities_logged, labelsCPU, p_of_actions_student_new, batchNumber)
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     model:evaluate()
     local top1_epoch = 0
