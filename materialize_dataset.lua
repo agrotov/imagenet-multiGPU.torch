@@ -57,6 +57,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
         actions[i] = prediction_sorted[i][1]
     end
 
+    print("opt.batchSize",opt.batchSize,"outputs:size()",outputs:size())
+    os.exit()
 
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
 --    print("p_of_actions")
