@@ -349,7 +349,7 @@ end
 
 
 --function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
-function full_information_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, p_of_actions_student_new)
+function full_information_test(inputsCPU, actions, rewards_logged, probabilities_logged, labelsCPU, p_of_actions_student_new)
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     model:evaluate()
     local top1_epoch = 0
@@ -380,8 +380,8 @@ function full_information_test(inputsCPU, actions, rewards, probabilities_logged
 
     diff_rewards = rewards_eva:mean() - rewards_logged:mean()
 
-    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
-    rewards_sum_new = torch.sum(torch.cmul(rewards,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
+    rewards_sum_logged = torch.sum(torch.cmul(rewards_logged,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_new = torch.sum(torch.cmul(rewards_logged,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
 
 
     -- Calculate top-1 error, and print information
