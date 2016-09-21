@@ -72,6 +72,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     print("labelsCPU",labels)
 
+    print("loss_matrix",loss_matrix)
+
     cutorch.synchronize()
     batchNumber = batchNumber + 1
 
