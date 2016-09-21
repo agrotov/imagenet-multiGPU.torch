@@ -416,7 +416,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     model:evaluate()
     local top1_epoch = 0
     local top1 = 0
-    local actions_eva = torch.LongTensor(opt.batchSize)
+    local actions_eva = torch.LongTensor(opt.batchSize,1)
     local rewards_model = 0
     outputs = model:forward(inputs)
 
