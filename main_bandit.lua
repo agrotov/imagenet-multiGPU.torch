@@ -107,7 +107,7 @@ function train_imagenet_bandit(model, data_path)
 
    logged_data = torch.load(data_path)
 
-   loss_matrix = load_rewards_csv("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
    -- local vars
@@ -187,7 +187,7 @@ function test_imagenet_bandit(model, data_path)
 
    logged_data = torch.load(data_path)
 
-   loss_matrix = load_rewards_csv("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
    -- local vars
