@@ -386,6 +386,8 @@ function full_information_test(inputsCPU, actions, rewards_logged, probabilities
     rewards_sum_new = torch.sum(torch.cmul(rewards_logged,p_of_actions_student_new))/torch.sum(p_of_actions_student_new)
 
 
+    print("rewards, new_probabilities",torch.cat(rewards,new_probabilities,2))
+
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
         epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
@@ -441,7 +443,6 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
 --    print("loss_matrix",loss_matrix)
 
-    print("rewards, new_probabilities",torch.cat(rewards,new_probabilities,2))
 
     rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
     rewards_sum_new = torch.sum(torch.cmul(rewards,new_probabilities))/torch.sum(new_probabilities)
