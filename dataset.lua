@@ -355,9 +355,9 @@ function dataset:sample(quantity, percentage)
       h1s[i][1] = h1
       w1s[i][1] = w1
       flips[i][1] = flip
-      print("sample image")
-      print(class)
-      print(index)
+--      print("sample image")
+--      print(class)
+--      print(index)
 ------      print(indexes[i][1])
    end
    local data, scalarLabels = tableToOutput(self, dataTable, scalarTable)

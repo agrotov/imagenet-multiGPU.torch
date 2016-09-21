@@ -57,6 +57,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
         actions[i][1] = prediction_sorted[i][1]
     end
 
+    print("actions",actions)
+
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
 --    print("p_of_actions")
 --    print(p_of_actions)
