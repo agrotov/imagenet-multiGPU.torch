@@ -70,6 +70,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     print("rewards",rewards)
 
+    print("labelsCPU",labels)
+
     cutorch.synchronize()
     batchNumber = batchNumber + 1
 

@@ -441,6 +441,8 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     print("rewards_eva",rewards_eva)
 
+    print("labelsCPU",labelsCPU)
+
     diff_rewards = rewards_eva:mean() - rewards:mean()
 
     rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
