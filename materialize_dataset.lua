@@ -68,6 +68,8 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     local rewards = 1-reward_for_actions(loss_matrix, actions, labels)
 
+    print("rewards",rewards)
+
     cutorch.synchronize()
     batchNumber = batchNumber + 1
 
