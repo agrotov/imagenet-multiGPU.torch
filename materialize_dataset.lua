@@ -57,7 +57,6 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
         actions[i][1] = prediction_sorted[i][1]
     end
 
-    print("actions",actions)
 
     local p_of_actions= probability_of_actions(outputs, actions, temperature)
 --    print("p_of_actions")
@@ -68,11 +67,6 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
 
     local rewards = 1-reward_for_actions(loss_matrix, actions, labels)
 
-    print("rewards",rewards)
-
-    print("labelsCPU",labels)
-
---    print("loss_matrix",loss_matrix)
 
     cutorch.synchronize()
     batchNumber = batchNumber + 1
