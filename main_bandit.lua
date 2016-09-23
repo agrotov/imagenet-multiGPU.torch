@@ -50,7 +50,7 @@ paths.dofile('load_csv.lua')
 paths.dofile('donkey.lua')
 
 
-function produce_dataset(model, data_path, loader)
+function produce_dataset(model, data_path)
    print("produce_dataset",data_path,opt.epochSize)
    batchNumber = 0
    cutorch.synchronize()
@@ -67,13 +67,13 @@ function produce_dataset(model, data_path, loader)
 
 --   model:evaluate()
    model:evaluate()
-   percentage = 1
+   percentage = -0.1
 
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
-      local inputs, labels, h1s, w1s, flips, indexes = loader:sample(opt.batchSize, percentage)
+      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
       materialize_dataset(indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips)
    end
    print("after all")
@@ -254,17 +254,9 @@ data_path = opt.bandit_data
 
 print("bandit_data_path",data_path)
 
-print("testLoader",testLoader)
-os.exit()
-
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path,trainLoader)
---    print_bandit_dataset()
-end
-
-if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path, testLoader)
+    produce_dataset(model, data_path)
 --    print_bandit_dataset()
 end
 
