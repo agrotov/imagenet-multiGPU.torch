@@ -310,7 +310,7 @@ function dataset:getByClass(class, percentage)
       index = self.classListSample[class]:nElement() - math.floor(torch.uniform() * self.classListSample[class]:nElement()*(-percentage))
    end
 
-   print("index",index,"self.classListSample[class]:nElement()",self.classListSample[class]:nElement())
+--   print("index",index,"self.classListSample[class]:nElement()",self.classListSample[class]:nElement())
 
    local imgpath = ffi.string(torch.data(self.imagePath[self.classListSample[class][index]]))
 --   print(imgpath)
