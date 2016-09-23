@@ -186,6 +186,8 @@ function train_imagenet_bandit(model, data_path)
            os:exit()
        end
 
+       rewards_weigted_test = rewards_weigted_test_new
+
    end
 
 
