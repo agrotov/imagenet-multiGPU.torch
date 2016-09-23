@@ -47,6 +47,8 @@ paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
 paths.dofile('test.lua')
 paths.dofile('load_csv.lua')
+paths.dofile('donkey.lua')
+
 
 function produce_dataset(model, data_path, loader)
    print("produce_dataset",data_path,opt.epochSize)
@@ -55,7 +57,6 @@ function produce_dataset(model, data_path, loader)
 
    -- set the dropouts to training mode
 --   model:training()
-   paths.dofile('donkey.lua')
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    local tm = torch.Timer()
@@ -103,7 +104,6 @@ end -- of produce_dataset()
 
 function train_imagenet_bandit(model, data_path)
 
-   paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
 
@@ -183,7 +183,6 @@ end -- of train_imagenet_bandit()
 
 function test_imagenet_bandit(model, data_path, loader)
 
-   paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
 
