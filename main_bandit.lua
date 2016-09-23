@@ -181,9 +181,9 @@ function train_imagenet_bandit(model, data_path)
 
        print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
 
-       if rewards_weigted_test_new - rewards_weigted_test < 0.01 then
+       if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
            print("no improvement")
-           os:exit()
+           os.exit()
        end
 
        rewards_weigted_test = rewards_weigted_test_new
