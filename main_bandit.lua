@@ -256,12 +256,12 @@ data_path = opt.bandit_data
 print("bandit_data_path",data_path)
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path)
+    produce_dataset(model, data_path,trainLoader)
 --    print_bandit_dataset()
 end
 
 if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path, trainLoader)
+    produce_dataset(model, data_path, testnLoader)
 --    print_bandit_dataset()
 end
 
