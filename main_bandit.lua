@@ -1,11 +1,3 @@
---
---  Copyright (c) 2014, Facebook, Inc.
---  All rights reserved.
---
---  This source code is licensed under the BSD-style license found in the
---  LICENSE file in the root directory of this source tree. An additional grant
---  of patent rights can be found in the PATENTS file in the same directory.
---
 require 'torch'
 require 'cutorch'
 require 'paths'
@@ -107,7 +99,7 @@ function train_imagenet_bandit(model, data_path)
 
    logged_data = torch.load(data_path)
 
-   loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
    -- local vars
@@ -154,7 +146,7 @@ function train_imagenet_bandit(model, data_path)
             -- load new sample
             local class = ((index_of_input)%1001)
             local index_of_image = math.floor((index_of_input/1001))
-            local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+            local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image)
             targets[k] = class
             inputs[k] = input
             actions[k] = action
@@ -181,13 +173,13 @@ function train_imagenet_bandit(model, data_path)
 end -- of train_imagenet_bandit()
 
 
-function test_imagenet_bandit(model, data_path, loader)
+function test_imagenet_bandit(model, data_path)
 
    paths.dofile('donkey.lua')
 
    logged_data = torch.load(data_path)
 
-   loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   loss_matrix = load_rewards_csv("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
    -- local vars
@@ -226,9 +218,7 @@ function test_imagenet_bandit(model, data_path, loader)
          -- load new sample
          local class = ((index_of_input)%1001)
          local index_of_image = math.floor((index_of_input/1001))
---         print("class",class)
---         print("index_of_image",index_of_image)
-         local input, h1, w1, flip, index_tmp = loader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
@@ -260,12 +250,6 @@ if opt.produce_dataset == 1 then
 --    print_bandit_dataset()
 end
 
-if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path)
---    print_bandit_dataset()
-end
-
-
 if opt.train == 1 then
     train_imagenet_bandit(model,data_path)
 end
@@ -274,14 +258,3 @@ end
 if opt.test == 1 then
     test_imagenet_bandit(model, data_path)
 end
-
---print_bandit_dataset()
---
-
---epoch = opt.epochNumber
---
---for i=1,opt.nEpochs do
---   train()
---   test()
---   epoch = epoch + 1
---end
