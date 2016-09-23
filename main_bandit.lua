@@ -50,7 +50,7 @@ paths.dofile('load_csv.lua')
 paths.dofile('donkey.lua')
 
 
-function produce_dataset(model, data_path)
+function produce_dataset(model, data_path, percentage)
    print("produce_dataset",data_path,opt.epochSize)
    batchNumber = 0
    cutorch.synchronize()
@@ -67,7 +67,6 @@ function produce_dataset(model, data_path)
 
 --   model:evaluate()
    model:evaluate()
-   percentage = -0.1
 
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
@@ -256,10 +255,14 @@ print("bandit_data_path",data_path)
 
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path)
+    produce_dataset(model, data_path, 0.9)
 --    print_bandit_dataset()
 end
 
+if opt.produce_test_dataset == 1 then
+    produce_dataset(model, data_path, -0.1)
+--    print_bandit_dataset()
+end
 
 if opt.train == 1 then
     train_imagenet_bandit(model,data_path)
