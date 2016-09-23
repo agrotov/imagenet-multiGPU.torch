@@ -186,6 +186,9 @@ function train_imagenet_bandit(model, data_path)
                print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
 
                if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
+                   model:clearState()
+                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
                    print("no improvement")
                    os.exit()
                end
@@ -196,6 +199,11 @@ function train_imagenet_bandit(model, data_path)
 
 
        end
+
+       model:clearState()
+       saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+       torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+
 
 
    end
