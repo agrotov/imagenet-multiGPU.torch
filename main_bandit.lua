@@ -72,7 +72,7 @@ function produce_dataset(model, data_path)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
-      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
+      local inputs, labels, h1s, w1s, flips, indexes = testLoader:sample(opt.batchSize, percentage)
       materialize_dataset(indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips)
    end
    print("after all")
