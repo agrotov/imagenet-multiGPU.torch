@@ -119,6 +119,8 @@ function train_imagenet_bandit(model, data_path)
 
    print("logged_data:size(1)",logged_data:size(1))
 
+   local last_test_time = sys.clock()
+
    rewards_weigted_test = 0
 
    for epoch = epoch or 1, opt.nEpochs do
@@ -175,18 +177,26 @@ function train_imagenet_bandit(model, data_path)
 
           outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
           batch_number = batch_number + 1
+
+           local curr_time = sys.clock()
+
+           if curr_time - last_test_time > 60 then
+               rewards_weigted_test_new = test_imagenet_bandit(model, opt.bandit_test_data)
+
+               print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
+
+               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
+                   print("no improvement")
+                   os.exit()
+               end
+
+               rewards_weigted_test = rewards_weigted_test_new
+           end
+           
+
+
        end
 
-       rewards_weigted_test_new = test_imagenet_bandit(model, opt.bandit_test_data)
-
-       print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
-
-       if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
-           print("no improvement")
-           os.exit()
-       end
-
-       rewards_weigted_test = rewards_weigted_test_new
 
    end
 
@@ -209,7 +219,7 @@ function test_imagenet_bandit(model, data_path, loader)
 
    epoch = epoch or 1
    -- local vars
-   local time = sys.clock()
+
 
    model:evaluate()
 --   model:training()
