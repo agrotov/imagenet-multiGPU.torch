@@ -185,7 +185,7 @@ function train_imagenet_bandit(model, data_path)
            print("no improvement")
            os:exit()
        end
-       
+
    end
 
 
@@ -247,7 +247,7 @@ function test_imagenet_bandit(model, data_path, loader)
          local index_of_image = math.floor((index_of_input/1001))
 --         print("class",class)
 --         print("index_of_image",index_of_image)
-         local input, h1, w1, flip, index_tmp = loader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
