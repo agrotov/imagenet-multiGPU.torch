@@ -254,6 +254,9 @@ data_path = opt.bandit_data
 
 print("bandit_data_path",data_path)
 
+print("testLoader",testLoader)
+os.exit()
+
 
 if opt.produce_dataset == 1 then
     produce_dataset(model, data_path,trainLoader)
