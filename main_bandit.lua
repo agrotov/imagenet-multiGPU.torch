@@ -184,6 +184,8 @@ function train_imagenet_bandit(model, data_path)
        if rewards_weigted_test_new - rewards_weigted_test < 0.01 then
            print("no improvement")
            os:exit()
+       end
+       
    end
 
 
@@ -195,9 +197,13 @@ end -- of train_imagenet_bandit()
 function test_imagenet_bandit(model, data_path, loader)
 
 
-   if not test_logged_data then test_logged_data = torch.load(data_path) end
+   if not test_logged_data then
+       test_logged_data = torch.load(data_path)
+   end
 
-   if not loss_matrix then loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt") end
+   if not loss_matrix then
+       loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   end
 
    epoch = epoch or 1
    -- local vars
