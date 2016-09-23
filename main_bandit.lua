@@ -180,7 +180,7 @@ function train_imagenet_bandit(model, data_path)
 
            local curr_time = sys.clock()
 
-           if curr_time - last_test_time > 60 then
+           if curr_time - last_test_time > 60 and epoch > 10 then
                rewards_weigted_test_new = test_imagenet_bandit(model, opt.bandit_test_data)
 
                print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
@@ -192,7 +192,7 @@ function train_imagenet_bandit(model, data_path)
 
                rewards_weigted_test = rewards_weigted_test_new
            end
-           
+
 
 
        end
