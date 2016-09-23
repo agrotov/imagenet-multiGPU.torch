@@ -48,7 +48,7 @@ paths.dofile('materialize_dataset.lua')
 paths.dofile('test.lua')
 paths.dofile('load_csv.lua')
 
-function produce_dataset(model, data_path, loader)
+function produce_dataset(model, data_path)
    print("produce_dataset",data_path,opt.epochSize)
    batchNumber = 0
    cutorch.synchronize()
@@ -256,12 +256,12 @@ data_path = opt.bandit_data
 print("bandit_data_path",data_path)
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path, trainLoader)
+    produce_dataset(model, data_path)
 --    print_bandit_dataset()
 end
 
 if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path, testLoader)
+    produce_dataset(model, data_path)
 --    print_bandit_dataset()
 end
 
@@ -272,7 +272,7 @@ end
 
 
 if opt.test == 1 then
-    test_imagenet_bandit(model, data_path, testLoader)
+    test_imagenet_bandit(model, data_path)
 end
 
 --print_bandit_dataset()
