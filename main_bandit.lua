@@ -48,7 +48,7 @@ paths.dofile('materialize_dataset.lua')
 paths.dofile('test.lua')
 paths.dofile('load_csv.lua')
 
-function produce_dataset(model, data_path)
+function produce_dataset(model, data_path, loader)
    print("produce_dataset",data_path,opt.epochSize)
    batchNumber = 0
    cutorch.synchronize()
@@ -72,7 +72,7 @@ function produce_dataset(model, data_path)
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
       print("donkeys:addjob",i)
-      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
+      local inputs, labels, h1s, w1s, flips, indexes = loader:sample(opt.batchSize, percentage)
       materialize_dataset(indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips)
    end
    print("after all")
@@ -181,7 +181,7 @@ function train_imagenet_bandit(model, data_path)
 end -- of train_imagenet_bandit()
 
 
-function test_imagenet_bandit(model, data_path)
+function test_imagenet_bandit(model, data_path, loader)
 
    paths.dofile('donkey.lua')
 
@@ -228,7 +228,7 @@ function test_imagenet_bandit(model, data_path)
          local index_of_image = math.floor((index_of_input/1001))
 --         print("class",class)
 --         print("index_of_image",index_of_image)
-         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+         local input, h1, w1, flip, index_tmp = loader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
          targets[k] = class
          inputs[k] = input
          actions[k] = action
@@ -256,9 +256,15 @@ data_path = opt.bandit_data
 print("bandit_data_path",data_path)
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path)
+    produce_dataset(model, data_path, trainLoader)
 --    print_bandit_dataset()
 end
+
+if opt.produce_test_dataset == 1 then
+    produce_dataset(model, data_path, testLoader)
+--    print_bandit_dataset()
+end
+
 
 if opt.train == 1 then
     train_imagenet_bandit(model,data_path)
@@ -266,7 +272,7 @@ end
 
 
 if opt.test == 1 then
-    test_imagenet_bandit(model, data_path)
+    test_imagenet_bandit(model, data_path, testLoader)
 end
 
 --print_bandit_dataset()
