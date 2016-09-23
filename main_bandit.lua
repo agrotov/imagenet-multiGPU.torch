@@ -261,7 +261,7 @@ if opt.produce_dataset == 1 then
 end
 
 if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path, testLoader)
+    produce_dataset(model, data_path, trainLoader)
 --    print_bandit_dataset()
 end
 
