@@ -452,6 +452,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
         epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
         optimState.learningRate))
 
+    return rewards_sum_new
 end
 
 

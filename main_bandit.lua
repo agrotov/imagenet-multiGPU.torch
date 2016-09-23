@@ -119,6 +119,8 @@ function train_imagenet_bandit(model, data_path)
 
    print("logged_data:size(1)",logged_data:size(1))
 
+   rewards_weigted_test = 0
+
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
 --       print("opt.batchSize",opt.batchSize,logged_data:size(1))
@@ -174,7 +176,17 @@ function train_imagenet_bandit(model, data_path)
           outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
           batch_number = batch_number + 1
        end
+
+       rewards_weigted_test_new = test_imagenet_bandit(model, opt.bandit_test_data)
+
+       print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
+
+       if rewards_weigted_test_new - rewards_weigted_test < 0.01 then
+           print("no improvement")
+           os:exit()
    end
+
+
 
 
 end -- of train_imagenet_bandit()
@@ -183,20 +195,23 @@ end -- of train_imagenet_bandit()
 function test_imagenet_bandit(model, data_path, loader)
 
 
-   logged_data = torch.load(data_path)
+   if not test_logged_data then test_logged_data = torch.load(data_path) end
 
-   loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
+   if not loss_matrix then loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt") end
 
    epoch = epoch or 1
    -- local vars
    local time = sys.clock()
 
---   model:evaluate()
-   model:training()
+   model:evaluate()
+--   model:training()
 
    print("baseline",baseline)
 
    epoch = 1
+
+   rewards_weigted_sum = 0
+   counter = 0
 
    for t = 1,logged_data:size(1),opt.batchSize do
 
@@ -209,16 +224,16 @@ function test_imagenet_bandit(model, data_path, loader)
 
       local k = 1
       indexes = torch.Tensor(opt.batchSize,1)
-      for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+      for i = t,math.min(t+opt.batchSize-1,test_logged_data :size(1)) do
 --         print("i",i,"t",t)
-         local index_of_input = logged_data[i][1]
-         local action = logged_data[i][2]
-         local reward = logged_data[i][3]
-         local probability_of_action = logged_data[i][4]
+         local index_of_input = test_logged_data [i][1]
+         local action = test_logged_data [i][2]
+         local reward = test_logged_data [i][3]
+         local probability_of_action = test_logged_data [i][4]
 
-         local h1 = logged_data[i][5]
-         local w1 = logged_data[i][6]
-         local flip = logged_data[i][7]
+         local h1 = test_logged_data [i][5]
+         local w1 = test_logged_data [i][6]
+         local flip = test_logged_data [i][7]
 
 
          -- load new sample
@@ -238,8 +253,12 @@ function test_imagenet_bandit(model, data_path, loader)
 --      opt.learningRate = 0.01
 
       cutorch.synchronize()
-      full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
+      rewards_weigted_sum = rewards_weigted_sum + full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
+      counter = counter + 1
    end
+
+    rewards_weigted_ave = rewards_weigted_sum / counter
+    return rewards_weigted_ave
 end -- of test_imagenet_bandit()
 
 
