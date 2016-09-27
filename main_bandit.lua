@@ -293,7 +293,6 @@ function test_imagenet_bandit(model, data_path, loader)
 
    end
 
-    rewards_weigted_ave = rewards_weigted_sum / counter
     return rewards_sum_new_sum / counter, rewards_sum_logged_sum / counter, rewards_new_sum / counter, rewards_logged_sum / counter
 end -- of test_imagenet_bandit()
 
