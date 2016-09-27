@@ -183,17 +183,17 @@ function train_imagenet_bandit(model, data_path)
            local curr_time = sys.clock()
 
            if curr_time - last_test_time > 60 and epoch > 10 then
-               rewards_weigted_test_new = test_imagenet_bandit(model, opt.bandit_test_data)
+               rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = test_imagenet_bandit(model, opt.bandit_test_data)
 
-               print("rewards_weigted_test_new",rewards_weigted_test_new,"rewards_weigted_test_new - rewards_weigted_test",rewards_weigted_test_new - rewards_weigted_test)
+               print("rewards_sum_new",rewards_sum_new,"rewards_sum_new - rewards_sum_logged",rewards_sum_new - rewards_sum_logged,"rewards_new",rewards_new,"rewards_logged",rewards_logged)
 
-               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
-                   model:clearState()
-                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
-                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
-                   print("no improvement")
-                   os.exit()
-               end
+--               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
+--                   model:clearState()
+--                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+--                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+--                   print("no improvement")
+--                   os.exit()
+--               end
 
                rewards_weigted_test = rewards_weigted_test_new
            end
@@ -238,7 +238,10 @@ function test_imagenet_bandit(model, data_path, loader)
 
    epoch = 1
 
-   rewards_weigted_sum = 0
+   rewards_sum_new_sum = 0
+   rewards_sum_logged_sum = 0
+   rewards_new_sum = 0
+   rewards_logged_sum = 0
    counter = 0
 
    for t = 1,logged_data:size(1),opt.batchSize do
@@ -281,12 +284,17 @@ function test_imagenet_bandit(model, data_path, loader)
 --      opt.learningRate = 0.01
 
       cutorch.synchronize()
-      rewards_weigted_sum = rewards_weigted_sum + full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
+      rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
+      rewards_sum_new_sum = rewards_sum_new_sum+rewards_sum_new
+      rewards_sum_logged_sum = rewards_sum_logged_sum+rewards_sum_logged
+      rewards_new_sum = rewards_new_sum+rewards_new
+      rewards_logged_sum = rewards_logged_sum+rewards_logged
       counter = counter + 1
+
    end
 
     rewards_weigted_ave = rewards_weigted_sum / counter
-    return rewards_weigted_ave
+    return rewards_sum_new_sum / counter, rewards_sum_logged_sum / counter, rewards_new_sum / counter, rewards_logged_sum / counter
 end -- of test_imagenet_bandit()
 
 
