@@ -109,15 +109,6 @@ function train_imagenet_bandit(model, data_path)
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
-   -- local vars
-   local time = sys.clock()
-
---   model:evaluate()
-   model:training()
-
-   print("baseline",baseline)
-
-   print("logged_data:size(1)",logged_data:size(1))
 
    local last_test_time = sys.clock()
 
@@ -127,11 +118,15 @@ function train_imagenet_bandit(model, data_path)
 
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
---       print("opt.batchSize",opt.batchSize,logged_data:size(1))
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
-       batch_number = 1
+       local batch_number = 1
+
+       local rewards_sum_new_sum = 0
+       local rewards_sum_logged_sum = 0
+       local rewards_new_sum = 0
+       local rewards_logged_sum = 0
 
        for t = 1,logged_data:size(1),opt.batchSize do
 
@@ -177,15 +172,20 @@ function train_imagenet_bandit(model, data_path)
 --             learningRateDecay = 5e-7
 --          }
 
-          outputs = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
+          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
+          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
+          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
+          rewards_new_sum = rewards_new_sum + rewards_new
+          rewards_logged_sum = rewards_logged_sum + rewards_logged
+
           batch_number = batch_number + 1
 
            local curr_time = sys.clock()
 
            if curr_time - last_test_time > 60 and epoch > 10 then
-               rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = test_imagenet_bandit(model, opt.bandit_test_data)
+               rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
 
-               print("rewards_sum_new",rewards_sum_new,"rewards_sum_new - rewards_sum_logged",rewards_sum_new - rewards_sum_logged,"rewards_new",rewards_new,"rewards_logged",rewards_logged)
+               print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
 
 --               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
 --                   model:clearState()
@@ -196,23 +196,20 @@ function train_imagenet_bandit(model, data_path)
 --               end
 
                rewards_weigted_test = rewards_weigted_test_new
-           end
+           end --if
+       end --for t = 1,logged_data:size(1),opt.batchSize do
 
+       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
+       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
+       local rewards_new_train = rewards_new_sum + rewards_new/batch_number
+       local rewards_logged_train = rewards_logged_sum/batch_number
 
-
-       end
+       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
        model:clearState()
        saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
        torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
-
-
-
-   end
-
-
-
-
+   end --for epoch = epoch or 1, opt.nEpochs do
 end -- of train_imagenet_bandit()
 
 
@@ -284,7 +281,7 @@ function test_imagenet_bandit(model, data_path, loader)
 --      opt.learningRate = 0.01
 
       cutorch.synchronize()
-      rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t, baseline )
+      rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t )
       rewards_sum_new_sum = rewards_sum_new_sum+rewards_sum_new
       rewards_sum_logged_sum = rewards_sum_logged_sum+rewards_sum_logged
       rewards_new_sum = rewards_new_sum+rewards_new
