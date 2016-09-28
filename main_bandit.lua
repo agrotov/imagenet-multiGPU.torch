@@ -294,7 +294,7 @@ function test_imagenet_bandit(model, data_path, loader)
       local rewards_sum_logged = rewards_sum_logged_sum/batch_number
       local rewards_new = rewards_new_sum/batch_number
       local rewards_logged = rewards_logged_sum/batch_number
-      counter = counter + 1
+      batch_number = batch_number + 1
 
    end
 
