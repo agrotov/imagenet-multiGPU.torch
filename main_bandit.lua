@@ -176,6 +176,12 @@ function train_imagenet_bandit(model, data_path)
                 --             momentum = opt.momentum,
                 --             learningRateDecay = 5e-7
                 --          }
+
+                 print("probability_of_actions",probability_of_actions)
+                 print("actions",actions)
+                 print("rewards",rewards)
+                 print("targets",targets)
+
                 return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline
             end --load_bandit_data,
             ,
