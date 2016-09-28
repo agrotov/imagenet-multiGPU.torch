@@ -114,7 +114,7 @@ function train_imagenet_bandit(model, data_path)
 
    print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
-   for i = epoch or 1, opt.nEpochs do
+   for i = epoch, opt.nEpochs do
        -- do one epoch
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
