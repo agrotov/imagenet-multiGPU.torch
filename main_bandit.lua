@@ -288,6 +288,8 @@ function test_imagenet_bandit(model, data_path)
 
             cutorch.synchronize()
 
+             print("t",t)
+
             return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, opt.baseline, t
         end --load_bandit_data,
         ,
