@@ -99,7 +99,50 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
+function load_bandit_data()
+      -- create mini batch
+    local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
+    local actions = torch.Tensor(opt.batchSize)
+    local rewards = torch.Tensor(opt.batchSize)
+    local probability_of_actions = torch.Tensor(opt.batchSize)
+    local targets = torch.Tensor(opt.batchSize)
 
+    local k = 1
+    indexes = torch.Tensor(opt.batchSize,1)
+
+    for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+        local index_of_input = logged_data[i][1]
+        local action = logged_data[i][2]
+        local reward = logged_data[i][3]
+        local probability_of_action = logged_data[i][4]
+
+        local h1 = logged_data[i][5]
+        local w1 = logged_data[i][6]
+        local flip = logged_data[i][7]
+
+
+        -- load new sample
+        local class = ((index_of_input)%1001)
+        local index_of_image = math.floor((index_of_input/1001))
+        local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+        targets[k] = class
+        inputs[k] = input
+        actions[k] = action
+        rewards[k] = reward
+        probability_of_actions[k] = probability_of_action
+
+        --            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
+        k = k + 1
+    end
+
+    cutorch.synchronize()
+    --          optimState = sgdState or {
+    --             learningRate = opt.LR,
+    --             momentum = opt.momentum,
+    --             learningRateDecay = 5e-7
+    --          }
+    return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline
+end --load_bandit_data
 
 function train_imagenet_bandit(model, data_path)
 
@@ -130,53 +173,19 @@ function train_imagenet_bandit(model, data_path)
 
        for t = 1,logged_data:size(1),opt.batchSize do
 
-          -- create mini batch
-          local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
-          local actions = torch.Tensor(opt.batchSize)
-          local rewards = torch.Tensor(opt.batchSize)
-          local probability_of_actions = torch.Tensor(opt.batchSize)
-          local targets = torch.Tensor(opt.batchSize)
-
-          local k = 1
-          indexes = torch.Tensor(opt.batchSize,1)
-
-          for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-            local index_of_input = logged_data[i][1]
-            local action = logged_data[i][2]
-            local reward = logged_data[i][3]
-            local probability_of_action = logged_data[i][4]
-
-            local h1 = logged_data[i][5]
-            local w1 = logged_data[i][6]
-            local flip = logged_data[i][7]
+          donkeys:addjob(
+             -- the job callback (runs in data-worker thread)
+             load_bandit_data,
+             -- the end callback (runs in the main thread)
+             trainBatch_bandit
+            )
 
 
-            -- load new sample
-            local class = ((index_of_input)%1001)
-            local index_of_image = math.floor((index_of_input/1001))
-            local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
-            targets[k] = class
-            inputs[k] = input
-            actions[k] = action
-            rewards[k] = reward
-            probability_of_actions[k] = probability_of_action
-
---            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
-            k = k + 1
-          end
-
-          cutorch.synchronize()
---          optimState = sgdState or {
---             learningRate = opt.LR,
---             momentum = opt.momentum,
---             learningRateDecay = 5e-7
---          }
-
-          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
-          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
-          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
-          rewards_new_sum = rewards_new_sum + rewards_new
-          rewards_logged_sum = rewards_logged_sum + rewards_logged
+--          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
+--          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
+--          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
+--          rewards_new_sum = rewards_new_sum + rewards_new
+--          rewards_logged_sum = rewards_logged_sum + rewards_logged
 
           batch_number = batch_number + 1
 
@@ -199,12 +208,12 @@ function train_imagenet_bandit(model, data_path)
            end --if
        end --for t = 1,logged_data:size(1),opt.batchSize do
 
-       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
-       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
-       local rewards_new_train = rewards_new_sum + rewards_new/batch_number
-       local rewards_logged_train = rewards_logged_sum/batch_number
-
-       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
+--       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
+--       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
+--       local rewards_new_train = rewards_new_sum + rewards_new/batch_number
+--       local rewards_logged_train = rewards_logged_sum/batch_number
+--
+--       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
        model:clearState()
        saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua

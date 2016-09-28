@@ -180,12 +180,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     feval = function(x)
         model:zeroGradParameters()
 
-        print("gradParameters",torch.mean(gradParameters))
-
-
         outputs = model:forward(inputs)
-
-        print("outputs", torch.mean(outputs),torch.min(outputs),torch.max(outputs))
 
         size_output = outputs:size()
         p_of_actions_student = probability_of_actions(outputs, actions, temperature)
@@ -199,13 +194,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         non_nan_mask = gradParameters:eq(gradParameters)
         print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
 
-        print("gradParameters",torch.mean(gradParameters[non_nan_mask]),torch.max(gradParameters[non_nan_mask]),torch.min(gradParameters[non_nan_mask]))
-
         gradParameters:clamp(-5, 5)
 
         return err, gradParameters
     end
-    print("optimState",optimState)
     optim.sgd(feval, parameters, optimState)
 
     -- DataParallelTable's syncParameters
