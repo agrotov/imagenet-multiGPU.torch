@@ -106,7 +106,7 @@ function train_imagenet_bandit(model, data_path)
 
    logged_data = torch.load(data_path)
 
-   print("logged_data logged_data",logged_data)
+   print("logged_data train_imagenet_bandit",logged_data)
 
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
@@ -139,7 +139,7 @@ function train_imagenet_bandit(model, data_path)
              -- the job callback (runs in data-worker thread)
              function()
                   -- create mini batch
-                print("logged_data",logged_data)
+                print("logged_data addjob",logged_data)
                 local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
                 local actions = torch.Tensor(opt.batchSize)
                 local rewards = torch.Tensor(opt.batchSize)
