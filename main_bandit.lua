@@ -121,10 +121,10 @@ function train_imagenet_bandit(model, data_path)
 
        batch_number = 1
 
-       local rewards_sum_new_sum = 0
-       local rewards_sum_logged_sum = 0
-       local rewards_new_sum = 0
-       local rewards_logged_sum = 0
+       rewards_sum_new_sum = 0
+       rewards_sum_logged_sum = 0
+       rewards_new_sum = 0
+       rewards_logged_sum = 0
 
        offset = 0
 
@@ -171,11 +171,6 @@ function train_imagenet_bandit(model, data_path)
                 end
 
                 cutorch.synchronize()
-                --          optimState = sgdState or {
-                --             learningRate = opt.LR,
-                --             momentum = opt.momentum,
-                --             learningRateDecay = 5e-7
-                --          }
 
                 return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, opt.baseline
             end --load_bandit_data,
@@ -185,10 +180,6 @@ function train_imagenet_bandit(model, data_path)
             )
 
 --          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
-          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new_train
-          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged_train
-          rewards_new_sum = rewards_new_sum + rewards_new_mean_train
-          rewards_logged_sum = rewards_logged_sum + rewards_logged_mean_train
 
           batch_number = batch_number + 1
 

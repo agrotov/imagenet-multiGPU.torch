@@ -162,6 +162,8 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = 0
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
+
+
     model:training()
 
     cutorch.synchronize()
@@ -207,6 +209,13 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 
     rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = full_information_full_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, temperature, batchNumber)
+
+    rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new_train
+    rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged_train
+    rewards_new_sum = rewards_new_sum + rewards_new_mean_train
+    rewards_logged_sum = rewards_logged_sum + rewards_logged_mean_train
+
+
     dataTimer:reset()
 
 
