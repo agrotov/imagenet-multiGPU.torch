@@ -119,7 +119,7 @@ function train_imagenet_bandit(model, data_path)
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
-       local batch_number = 1
+       batch_number = 1
 
        local rewards_sum_new_sum = 0
        local rewards_sum_logged_sum = 0
