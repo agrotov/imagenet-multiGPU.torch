@@ -195,11 +195,13 @@ function train_imagenet_bandit(model, data_path)
 
            local curr_time = sys.clock()
 
-           if epoch % 10 == 0 then
-               rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
-               last_test_time = sys.clock()
+       end --for t = 1,logged_data:size(1),opt.batchSize do
 
-               print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
+       if epoch % 10 == 0 then
+           rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
+           last_test_time = sys.clock()
+
+           print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
 
 --               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
 --                   model:clearState()
@@ -209,9 +211,9 @@ function train_imagenet_bandit(model, data_path)
 --                   os.exit()
 --               end
 
-               rewards_weigted_test = rewards_weigted_test_new
-           end --if
-       end --for t = 1,logged_data:size(1),opt.batchSize do
+           rewards_weigted_test = rewards_weigted_test_new
+       end --if
+
 
 --       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
 --       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
