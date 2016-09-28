@@ -191,7 +191,7 @@ function train_imagenet_bandit(model, data_path)
            rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
            last_test_time = sys.clock()
 
-           print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
+           print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
 
 --               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
 --                   model:clearState()
