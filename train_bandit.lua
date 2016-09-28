@@ -206,10 +206,10 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     end
 
 
-    rewards_sum_new,rewards_sum_logged,rewards_new_mean, rewards_logged_mean = full_information_full_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, temperature, batchNumber)
+    rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = full_information_full_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, temperature, batchNumber)
     dataTimer:reset()
 
-    return rewards_sum_new,rewards_sum_logged,rewards_eva:mean(), rewards:mean()
+
 end
 
 

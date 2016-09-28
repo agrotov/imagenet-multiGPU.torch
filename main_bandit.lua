@@ -184,12 +184,11 @@ function train_imagenet_bandit(model, data_path)
              trainBatch_bandit
             )
 
-
 --          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
---          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
---          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
---          rewards_new_sum = rewards_new_sum + rewards_new
---          rewards_logged_sum = rewards_logged_sum + rewards_logged
+          rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new_train
+          rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged_train
+          rewards_new_sum = rewards_new_sum + rewards_new_mean_train
+          rewards_logged_sum = rewards_logged_sum + rewards_logged_mean_train
 
           batch_number = batch_number + 1
 
@@ -215,12 +214,12 @@ function train_imagenet_bandit(model, data_path)
        end --if
 
 
---       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
---       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
---       local rewards_new_train = rewards_new_sum + rewards_new/batch_number
---       local rewards_logged_train = rewards_logged_sum/batch_number
---
---       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
+       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
+       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
+       local rewards_new_train = rewards_new_sum + rewards_new/batch_number
+       local rewards_logged_train = rewards_logged_sum/batch_number
+
+       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
        donkeys:synchronize()
        model:clearState()
        saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
