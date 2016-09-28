@@ -99,7 +99,7 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
-function load_bandit_data(offset)
+function load_bandit_data()
       -- create mini batch
     local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
     local actions = torch.Tensor(opt.batchSize)
@@ -171,11 +171,15 @@ function train_imagenet_bandit(model, data_path)
        local rewards_new_sum = 0
        local rewards_logged_sum = 0
 
+       offset = 0
+
        for t = 1,logged_data:size(1),opt.batchSize do
+
+           offset = t
 
           donkeys:addjob(
              -- the job callback (runs in data-worker thread)
-             load_bandit_data(t),
+             load_bandit_data,
              -- the end callback (runs in the main thread)
              trainBatch_bandit
             )
