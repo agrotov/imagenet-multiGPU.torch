@@ -211,6 +211,8 @@ function train_imagenet_bandit(model, data_path)
        local rewards_new_train = rewards_new_sum/batch_number
        local rewards_logged_train = rewards_logged_sum/batch_number
 
+       PRINT("batch_number TRAIN",batch_number)
+
        print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
 
@@ -303,6 +305,8 @@ function test_imagenet_bandit(model, data_path)
     local rewards_sum_logged = rewards_sum_logged_sum/batch_number
     local rewards_new = rewards_new_sum/batch_number
     local rewards_logged = rewards_logged_sum/batch_number
+
+   PRINT("batch_number TEST",batch_number)
 
 
     return rewards_sum_new, rewards_sum_logged, rewards_new, rewards_logged
