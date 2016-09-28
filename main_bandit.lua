@@ -136,7 +136,6 @@ function train_imagenet_bandit(model, data_path)
              function()
                  logged_data = torch.load(data_path)
                   -- create mini batch
-                print("logged_data addjob",logged_data)
                 local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
                 local actions = torch.Tensor(opt.batchSize)
                 local rewards = torch.Tensor(opt.batchSize)
