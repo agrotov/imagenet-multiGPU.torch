@@ -67,6 +67,9 @@ end
 
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
+    print("rewards_arg-baseline",rewards_arg-baseline)
+    print("probability_actions_student_model",probability_actions_student_model)
+    print("probability_actions_teacher_model",probability_actions_teacher_model)
     weight = compute_weight(rewards_arg-baseline, probability_actions_student_model, probability_actions_teacher_model)
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
     weight = -torch.cdiv(weight, log_probability_of_actions_val)
@@ -167,8 +170,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     cutorch.synchronize()
     collectgarbage()
     timer:reset()
-
-    print("trainBatch_bandit actions_cpu",actions_cpu)
 
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
