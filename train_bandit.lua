@@ -223,8 +223,6 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     local dataLoadingTime = dataTimer:time().real
     timer:reset()
 
-    print("actions_cpu",actions_cpu[1])
-
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     actions:copy(actions_cpu)
