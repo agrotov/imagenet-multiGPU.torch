@@ -110,9 +110,9 @@ function train_imagenet_bandit(model, data_path)
 
    local last_test_time = sys.clock()
 
---   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
---
---   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
+   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
+
+   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
@@ -247,7 +247,7 @@ function test_imagenet_bandit(model, data_path, loader)
    rewards_sum_logged_sum = 0
    rewards_new_sum = 0
    rewards_logged_sum = 0
-   counter = 0
+   batch_number = 0
 
    for t = 1,logged_data:size(1),opt.batchSize do
 
@@ -290,15 +290,15 @@ function test_imagenet_bandit(model, data_path, loader)
 
       cutorch.synchronize()
       rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t )
-      rewards_sum_new_sum = rewards_sum_new_sum+rewards_sum_new
-      rewards_sum_logged_sum = rewards_sum_logged_sum+rewards_sum_logged
-      rewards_new_sum = rewards_new_sum+rewards_new
-      rewards_logged_sum = rewards_logged_sum+rewards_logged
+      local rewards_sum_new = rewards_sum_new_sum/batch_number
+      local rewards_sum_logged = rewards_sum_logged_sum/batch_number
+      local rewards_new = rewards_new_sum/batch_number
+      local rewards_logged = rewards_logged_sum/batch_number
       counter = counter + 1
 
    end
 
-    return rewards_sum_new_sum / counter, rewards_sum_logged_sum / counter, rewards_new_sum / counter, rewards_logged_sum / counter
+    return rewards_sum_new, rewards_sum_logged, rewards_new, rewards_logged
 end -- of test_imagenet_bandit()
 
 
