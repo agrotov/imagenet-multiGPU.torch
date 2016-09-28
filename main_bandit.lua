@@ -114,15 +114,13 @@ function train_imagenet_bandit(model, data_path)
 
    print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
-   num_batches = logged_data:size(1)/opt.batchSize
-
    for epoch = epoch or 1, opt.nEpochs do
        -- do one epoch
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
 
-
+       num_batches = logged_data:size(1)/opt.batchSize
        rewards_sum_new_sum = 0
        rewards_sum_logged_sum = 0
        rewards_new_sum = 0
@@ -248,6 +246,7 @@ function test_imagenet_bandit(model, data_path)
    rewards_new_sum = 0
    rewards_logged_sum = 0
    batch_number = 0
+   num_batches = logged_data:size(1)/opt.batchSize
    for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
         -- the job callback (runs in data-worker thread)
