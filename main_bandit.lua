@@ -106,7 +106,7 @@ function train_imagenet_bandit(model, data_path)
 
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
-   epoch = epoch or 1
+   epoch = opt.epochNumber
 
    local last_test_time = sys.clock()
 
@@ -114,7 +114,7 @@ function train_imagenet_bandit(model, data_path)
 
    print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
-   for epoch = epoch or 1, opt.nEpochs do
+   for i = epoch or 1, opt.nEpochs do
        -- do one epoch
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
@@ -217,6 +217,7 @@ function train_imagenet_bandit(model, data_path)
        model:clearState()
        saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
        torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+       epoch = epoch + 1
    end --for epoch = epoch or 1, opt.nEpochs do
 end -- of train_imagenet_bandit()
 
