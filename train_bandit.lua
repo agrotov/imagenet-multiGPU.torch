@@ -168,6 +168,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     collectgarbage()
     timer:reset()
 
+    print("trainBatch_bandit actions_cpu",actions_cpu)
+
     -- transfer over to GPU
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     actions:copy(actions_cpu)

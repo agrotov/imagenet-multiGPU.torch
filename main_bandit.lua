@@ -177,8 +177,6 @@ function train_imagenet_bandit(model, data_path)
                 --             learningRateDecay = 5e-7
                 --          }
 
-                 print("inputs",inputs[1])
-
                 return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline
             end --load_bandit_data,
             ,
