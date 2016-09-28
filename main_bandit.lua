@@ -99,13 +99,11 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
-logged_data = nil
-
 function train_imagenet_bandit(model, data_path)
 
 
    logged_data = torch.load(data_path)
-   
+
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = epoch or 1
@@ -136,6 +134,7 @@ function train_imagenet_bandit(model, data_path)
           donkeys:addjob(
              -- the job callback (runs in data-worker thread)
              function()
+                 logged_data = torch.load(data_path)
                   -- create mini batch
                 print("logged_data addjob",logged_data)
                 local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
