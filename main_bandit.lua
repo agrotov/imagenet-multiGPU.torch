@@ -99,7 +99,7 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
-
+logged_data = nil
 
 function train_imagenet_bandit(model, data_path)
 
