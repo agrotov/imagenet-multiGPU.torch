@@ -135,9 +135,6 @@ end
 
 -- 2. Create loggers.
 trainLogger = optim.Logger(paths.concat(opt.save, 'train.log'))
-local batchNumber
-local top1_epoch, loss_epoch
-
 
 
 
@@ -161,7 +158,7 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = 0
 
-function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber, baseline)
+function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
 
 
     model:training()
@@ -207,8 +204,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         model:syncParameters()
     end
 
-
-    rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = full_information_full_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, temperature, batchNumber)
+    rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_logged_mean_train = full_information_full_test(inputsCPU, actions, rewards, probabilities_logged, labelsCPU, temperature)
 
     dataTimer:reset()
 
@@ -217,9 +213,8 @@ end
 
 
 
-function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, batchNumber)
+function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature)
     model:evaluate()
-    batchNumber = batchNumber or 1
 
     cutorch.synchronize()
     collectgarbage()
@@ -265,7 +260,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batchNumber, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
+        epoch, batch_number, opt.epochSize, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
         optimState.learningRate))
 
 
