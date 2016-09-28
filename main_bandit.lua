@@ -261,15 +261,15 @@ function test_imagenet_bandit(model, data_path)
             local k = 1
             indexes = torch.Tensor(opt.batchSize,1)
 
-            for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
-                local index_of_input = logged_data[i][1]
-                local action = logged_data[i][2]
-                local reward = logged_data[i][3]
-                local probability_of_action = logged_data[i][4]
+            for i = t,math.min(t+opt.batchSize-1,test_logged_data:size(1)) do
+                local index_of_input = test_logged_data[i][1]
+                local action = test_logged_data[i][2]
+                local reward = test_logged_data[i][3]
+                local probability_of_action = test_logged_data[i][4]
 
-                local h1 = logged_data[i][5]
-                local w1 = logged_data[i][6]
-                local flip = logged_data[i][7]
+                local h1 = test_logged_data[i][5]
+                local w1 = test_logged_data[i][6]
+                local flip = test_logged_data[i][7]
 
 
                 -- load new sample
