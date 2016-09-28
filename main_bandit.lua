@@ -145,7 +145,7 @@ function train_imagenet_bandit(model, data_path)
                 local k = 1
                 indexes = torch.Tensor(opt.batchSize,1)
 
-                for i = offset,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+                for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
                     local index_of_input = logged_data[i][1]
                     local action = logged_data[i][2]
                     local reward = logged_data[i][3]
