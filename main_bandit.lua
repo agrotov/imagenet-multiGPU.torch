@@ -217,7 +217,7 @@ function train_imagenet_bandit(model, data_path)
 --       local rewards_logged_train = rewards_logged_sum/batch_number
 --
 --       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
-
+       donkeys:synchronize()
        model:clearState()
        saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
        torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
