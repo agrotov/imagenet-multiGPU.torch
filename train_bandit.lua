@@ -214,6 +214,8 @@ end
 
 
 function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature)
+    batch_number = batch_number + 1
+
     model:evaluate()
 
     cutorch.synchronize()

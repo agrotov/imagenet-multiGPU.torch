@@ -119,7 +119,7 @@ function train_imagenet_bandit(model, data_path)
        print('<train_imagenet_bandit> on training set:')
        print("<train_imagenet_bandit> online epoch # " .. epoch .. ' [batchSize = ' .. opt.batchSize .. ']')
 
-       batch_number = 1
+
 
        rewards_sum_new_sum = 0
        rewards_sum_logged_sum = 0
@@ -127,6 +127,8 @@ function train_imagenet_bandit(model, data_path)
        rewards_logged_sum = 0
 
        offset = 0
+
+       batch_number = 0
 
        for t = 1,logged_data:size(1),opt.batchSize do
 
@@ -171,7 +173,6 @@ function train_imagenet_bandit(model, data_path)
                 end
 
                 cutorch.synchronize()
-
                 return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, opt.baseline
             end --load_bandit_data,
             ,
@@ -181,7 +182,6 @@ function train_imagenet_bandit(model, data_path)
 
 --          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
 
-          batch_number = batch_number + 1
 
            local curr_time = sys.clock()
 
@@ -295,8 +295,6 @@ function test_imagenet_bandit(model, data_path)
         full_information_full_test
         )
         --      opt.learningRate = 0.01
-        batch_number = batch_number + 1
-
     end
 
     donkeys:synchronize()
