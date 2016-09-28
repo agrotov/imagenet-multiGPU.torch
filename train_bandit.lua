@@ -67,7 +67,7 @@ end
 
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
-    weight = compute_weight(rewards_arg-baseline, probability_actions_student_model, probability_actions_teacher_model)
+    weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model)
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
     weight = -torch.cdiv(weight, log_probability_of_actions_val)
     target:scatter(2,actions:long(),weight:float())
