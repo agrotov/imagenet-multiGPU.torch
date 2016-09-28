@@ -297,15 +297,17 @@ function test_imagenet_bandit(model, data_path)
         full_information_full_test
         )
         --      opt.learningRate = 0.01
-        donkeys:synchronize()
-        cutorch.synchronize()
-        local rewards_sum_new = rewards_sum_new_sum/batch_number
-        local rewards_sum_logged = rewards_sum_logged_sum/batch_number
-        local rewards_new = rewards_new_sum/batch_number
-        local rewards_logged = rewards_logged_sum/batch_number
         batch_number = batch_number + 1
 
     end
+
+    donkeys:synchronize()
+    cutorch.synchronize()
+    local rewards_sum_new = rewards_sum_new_sum/batch_number
+    local rewards_sum_logged = rewards_sum_logged_sum/batch_number
+    local rewards_new = rewards_new_sum/batch_number
+    local rewards_logged = rewards_logged_sum/batch_number
+
 
     return rewards_sum_new, rewards_sum_logged, rewards_new, rewards_logged
 end -- of test_imagenet_bandit()
