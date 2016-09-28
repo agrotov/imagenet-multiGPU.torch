@@ -221,9 +221,7 @@ function train_imagenet_bandit(model, data_path)
 end -- of train_imagenet_bandit()
 
 
-function test_imagenet_bandit(model, data_path, loader)
-
-
+function test_imagenet_bandit(model, data_path)
    if not test_logged_data then
        test_logged_data = torch.load(data_path)
    end
@@ -248,55 +246,64 @@ function test_imagenet_bandit(model, data_path, loader)
    rewards_new_sum = 0
    rewards_logged_sum = 0
    batch_number = 0
-
    for t = 1,logged_data:size(1),opt.batchSize do
+        donkeys:addjob(
+        -- the job callback (runs in data-worker thread)
+        function()
+             test_logged_data = torch.load(data_path)
+              -- create mini batch
+            local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
+            local actions = torch.Tensor(opt.batchSize)
+            local rewards = torch.Tensor(opt.batchSize)
+            local probability_of_actions = torch.Tensor(opt.batchSize)
+            local targets = torch.Tensor(opt.batchSize)
 
-      -- create mini batch
-      local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
-      local actions = torch.Tensor(opt.batchSize)
-      local rewards = torch.Tensor(opt.batchSize)
-      local probability_of_actions = torch.Tensor(opt.batchSize)
-      local targets = torch.Tensor(opt.batchSize)
+            local k = 1
+            indexes = torch.Tensor(opt.batchSize,1)
 
-      local k = 1
-      indexes = torch.Tensor(opt.batchSize,1)
-      for i = t,math.min(t+opt.batchSize-1,test_logged_data :size(1)) do
---         print("i",i,"t",t)
-         local index_of_input = test_logged_data [i][1]
-         local action = test_logged_data [i][2]
-         local reward = test_logged_data [i][3]
-         local probability_of_action = test_logged_data [i][4]
+            for i = t,math.min(t+opt.batchSize-1,logged_data:size(1)) do
+                local index_of_input = logged_data[i][1]
+                local action = logged_data[i][2]
+                local reward = logged_data[i][3]
+                local probability_of_action = logged_data[i][4]
 
-         local h1 = test_logged_data [i][5]
-         local w1 = test_logged_data [i][6]
-         local flip = test_logged_data [i][7]
+                local h1 = logged_data[i][5]
+                local w1 = logged_data[i][6]
+                local flip = logged_data[i][7]
 
 
-         -- load new sample
-         local class = ((index_of_input)%1001)
-         local index_of_image = math.floor((index_of_input/1001))
---         print("class",class)
---         print("index_of_image",index_of_image)
-         local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
-         targets[k] = class
-         inputs[k] = input
-         actions[k] = action
-         rewards[k] = reward
-         probability_of_actions[k] = probability_of_action
-         k = k + 1
-      end
+                -- load new sample
+                local class = ((index_of_input)%1001)
+                local index_of_image = math.floor((index_of_input/1001))
+                local input, h1, w1, flip, index_tmp = trainLoader:getByClassAndIndex(class, index_of_image, h1, w1, flip)
+                targets[k] = class
+                inputs[k] = input
+                actions[k] = action
+                rewards[k] = reward
+                probability_of_actions[k] = probability_of_action
 
---      opt.learningRate = 0.01
+                --            print("class",class,"k",k,"i",i,"math.min(t+opt.batchSize-1,logged_data:size(1))",math.min(t+opt.batchSize-1,logged_data:size(1)))
+                k = k + 1
+            end
 
-      cutorch.synchronize()
-      rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = full_information_full_test(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, t )
-      local rewards_sum_new = rewards_sum_new_sum/batch_number
-      local rewards_sum_logged = rewards_sum_logged_sum/batch_number
-      local rewards_new = rewards_new_sum/batch_number
-      local rewards_logged = rewards_logged_sum/batch_number
-      batch_number = batch_number + 1
+            cutorch.synchronize()
 
-   end
+            return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, opt.baseline, t
+        end --load_bandit_data,
+        ,
+        -- the end callback (runs in the main thread)
+        full_information_full_test
+        )
+        --      opt.learningRate = 0.01
+        donkeys:synchronize()
+        cutorch.synchronize()
+        local rewards_sum_new = rewards_sum_new_sum/batch_number
+        local rewards_sum_logged = rewards_sum_logged_sum/batch_number
+        local rewards_new = rewards_new_sum/batch_number
+        local rewards_logged = rewards_logged_sum/batch_number
+        batch_number = batch_number + 1
+
+    end
 
     return rewards_sum_new, rewards_sum_logged, rewards_new, rewards_logged
 end -- of test_imagenet_bandit()
