@@ -215,6 +215,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     rewards_new_sum = rewards_new_sum + rewards_new_mean_train
     rewards_logged_sum = rewards_logged_sum + rewards_logged_mean_train
 
+    print("rewards_sum_new_sum",rewards_sum_new_sum)
 
     dataTimer:reset()
 
