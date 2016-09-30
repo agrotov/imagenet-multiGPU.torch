@@ -99,7 +99,7 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
-local var = 3
+local logged_data = torch.load(data_path)
 
 function train_imagenet_bandit(model, data_path)
 
@@ -333,7 +333,6 @@ if opt.produce_test_dataset == 1 then
 end
 
 if opt.train == 1 then
-    logged_data = torch.load(data_path)
     train_imagenet_bandit(model,data_path)
 end
 
