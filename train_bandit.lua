@@ -215,7 +215,6 @@ end
 
 
 function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature)
-    print("full_information_full_test batch_number", batch_number)
     batch_number = batch_number + 1
 
     model:evaluate()
