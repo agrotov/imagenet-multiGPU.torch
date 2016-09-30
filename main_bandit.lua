@@ -45,7 +45,7 @@ paths.dofile('data.lua')
 
 local logged_data = torch.load(opt.bandit_data)
 local test_logged_data = torch.load(opt.bandit_test_data)
-local batch_number = 0
+local test_logged_data = torch.load(opt.bandit_test_data)
 
 
 --paths.dofile('train.lua')
@@ -117,6 +117,8 @@ function train_imagenet_bandit(model, data_path)
 
    rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
    print("rewards_sum_new_test",rewards_sum_new_test,"initial")
+
+   local batch_number = 0
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
