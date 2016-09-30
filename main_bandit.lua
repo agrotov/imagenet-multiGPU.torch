@@ -110,8 +110,8 @@ function train_imagenet_bandit(model, data_path)
 
    local last_test_time = sys.clock()
 
-   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
-   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
+--   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
+--   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
