@@ -187,31 +187,34 @@ function train_imagenet_bandit(model, data_path)
 
        end --for t = 1,logged_data:size(1),opt.batchSize do
 
+
+       donkeys:synchronize()
+
        if epoch % 10 == 0 then
-           rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
-           last_test_time = sys.clock()
+       rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
+       last_test_time = sys.clock()
 
-           print("rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
+       print("epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
 
---               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
+               if rewards_weigted_test_new - rewards_weigted_test < 0.00001 then
 --                   model:clearState()
 --                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
 --                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
 --                   print("no improvement")
 --                   os.exit()
---               end
+                   print("Would terminate epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
+               end
 
-           rewards_weigted_test = rewards_weigted_test_new
+       rewards_weigted_test = rewards_weigted_test_new
        end --if
 
-       donkeys:synchronize()
 
        local rewards_sum_new_train = rewards_sum_new_sum/batch_number
        local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
        local rewards_new_train = rewards_new_sum/batch_number
        local rewards_logged_train = rewards_logged_sum/batch_number
 
-       print("rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
+       print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
 
        model:clearState()
