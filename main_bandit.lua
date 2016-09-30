@@ -42,12 +42,6 @@ print('Saving everything to: ' .. opt.save)
 os.execute('mkdir -p ' .. opt.save)
 
 paths.dofile('data.lua')
-
-local logged_data = torch.load(opt.bandit_data)
-local test_logged_data = torch.load(opt.bandit_test_data)
-local test_logged_data = torch.load(opt.bandit_test_data)
-
-
 --paths.dofile('train.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
@@ -106,7 +100,8 @@ function produce_dataset(model, data_path, percentage)
 end -- of produce_dataset()
 
 
-
+local logged_data = torch.load(opt.bandit_data)
+local test_logged_data = torch.load(opt.bandit_test_data)
 
 function train_imagenet_bandit(model, data_path)
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
@@ -117,8 +112,6 @@ function train_imagenet_bandit(model, data_path)
 
    rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
    print("rewards_sum_new_test",rewards_sum_new_test,"initial")
-
-   local batch_number = 0
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
@@ -132,7 +125,11 @@ function train_imagenet_bandit(model, data_path)
        rewards_new_sum = 0
        rewards_logged_sum = 0
 
+       local batch_number = 0
+
        for t = 1,logged_data:size(1),opt.batchSize do
+
+
           donkeys:addjob(
              -- the job callback (runs in data-worker thread)
              function()
@@ -188,15 +185,6 @@ function train_imagenet_bandit(model, data_path)
 
        donkeys:synchronize()
 
-       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
-       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
-       local rewards_new_train = rewards_new_sum/batch_number
-       local rewards_logged_train = rewards_logged_sum/batch_number
-       print("batch_number",batch_number)
-
-       print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
-
-
        if epoch % 10 == 0 then
        rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
        last_test_time = sys.clock()
@@ -216,6 +204,12 @@ function train_imagenet_bandit(model, data_path)
        end --if
 
 
+       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
+       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
+       local rewards_new_train = rewards_new_sum/batch_number
+       local rewards_logged_train = rewards_logged_sum/batch_number
+
+       print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
 
        model:clearState()
@@ -243,18 +237,13 @@ function test_imagenet_bandit(model, data_path)
    rewards_sum_logged_sum = 0
    rewards_new_sum = 0
    rewards_logged_sum = 0
+   batch_number = 0
    num_batches = logged_data:size(1)/opt.batchSize
-
-
-   local batch_number = 0
-
-   
    for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
         -- the job callback (runs in data-worker thread)
         function()
               -- create mini batch
-            print("batch_number",batch_number)
             local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
             local actions = torch.Tensor(opt.batchSize)
             local rewards = torch.Tensor(opt.batchSize)
@@ -307,8 +296,6 @@ function test_imagenet_bandit(model, data_path)
     local rewards_new = rewards_new_sum/batch_number
     local rewards_logged = rewards_logged_sum/batch_number
 
-   print("batch_number",batch_number)
-
 
     return rewards_sum_new, rewards_sum_logged, rewards_new, rewards_logged
 end -- of test_imagenet_bandit()
@@ -318,6 +305,10 @@ end -- of test_imagenet_bandit()
 
 
 
+
+
+
+print("bandit_data_path",data_path)
 
 
 if opt.produce_dataset == 1 then
