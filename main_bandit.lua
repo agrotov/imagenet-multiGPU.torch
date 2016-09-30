@@ -178,29 +178,29 @@ function train_imagenet_bandit(model, data_path)
             )
 
 
-           local curr_time = sys.clock()
 
        end --for t = 1,logged_data:size(1),opt.batchSize do
 
 
        donkeys:synchronize()
+       local curr_time = sys.clock()
 
-       if epoch % 10 == 0 then
-       rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
-       last_test_time = sys.clock()
+       if epoch % 1 == 0 or curr_time - last_test_time > 2.5 * 60 * 60 then
+           rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
+           last_test_time = sys.clock()
 
-       print("epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test,"batch_number",batch_number)
+           print("epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test,"batch_number",batch_number)
 
-               if rewards_sum_new_test - rewards_weigted_test_current < 0 then
---                   model:clearState()
---                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
---                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
---                   print("no improvement")
---                   os.exit()
-                   print("Would terminate epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
-               end
+                   if rewards_sum_new_test - rewards_weigted_test_current < 0 then
+    --                   model:clearState()
+    --                   saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+    --                   torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+    --                   print("no improvement")
+    --                   os.exit()
+                       print("Would terminate epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test)
+                   end
 
-       rewards_weigted_test_current = rewards_sum_new_test
+           rewards_weigted_test_current = rewards_sum_new_test
        end --if
 
 
