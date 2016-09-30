@@ -99,21 +99,19 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
+
 local logged_data = torch.load(opt.bandit_data)
+local test_logged_data = torch.load(opt.opt.bandit_test_data)
 
 function train_imagenet_bandit(model, data_path)
-
-
-
-
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
    epoch = opt.epochNumber
 
    local last_test_time = sys.clock()
 
---   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
---   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
+   rewards_sum_new_test = test_imagenet_bandit(model, opt.bandit_test_data)
+   print("rewards_sum_new_test",rewards_sum_new_test,"initial")
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
@@ -181,8 +179,6 @@ function train_imagenet_bandit(model, data_path)
              trainBatch_bandit
             )
 
---          local rewards_sum_new,rewards_sum_logged,rewards_new, rewards_logged = trainBatch_bandit(inputs,actions,rewards,probability_of_actions, targets, opt.temperature, batch_number, baseline )
-
 
            local curr_time = sys.clock()
 
@@ -227,9 +223,6 @@ end -- of train_imagenet_bandit()
 
 
 function test_imagenet_bandit(model, data_path)
-   if not test_logged_data then
-       test_logged_data = torch.load(data_path)
-   end
 
    if not loss_matrix then
        loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
@@ -252,7 +245,6 @@ function test_imagenet_bandit(model, data_path)
         donkeys:addjob(
         -- the job callback (runs in data-worker thread)
         function()
-             test_logged_data = torch.load(data_path)
               -- create mini batch
             local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
             local actions = torch.Tensor(opt.batchSize)
