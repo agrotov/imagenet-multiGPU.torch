@@ -99,6 +99,8 @@ function produce_dataset(model, data_path, percentage)
    -- this saves lots of disk space
 end -- of produce_dataset()
 
+local var = 3
+
 function train_imagenet_bandit(model, data_path)
 
 
@@ -136,7 +138,7 @@ function train_imagenet_bandit(model, data_path)
 --                 logged_data = torch.load(data_path)
                   -- create mini batch
                 print("logged_data",logged_data)
-                print("num_batches",num_batches)
+                print("var",var)
                 local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
                 local actions = torch.Tensor(opt.batchSize)
                 local rewards = torch.Tensor(opt.batchSize)
