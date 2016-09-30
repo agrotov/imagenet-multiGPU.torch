@@ -232,15 +232,11 @@ function test_imagenet_bandit(model, data_path)
    end
 
    epoch = epoch or 1
-   -- local vars
 
 
    model:evaluate()
---   model:training()
 
    print("baseline",baseline)
-
-   epoch = 1
 
    rewards_sum_new_sum = 0
    rewards_sum_logged_sum = 0
