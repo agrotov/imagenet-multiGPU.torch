@@ -245,6 +245,7 @@ function test_imagenet_bandit(model, data_path)
         -- the job callback (runs in data-worker thread)
         function()
               -- create mini batch
+            print("batch_number",batch_number)
             local inputs = torch.Tensor(opt.batchSize,3,opt.cropSize,opt.cropSize)
             local actions = torch.Tensor(opt.batchSize)
             local rewards = torch.Tensor(opt.batchSize)
