@@ -129,6 +129,8 @@ function train_imagenet_bandit(model, data_path)
 
        batch_number = 0
 
+       print("logged_data train_imagenet_bandit",logged_data)
+
        for t = 1,logged_data:size(1),opt.batchSize do
 
 
