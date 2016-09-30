@@ -42,6 +42,12 @@ print('Saving everything to: ' .. opt.save)
 os.execute('mkdir -p ' .. opt.save)
 
 paths.dofile('data.lua')
+
+local logged_data = torch.load(opt.bandit_data)
+local test_logged_data = torch.load(opt.bandit_test_data)
+local batch_number = 0
+
+
 --paths.dofile('train.lua')
 paths.dofile('train_bandit.lua')
 paths.dofile('materialize_dataset.lua')
@@ -100,9 +106,6 @@ function produce_dataset(model, data_path, percentage)
 end -- of produce_dataset()
 
 
-local logged_data = torch.load(opt.bandit_data)
-local test_logged_data = torch.load(opt.bandit_test_data)
-local batch_number = 0
 
 
 function train_imagenet_bandit(model, data_path)
