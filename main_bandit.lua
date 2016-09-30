@@ -128,8 +128,6 @@ function train_imagenet_bandit(model, data_path)
        local batch_number = 0
 
        for t = 1,logged_data:size(1),opt.batchSize do
-
-
           donkeys:addjob(
              -- the job callback (runs in data-worker thread)
              function()
@@ -185,6 +183,14 @@ function train_imagenet_bandit(model, data_path)
 
        donkeys:synchronize()
 
+       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
+       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
+       local rewards_new_train = rewards_new_sum/batch_number
+       local rewards_logged_train = rewards_logged_sum/batch_number
+
+       print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
+
+
        if epoch % 10 == 0 then
        rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
        last_test_time = sys.clock()
@@ -204,12 +210,6 @@ function train_imagenet_bandit(model, data_path)
        end --if
 
 
-       local rewards_sum_new_train = rewards_sum_new_sum/batch_number
-       local rewards_sum_logged_train = rewards_sum_logged_sum/batch_number
-       local rewards_new_train = rewards_new_sum/batch_number
-       local rewards_logged_train = rewards_logged_sum/batch_number
-
-       print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train)
 
 
        model:clearState()
@@ -237,7 +237,7 @@ function test_imagenet_bandit(model, data_path)
    rewards_sum_logged_sum = 0
    rewards_new_sum = 0
    rewards_logged_sum = 0
-   batch_number = 0
+   local batch_number = 0
    num_batches = logged_data:size(1)/opt.batchSize
    for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
