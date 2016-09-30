@@ -125,8 +125,8 @@ function train_imagenet_bandit(model, data_path)
        rewards_new_sum = 0
        rewards_logged_sum = 0
 
-       batch_number = 0
-       
+       local batch_number = 0
+
        for t = 1,logged_data:size(1),opt.batchSize do
 
 
