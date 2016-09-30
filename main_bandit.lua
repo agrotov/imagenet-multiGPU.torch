@@ -311,10 +311,6 @@ end -- of test_imagenet_bandit()
 
 
 
-
-print("bandit_data_path",data_path)
-
-
 if opt.produce_dataset == 1 then
     produce_dataset(model, data_path, 0.9)
 --    print_bandit_dataset()
