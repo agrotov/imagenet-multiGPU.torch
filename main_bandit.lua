@@ -238,7 +238,7 @@ function test_imagenet_bandit(model, data_path)
    rewards_sum_logged_sum = 0
    rewards_new_sum = 0
    rewards_logged_sum = 0
-   local batch_number = 0
+   batch_number = 0
    num_batches = logged_data:size(1)/opt.batchSize
    for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
