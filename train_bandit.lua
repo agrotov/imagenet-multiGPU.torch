@@ -195,7 +195,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 --        print("sum nan ",torch.sum(nan_mask),torch.sum(non_nan_mask))
         print("gradParameters", gradParameters:mean(),gradParameters:min(),gradParameters:max())
         print("parameters", parameters:mean(),parameters:min(),parameters:max())
-        print("outputs", outputs:mean(),outputs:min(),outputs:max())
         gradParameters:clamp(-5, 5)
 
         return err, gradParameters
@@ -262,6 +261,10 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
     rewards_sum_new = torch.sum(torch.cmul(rewards,new_probabilities))/torch.sum(new_probabilities)
+
+    print("outputs", outputs:mean(),outputs:min(),outputs:max())
+    print("probabilities_logged", probabilities_logged:mean(),probabilities_logged:min(),probabilities_logged:max())
+    print("new_probabilities", new_probabilities:mean(),new_probabilities:min(),new_probabilities:max())
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
