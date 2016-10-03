@@ -36,6 +36,7 @@ function M.parse(arg)
     cmd:option('-LR',    0.0, 'learning rate; if set, overrides default LR/WD recipe')
     cmd:option('-momentum',        0.9,  'momentum')
     cmd:option('-weightDecay',     5e-4, 'weight decay')
+    cmd:option('-variance_reg',     1, 'variance regularisation')
     ---------- Model options ----------------------------------
     cmd:option('-netType',     'alexnet', 'Options: alexnet | overfeat | alexnetowtbn | vgg | googlenet')
     cmd:option('-retrain',     'none', 'provide path to model to retrain with')

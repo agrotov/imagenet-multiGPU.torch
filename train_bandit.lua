@@ -78,11 +78,6 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
     A_w0 = - mean_weighted_rewards_of_logging_policy / ((opt.batchSize - 1) * sqrt_variance_of_logging_policy)
     b_w0 = 1/(2 * (opt.batchSize - 1) * sqrt_variance_of_logging_policy)
 
-    print("gradient_of_risk",gradient_of_risk:size())
-    print("gradient_of_risk",risk:size())
-    print("A_w0",A_w0)
-    print("b_w0",b_w0)
-
     grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk
     return grad_variance
 end
@@ -102,7 +97,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
 
-    return target + variance_grad
+    return target + opt.variance_reg * variance_grad
 end
 
 
