@@ -96,7 +96,11 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     weight = -torch.cdiv(weight, log_probability_of_actions_val)
     target:scatter(2,actions:long(),weight:float())
 
-    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, target, target)
+    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
+    expected_reward_scattered = torch.Tensor(size):fill(0)
+    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
+
+    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
 
     return target
 end
