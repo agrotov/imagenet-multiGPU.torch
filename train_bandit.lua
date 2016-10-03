@@ -88,10 +88,11 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model)
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
 
+    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, weight, weight)
+
     weight = -torch.cdiv(weight, log_probability_of_actions_val)
     target:scatter(2,actions:long(),weight:float())
 
-    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, weight, target)
 
     return target + variance_grad
 end
