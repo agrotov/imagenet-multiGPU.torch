@@ -83,7 +83,7 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
     print("A_w0",A_w0)
     print("b_w0",b_w0)
 
-    grad_variance = A_w0*risk
+    grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk
     return grad_variance
 end
 
@@ -93,13 +93,12 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model)
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
 
-    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, weight, weight)
-
     weight = -torch.cdiv(weight, log_probability_of_actions_val)
     target:scatter(2,actions:long(),weight:float())
 
+    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, target, target)
 
-    return target + variance_grad
+    return target
 end
 
 
