@@ -72,11 +72,11 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
     diff_mean_weighted_reawrds_of_logging_policy = (weighted_rewards_of_logging_policy-mean_weighted_rewards_of_logging_policy)
     diff_mean_weighted_reawrds_of_logging_policy_square = torch.cmul(diff_mean_weighted_reawrds_of_logging_policy,diff_mean_weighted_reawrds_of_logging_policy)
     diff_mean_weighted_reawrds_of_logging_policy_square_sum = torch.sum(diff_mean_weighted_reawrds_of_logging_policy_square)
-    variance_of_logging_policy = diff_mean_weighted_reawrds_of_logging_policy_square_sum / (opt.batch_size - 1)
+    variance_of_logging_policy = diff_mean_weighted_reawrds_of_logging_policy_square_sum / (opt.batchSize - 1)
     sqrt_variance_of_logging_policy = torch.sqrt(variance_of_logging_policy)
 
-    A_w0 = - mean_weighted_reawrds_of_logging_policy / ((opt.batch_size - 1) * sqrt_variance_of_logging_policy)
-    b_w0 = 1/(2 * (opt.batch_size - 1) * sqrt_variance_of_logging_policy)
+    A_w0 = - mean_weighted_reawrds_of_logging_policy / ((opt.batchSize - 1) * sqrt_variance_of_logging_policy)
+    b_w0 = 1/(2 * (opt.batchSize - 1) * sqrt_variance_of_logging_policy)
 
     return gradient_of_risk*A_w0 + 2*gradient_of_risk*risk*b_w0
 end
