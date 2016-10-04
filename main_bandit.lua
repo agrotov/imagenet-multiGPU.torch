@@ -59,10 +59,6 @@ function produce_dataset(model, data_path, percentage)
 --   model:training()
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 
-   local tm = torch.Timer()
-   top1_epoch = 0
-   loss_epoch = 0
-
 --   opt.epochSize = 1
 
 --   model:evaluate()
@@ -71,32 +67,18 @@ function produce_dataset(model, data_path, percentage)
    for i=1,opt.epochSize do
 --      local inputs, labels, indexes = trainLoader:sample(opt.batchSize)
 --      materialize_datase(indexes, inputs, labels, model, temperature)
-      print("donkeys:addjob",i)
-      local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
-      materialize_dataset(indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips)
+        donkeys:addjob(
+         -- the job callback (runs in data-worker thread)
+         function()
+            local inputs, labels, h1s, w1s, flips, indexes = trainLoader:sample(opt.batchSize, percentage)
+            return indexes, inputs, labels, data_path, opt.temperature, h1s, w1s, flips
+         end,
+         -- the end callback (runs in the main thread)
+         materialize_dataset
+        )
    end
-   print("after all")
-   cutorch.synchronize()
+   donkeys:synchronize()
 
-   top1_epoch = top1_epoch * 100 / (opt.batchSize * opt.epochSize)
-   loss_epoch = loss_epoch / opt.epochSize
-
-   trainLogger:add{
-      ['% top1 accuracy (train set)'] = top1_epoch,
-      ['avg loss (train set)'] = loss_epoch
-   }
-   print(string.format('Epoch: [%d][TRAINING SUMMARY] Total Time(s): %.2f\t'
-                          .. 'average loss (per batch): %.2f \t '
-                          .. 'accuracy(%%):\t top-1 %.2f\t',
-                       1, tm:time().real, loss_epoch, top1_epoch))
-   print('\n')
-
-   -- save model
-   collectgarbage()
---   print_bandit_dataset()
-
-   -- clear the intermediate states in the model before saving to disk
-   -- this saves lots of disk space
 end -- of produce_dataset()
 
 local logged_data = nil
