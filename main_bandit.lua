@@ -313,12 +313,12 @@ end -- of test_imagenet_bandit()
 
 
 if opt.produce_dataset == 1 then
-    produce_dataset(model, data_path, 0.9)
+    produce_dataset(model, opt.bandit_data, 0.9)
 --    print_bandit_dataset()
 end
 
 if opt.produce_test_dataset == 1 then
-    produce_dataset(model, data_path, -0.1)
+    produce_dataset(model, opt.bandit_test_data, -0.1)
 --    print_bandit_dataset()
 end
 
