@@ -32,7 +32,7 @@ function reward_for_actions(loss_matrix, actions, labels)
     print("labels",labels)
 
     rewards_zero_one = torch.Tensor(actions:size())
-    for i=1,actions:size() do
+    for i=1,actions:size()[1] do
         if actions[i] == labels[i] then
             rewards_zero_one[i] = 1
         else
