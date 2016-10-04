@@ -28,7 +28,7 @@ end
 function reward_for_actions(loss_matrix, actions, labels)
     rewards = (loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
 
-    print("actions",actions)
+    print("actions",actions, actions:size(), actions:size()[1])
     print("labels",labels)
 
     rewards_zero_one = torch.Tensor(actions:size())
