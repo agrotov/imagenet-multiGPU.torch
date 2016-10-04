@@ -306,12 +306,12 @@ if opt.produce_test_dataset == 1 then
 end
 
 if opt.train == 1 then
-    train_imagenet_bandit(model,data_path)
+    train_imagenet_bandit(model,opt.bandit_data)
 end
 
 
 if opt.test == 1 then
-    test_imagenet_bandit(model, data_path)
+    test_imagenet_bandit(model, opt.bandit_data)
 end
 
 --print_bandit_dataset()

@@ -288,7 +288,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     top1 = top1 * 100 / opt.batchSize;
 
 
-    rewards_eva = reward_for_actions(loss_matrix, actions_eva, labelsCPU)
+    rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
 
     diff_rewards = rewards_eva:mean() - rewards:mean()
