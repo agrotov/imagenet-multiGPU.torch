@@ -38,8 +38,8 @@ function reward_for_actions(loss_matrix, actions, labels)
         else
             rewards_zero_one[i] = 0
         end
+        print(actions[i],labels[i],rewards_zero_one[i])
     end
-    print(actions[i],labels[i],rewards_zero_one[i])
     print("rewards_zero_one",rewards_zero_one)
 
     return  rewards_zero_one
