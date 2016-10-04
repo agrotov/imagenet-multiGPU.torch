@@ -27,7 +27,22 @@ end
 
 function reward_for_actions(loss_matrix, actions, labels)
     rewards = (loss_matrix:index(1,actions:view(actions:nElement())):gather(2,labels:long():view(labels:nElement(),1)))
-    return  rewards
+
+    print("actions",actions)
+    print("labels",labels)
+
+    rewards_zero_one = torch.Tensor(actions:size())
+    for i=1,actions:size() do
+        if actions[i] == labels[i] then
+            rewards_zero_one[i] = 1
+        else
+            rewards_zero_one[i] = 0
+        end
+    end
+
+    print("rewards_zero_one",rewards_zero_one)
+
+    return  rewards_zero_one
 end
 
 function probabilities_from_output(model_output, temperature)
