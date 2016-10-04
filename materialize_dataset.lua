@@ -162,6 +162,7 @@ end
 
 
 function save_bandit_dataset(filename)
+    print("filename",filename)
     torch.save(filename,bandit_dataset)
 end
 
