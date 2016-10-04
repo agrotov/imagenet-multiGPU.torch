@@ -78,6 +78,7 @@ function produce_dataset(model, data_path, percentage)
         )
    end
    donkeys:synchronize()
+   save_bandit_dataset(data_path)
 
 end -- of produce_dataset()
 

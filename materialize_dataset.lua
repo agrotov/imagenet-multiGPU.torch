@@ -87,7 +87,7 @@ function materialize_dataset(input_indexes, inputsCPU, labelsCPU, path, temperat
     else
         bandit_dataset = result:clone()
     end
-    save_bandit_dataset(path)
+
     return outputs
 end
 
