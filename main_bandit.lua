@@ -84,7 +84,7 @@ end -- of produce_dataset()
 
 local logged_data = nil
 local test_logged_data = nil
-if opt.produce_dataset ~= 1 then
+if opt.produce_dataset ~= 1 and opt.produce_test_dataset ~= 1then
     logged_data = torch.load(opt.bandit_data)
     test_logged_data = torch.load(opt.bandit_test_data)
 end
