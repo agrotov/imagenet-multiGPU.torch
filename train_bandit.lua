@@ -31,9 +31,9 @@ function reward_for_actions(loss_matrix, actions, labels)
     rewards_zero_one = torch.Tensor(actions:size())
     for i=1,actions:size()[1] do
         if actions[i][1] == labels[i] then
-            rewards_zero_one[i] = 1
-        else
             rewards_zero_one[i] = 0
+        else
+            rewards_zero_one[i] = 1
         end
     end
 
