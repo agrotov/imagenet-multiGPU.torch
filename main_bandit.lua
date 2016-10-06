@@ -89,6 +89,9 @@ if opt.produce_dataset ~= 1 and opt.produce_test_dataset ~= 1 then
     test_logged_data = torch.load(opt.bandit_test_data)
 end
 
+
+function compute_variance
+
 function train_imagenet_bandit(model, data_path)
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
 

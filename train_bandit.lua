@@ -78,7 +78,7 @@ end
 
 function get_variance_gradient(rewards_arg,probability_actions_teacher_model, risk, gradient_of_risk)
     weighted_rewards_of_logging_policy = torch.cmul(rewards_arg,probability_actions_teacher_model)
-    mean_weighted_rewards_of_logging_policy  = weighted_rewards_of_logging_policy :mean()
+    mean_weighted_rewards_of_logging_policy  = weighted_rewards_of_logging_policy:mean()
     diff_mean_weighted_rewards_of_logging_policy = (weighted_rewards_of_logging_policy-mean_weighted_rewards_of_logging_policy)
     diff_mean_weighted_rewards_of_logging_policy_square = torch.cmul(diff_mean_weighted_rewards_of_logging_policy,diff_mean_weighted_rewards_of_logging_policy)
     diff_mean_weighted_rewards_of_logging_policy_square_sum = torch.sum(diff_mean_weighted_rewards_of_logging_policy_square)
@@ -87,6 +87,9 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
 
     A_w0 = - mean_weighted_rewards_of_logging_policy / ((opt.batchSize - 1) * sqrt_variance_of_logging_policy)
     b_w0 = 1/(2 * (opt.batchSize - 1) * sqrt_variance_of_logging_policy)
+
+    print("A_w0",A_w0)
+    print("b_w0",b_w0)
 
     grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk
     return grad_variance
