@@ -93,7 +93,7 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
 
     grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk
 
-    print("grad_variance",grad_variance)
+--    print("grad_variance",grad_variance)
 
     return grad_variance
 end
