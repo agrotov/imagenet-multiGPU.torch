@@ -90,7 +90,8 @@ if opt.produce_dataset ~= 1 and opt.produce_test_dataset ~= 1 then
 end
 
 
-function compute_variance
+function compute_variance()
+end
 
 function train_imagenet_bandit(model, data_path)
    loss_matrix = load_rewards_csv_new("/home/agrotov1/imagenet-multiGPU.torch/loss_matrix.txt")
