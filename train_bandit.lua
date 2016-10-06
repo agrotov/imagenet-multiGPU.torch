@@ -92,6 +92,9 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
     print("b_w0",b_w0)
 
     grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk
+
+    print("grad_variance",grad_variance)
+
     return grad_variance
 end
 
@@ -110,7 +113,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
 
-    return target + opt.variance_reg * variance_grad
+    return opt.variance_reg * variance_grad
 end
 
 
