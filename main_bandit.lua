@@ -96,6 +96,11 @@ function compute_variance()
 
     print("compute_variance")
 
+    mean_so_far= 0
+    number_of_data_processed = 0
+    m2_value = 0
+
+
     for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
          -- the job callback (runs in data-worker thread)

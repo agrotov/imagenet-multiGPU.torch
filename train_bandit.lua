@@ -93,14 +93,13 @@ local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
-local mean_so_far= 0
-local number_of_data_processed = 0
-local m2_value = 0
+mean_so_far= 0
+number_of_data_processed = 0
+m2_value = 0
 
 
 
 function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
-    print("compute_variance_batch")
     model:training()
 
     cutorch.synchronize()
@@ -116,7 +115,6 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 
     weighted_reward = torch.cmul(rewards,p_of_actions_student)
 
-    print("weighted_reward",weighted_reward)
 
     for i=1,opt.batchSize do
         weighted_reward_value = weighted_reward[i][1]
