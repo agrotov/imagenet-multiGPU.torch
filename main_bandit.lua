@@ -147,7 +147,11 @@ function compute_variance()
         end --for t = 1,logged_data:size(1),opt.batchSize do
 
 
-       donkeys:synchronize()
+        donkeys:synchronize()
+        variance = m2_value/(number_of_data_processed-1)
+        print("compute_variance",variance)
+        sys.exit()
+
 
 end
 
@@ -158,8 +162,8 @@ function train_imagenet_bandit(model, data_path)
 
    local last_test_time = sys.clock()
 
---   rewards_weigted_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
---   print("rewards_sum_new_test",rewards_weigted_test_current,"initial")
+   rewards_weigted_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
+   print("rewards_sum_new_test",rewards_weigted_test_current,"initial")
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
