@@ -75,9 +75,6 @@ function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
-number_of_data_processed = 0
-mean_so_far = 0
-m2_value = 0
 
 -- GPU inputs (preallocate)
 local inputs = torch.CudaTensor()
@@ -94,6 +91,11 @@ local parameters, gradParameters = model:getParameters()
 local actions = torch.CudaTensor(opt.batchSize,1)
 local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
+
+number_of_data_processed = 0
+mean_so_far = 0
+m2_value = 0
+
 
 
 function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
