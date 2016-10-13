@@ -135,12 +135,13 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 
         m2_value = m2_value + delta*(weighted_reward_value - mean_so_far)
         print("m2_value",m2_value)
+        sys.exit()
     end
 
 --    print("nuber_of_data_processed",nuber_of_data_processed)
 --    print("mean_so_far",mean_so_far)
 --    print("m2_value",m2_value)
-    sys.exit()
+
 end
 
 
