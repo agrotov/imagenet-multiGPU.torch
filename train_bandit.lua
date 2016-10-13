@@ -107,6 +107,13 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     actions:copy(actions_cpu)
     rewards:copy(rewards_cpu)
 
+    outputs = model:forward(inputs)
+
+    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+
+    weighted_reward = torch.cmul(rewards,p_of_actions_student)
+
+
 end
 
 
