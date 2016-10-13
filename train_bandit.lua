@@ -164,9 +164,10 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     expected_reward_scattered = torch.Tensor(size):fill(0)
     expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
 
-    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
+--    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
 
-    return target + opt.variance_reg * variance_grad
+--    return target + opt.variance_reg * variance_grad
+    return target
 end
 
 

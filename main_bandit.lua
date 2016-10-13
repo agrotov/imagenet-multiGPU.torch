@@ -94,6 +94,8 @@ function compute_variance()
 
     nuber_of_data_processed, mean_so_far, m2_value = 0.0
 
+    print("compute_variance")
+
     for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
          -- the job callback (runs in data-worker thread)
@@ -146,6 +148,7 @@ function compute_variance()
 
 
        donkeys:synchronize()
+
 end
 
 function train_imagenet_bandit(model, data_path)
