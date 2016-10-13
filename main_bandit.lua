@@ -154,7 +154,7 @@ function compute_variance()
 
         donkeys:synchronize()
         variance = m2_value/(number_of_data_processed-1)
-        print("compute_variance",variance)
+        print("compute_variance",variance,"mean_so_far",mean_so_far)
         sys.exit()
 
 
