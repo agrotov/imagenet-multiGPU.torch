@@ -93,8 +93,8 @@ local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
-mean_so_far= 0
-number_of_data_processed = 0
+local mean_so_far= 0
+local number_of_data_processed = 0
 local m2_value = 0
 
 
