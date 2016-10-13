@@ -93,7 +93,7 @@ local rewards= torch.CudaTensor(opt.batchSize,1)
 local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
-function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
+function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
     model:training()
 
     cutorch.synchronize()

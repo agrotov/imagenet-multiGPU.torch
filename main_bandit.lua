@@ -220,7 +220,7 @@ function train_imagenet_bandit(model, data_path)
                 end
 
                 cutorch.synchronize()
-                return inputs,actions,rewards,probability_of_actions, targets, opt.temperature, opt.baseline
+                return inputs,actions,rewards,probability_of_actions, opt.temperature
             end --load_bandit_data,
             ,
              -- the end callback (runs in the main thread)
