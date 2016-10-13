@@ -75,7 +75,10 @@ function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
-nuber_of_data_processed, mean_so_far, m2_value = 0
+nuber_of_data_processed =0
+mean_so_far = 0
+m2_value = 0
+
 -- GPU inputs (preallocate)
 local inputs = torch.CudaTensor()
 local labels = torch.CudaTensor()
@@ -94,6 +97,7 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 
 
 function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
+    print("compute_variance_batch")
     model:training()
 
     cutorch.synchronize()
@@ -120,7 +124,6 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     print("mean_so_far",mean_so_far)
     print("m2_value",m2_value)
 
-    return nuber_of_data_processed, mean_so_far, m2_value
 end
 
 
