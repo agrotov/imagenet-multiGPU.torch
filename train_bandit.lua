@@ -100,6 +100,13 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     print("compute_variance_batch")
     model:training()
 
+    cutorch.synchronize()
+    collectgarbage()
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+
 end
 
 
