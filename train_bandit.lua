@@ -100,30 +100,6 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     print("compute_variance_batch")
     model:training()
 
-    cutorch.synchronize()
-    collectgarbage()
-    -- transfer over to GPU
-    inputs:resize(inputsCPU:size()):copy(inputsCPU)
-    actions:copy(actions_cpu)
-    rewards:copy(rewards_cpu)
-
-    outputs = model:forward(inputs)
-
-    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-
-    weighted_reward = torch.cmul(rewards,p_of_actions_student)
-
-    for i=1,opt.batchSize do
-        nuber_of_data_processed = nuber_of_data_processed + 1
-        delta = weighted_reward[i] - mean_so_far
-        mean_so_far = mean_so_far + delta/nuber_of_data_processed
-        m2_value = m2_value + delta*(weighted_reward[i] - mean_so_far)
-    end
-
-    print("nuber_of_data_processed",nuber_of_data_processed)
-    print("mean_so_far",mean_so_far)
-    print("m2_value",m2_value)
-
 end
 
 
