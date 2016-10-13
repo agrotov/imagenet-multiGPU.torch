@@ -75,9 +75,62 @@ function load_rewards(file_name)
     return csvigo.load({path = file_name, mode = "large"})
 end
 
+nuber_of_data_processed, mean_so_far, m2_value = 0
 
-function get_variance_gradient(rewards_arg,probability_actions_teacher_model, risk, gradient_of_risk)
-    weighted_rewards_of_logging_policy = torch.cmul(rewards_arg,probability_actions_teacher_model)
+function compute_variance(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
+    model:training()
+
+    cutorch.synchronize()
+    collectgarbage()
+    timer:reset()
+
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+
+    outputs = model:forward(inputs)
+
+    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+
+    mean_weighted_reward = torch.cmul(rewards,p_of_actions_student):mean()
+
+    for i=1,opt.batchSize do
+        nuber_of_data_processed = nuber_of_data_processed + 1
+        delta = mean_weighted_reward[i] - mean_so_far
+        mean_so_far = mean_so_far + delta/nuber_of_data_processed
+        m2_value = m2_value + delta*(mean_weighted_reward[i] - mean_so_far)
+    end
+
+    return nuber_of_data_processed, mean_so_far, m2_value
+end
+
+
+
+function compute_variance_constants(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
+    model:training()
+
+    cutorch.synchronize()
+    collectgarbage()
+    timer:reset()
+
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+    probabilities_logged:copy(probabilities_logged_cpu)
+
+    local err, target, p_of_actions_student, size_output
+    outputs = model:forward(inputs)
+    size_output = outputs:size()
+    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+    target = compute_target(outputs, size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
+
+
+end
+
+function get_variance_gradient(rewards_arg,probability_actions)
+    weighted_rewards_of_logging_policy = torch.cmul(rewards_arg,probability_actions)
     mean_weighted_rewards_of_logging_policy  = weighted_rewards_of_logging_policy:mean()
     diff_mean_weighted_rewards_of_logging_policy = (weighted_rewards_of_logging_policy-mean_weighted_rewards_of_logging_policy)
     diff_mean_weighted_rewards_of_logging_policy_square = torch.cmul(diff_mean_weighted_rewards_of_logging_policy,diff_mean_weighted_rewards_of_logging_policy)
@@ -91,8 +144,7 @@ function get_variance_gradient(rewards_arg,probability_actions_teacher_model, ri
     print("A_w0",A_w0)
     print("b_w0",b_w0)
 
-    grad_variance = A_w0*risk + 2 * b_w0 * gradient_of_risk*risk
-    return grad_variance
+    return A_w0,b_w0
 end
 
 
