@@ -122,7 +122,7 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
         weighted_reward_value = weighted_reward[i][1]
         print("weighted_reward[i]",weighted_reward_value)
 
-        number_of_data_processed  = number_of_data_processed  + 1.0
+        number_of_data_processed  =  1.0
         print("number_of_data_processed",number_of_data_processed)
 
         delta = 1
