@@ -107,13 +107,13 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, probabiliti
 
     p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
-    mean_weighted_reward = torch.cmul(rewards,p_of_actions_student):mean()
+    weighted_reward = torch.cmul(rewards,p_of_actions_student)
 
     for i=1,opt.batchSize do
         nuber_of_data_processed = nuber_of_data_processed + 1
-        delta = mean_weighted_reward[i] - mean_so_far
+        delta = weighted_reward[i] - mean_so_far
         mean_so_far = mean_so_far + delta/nuber_of_data_processed
-        m2_value = m2_value + delta*(mean_weighted_reward[i] - mean_so_far)
+        m2_value = m2_value + delta*(weighted_reward[i] - mean_so_far)
     end
 
     print("nuber_of_data_processed",nuber_of_data_processed)
