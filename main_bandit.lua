@@ -139,7 +139,7 @@ function compute_variance()
         end --load_bandit_data,
         ,
          -- the end callback (runs in the main thread)
-         compute_variance
+         compute_variance_batch
         )
 
         end --for t = 1,logged_data:size(1),opt.batchSize do
@@ -155,8 +155,8 @@ function train_imagenet_bandit(model, data_path)
 
    local last_test_time = sys.clock()
 
-   rewards_weigted_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
-   print("rewards_sum_new_test",rewards_weigted_test_current,"initial")
+--   rewards_weigted_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
+--   print("rewards_sum_new_test",rewards_weigted_test_current,"initial")
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
@@ -171,6 +171,8 @@ function train_imagenet_bandit(model, data_path)
        rewards_logged_sum = 0
 
        batch_number = 0
+
+       compute_variance()
 
        for t = 1,logged_data:size(1),opt.batchSize do
 

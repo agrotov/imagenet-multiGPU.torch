@@ -77,7 +77,7 @@ end
 
 nuber_of_data_processed, mean_so_far, m2_value = 0
 
-function compute_variance(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
+function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
     model:training()
 
     cutorch.synchronize()
