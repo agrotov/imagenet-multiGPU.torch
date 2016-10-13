@@ -118,8 +118,8 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     for i=1,opt.batchSize do
         nuber_of_data_processed = nuber_of_data_processed + 1
         delta = weighted_reward[i] - mean_so_far
-        mean_so_far = mean_so_far + delta/nuber_of_data_processed
-        m2_value = m2_value + delta*(weighted_reward[i] - mean_so_far)
+--        mean_so_far = mean_so_far + delta/nuber_of_data_processed
+--        m2_value = m2_value + delta*(weighted_reward[i] - mean_so_far)
     end
 
 --    print("nuber_of_data_processed",nuber_of_data_processed)
