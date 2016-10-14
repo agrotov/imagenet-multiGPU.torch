@@ -154,7 +154,9 @@ function compute_variance()
 
         donkeys:synchronize()
         variance = m2_value/(number_of_data_processed-1)
+        A_w0,b_w0 = get_constants(mean_so_far, variance, number_of_data_processed)
         print("compute_variance",variance,"mean_so_far",mean_so_far)
+        print("A_w0",A_w0,"b_w0",b_w0)
         sys.exit()
 
 

@@ -154,17 +154,10 @@ function compute_variance_constants(inputsCPU, actions_cpu, rewards_cpu, probabi
 
 end
 
-function get_variance_gradient(rewards_arg,probability_actions)
-    weighted_rewards_of_logging_policy = torch.cmul(rewards_arg,probability_actions)
-    mean_weighted_rewards_of_logging_policy  = weighted_rewards_of_logging_policy:mean()
-    diff_mean_weighted_rewards_of_logging_policy = (weighted_rewards_of_logging_policy-mean_weighted_rewards_of_logging_policy)
-    diff_mean_weighted_rewards_of_logging_policy_square = torch.cmul(diff_mean_weighted_rewards_of_logging_policy,diff_mean_weighted_rewards_of_logging_policy)
-    diff_mean_weighted_rewards_of_logging_policy_square_sum = torch.sum(diff_mean_weighted_rewards_of_logging_policy_square)
-    variance_of_logging_policy = diff_mean_weighted_rewards_of_logging_policy_square_sum / (opt.batchSize - 1)
-    sqrt_variance_of_logging_policy = torch.sqrt(variance_of_logging_policy)
-
-    A_w0 = - mean_weighted_rewards_of_logging_policy / ((opt.batchSize - 1) * sqrt_variance_of_logging_policy)
-    b_w0 = 1/(2 * (opt.batchSize - 1) * sqrt_variance_of_logging_policy)
+function get_constants(mean_weighted_rewards, variance, num_examples)
+    sqrt_variance = torch.sqrt(variance)
+    A_w0 = - mean_weighted_rewards / ((num_examples - 1) * sqrt_variance)
+    b_w0 = 1/(2 * (num_examples - 1) * sqrt_variance_of_logging_policy)
 
     print("A_w0",A_w0)
     print("b_w0",b_w0)
