@@ -157,7 +157,7 @@ end
 function get_constants(mean_weighted_rewards, variance, num_examples)
     sqrt_variance = torch.sqrt(variance)
     A_w0 = - mean_weighted_rewards / ((num_examples - 1) * sqrt_variance)
-    b_w0 = 1/(2 * (num_examples - 1) * sqrt_variance_of_logging_policy)
+    b_w0 = 1/(2 * (num_examples - 1) * sqrt_variance)
 
     print("A_w0",A_w0)
     print("b_w0",b_w0)
