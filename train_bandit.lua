@@ -114,6 +114,8 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 
     p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
+    print("p_of_actions_student",p_of_actions_student)
+
     weighted_reward = torch.cmul(rewards,p_of_actions_student)
 
 
@@ -132,28 +134,6 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 end
 
 
-
-function compute_variance_constants(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
-    model:training()
-
-    cutorch.synchronize()
-    collectgarbage()
-    timer:reset()
-
-    -- transfer over to GPU
-    inputs:resize(inputsCPU:size()):copy(inputsCPU)
-    actions:copy(actions_cpu)
-    rewards:copy(rewards_cpu)
-    probabilities_logged:copy(probabilities_logged_cpu)
-
-    local err, target, p_of_actions_student, size_output
-    outputs = model:forward(inputs)
-    size_output = outputs:size()
-    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-    target = compute_target(outputs, size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
-
-
-end
 
 function get_constants(mean_weighted_rewards, variance, num_examples)
     sqrt_variance = torch.sqrt(variance)
