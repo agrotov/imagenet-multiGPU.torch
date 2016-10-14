@@ -183,7 +183,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variance_grad = get_variance_gradient(expected_reward_scattered, target)
 
-    return target + opt.variance_reg * variance_grad
+    return opt.variance_reg * variance_grad
 --    return target
 end
 
