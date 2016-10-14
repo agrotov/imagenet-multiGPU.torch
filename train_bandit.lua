@@ -96,7 +96,8 @@ local probabilities_logged= torch.CudaTensor(opt.batchSize,1)
 mean_so_far= 0
 number_of_data_processed = 0
 m2_value = 0
-
+A_w0 = 0
+b_w0 = 0
 
 
 function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
@@ -158,9 +159,6 @@ function get_constants(mean_weighted_rewards, variance, num_examples)
     sqrt_variance = torch.sqrt(variance)
     A_w0 = - mean_weighted_rewards / ((num_examples - 1) * sqrt_variance)
     b_w0 = 1/(2 * (num_examples - 1) * sqrt_variance)
-
-    print("A_w0",A_w0)
-    print("b_w0",b_w0)
 
     return A_w0,b_w0
 end
@@ -254,6 +252,8 @@ rewards_sum_new_train,rewards_sum_logged_train,rewards_new_mean_train, rewards_l
 num_batches = 0
 
 function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature, baseline)
+    print("trainBatch_bandit A_w0",A_w0)
+    print("trainBatch_bandit b_w0",b_w0)
 
 
     model:training()
