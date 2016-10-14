@@ -163,6 +163,11 @@ function get_constants(mean_weighted_rewards, variance, num_examples)
     return A_w0,b_w0
 end
 
+function get_variance_gradient(weighted_rewards, grad_of_weighted_rewards)
+    var_grad = A_w0*grad_of_weighted_rewards + 2 * b_w0 * weighted_rewards * grad_of_weighted_rewards
+    return var_grad
+end
+
 
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
@@ -176,10 +181,10 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     expected_reward_scattered = torch.Tensor(size):fill(0)
     expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
 
---    variance_grad = get_variance_gradient(rewards_arg,probability_actions_teacher_model, expected_reward_scattered, target)
+    variance_grad = get_variance_gradient(expected_reward_scattered, target)
 
---    return target + opt.variance_reg * variance_grad
-    return target
+    return target + opt.variance_reg * variance_grad
+--    return target
 end
 
 

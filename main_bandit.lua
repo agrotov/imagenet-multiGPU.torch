@@ -244,7 +244,7 @@ function train_imagenet_bandit(model, data_path)
 
 
        donkeys:synchronize()
-       
+
        local curr_time = sys.clock()
 
        if epoch % 1 == 0 or curr_time - last_test_time > 15 * 60 then
