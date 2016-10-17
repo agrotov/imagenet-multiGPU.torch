@@ -320,6 +320,8 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     new_probabilities = probability_of_actions(outputs, actions, temperature)
 
+    print("new_probabilities",new_probabilities)
+
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
         if prediction_sorted[i][1] == labelsCPU[i] then
