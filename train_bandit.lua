@@ -113,7 +113,7 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     outputs = model:forward(inputs)
 
     p_of_actions_student = probability_of_actions(outputs, actions, temperature)
-    
+
     weighted_reward = torch.cmul(rewards,p_of_actions_student)
 
 
@@ -161,7 +161,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variance_grad = get_variance_gradient(expected_reward_scattered, target)
 
-    return target + opt.variance_reg * variance_grad
+    return opt.variance_reg * variance_grad
 --    return target
 end
 
