@@ -46,7 +46,7 @@ function M.parse(arg)
     cmd:option('-produce_dataset',  0, 'produce_dataset')
     cmd:option('-produce_test_dataset',  0, 'produce_test_dataset')
     cmd:option('-train',  0, 'train')
-    cmd:option('-test',  0, 'test')
+    cmd:option('-test',  0, 'test')S
     cmd:option('-bandit_data',  '/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000', 'bandit data')
     cmd:option('-bandit_test_data',  '/home/agrotov1/bandit_imagenet/logged_dataset_with_offsets_model_7.t7_1000', 'bandit data')
     cmd:option('-temperature',  1, 'temperature')
