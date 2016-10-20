@@ -65,8 +65,8 @@ function probability_of_actions(model_output, actions,temperature)
 end
 
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
+    probability_actions_teacher_model:clamp(0.01, torch.max(probability_actions_teacher_model))
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
-    propencity:clamp(0.01, torch.max(propencity))
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
 end
@@ -150,18 +150,27 @@ end
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
     weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model)
-    log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
 
-    weight = -torch.cdiv(weight, log_probability_of_actions_val)
+
     target:scatter(2,actions:long(),weight:float())
 
-    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
-    expected_reward_scattered = torch.Tensor(size):fill(0)
-    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
+--    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
+--    expected_reward_scattered = torch.Tensor(size):fill(0)
+--    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
 
-    variance_grad = get_variance_gradient(expected_reward_scattered, target)
+    variance_grad = get_variance_gradient(target, target)
 
-    return target + opt.variance_reg * variance_grad
+    variace_regularised_target = target + opt.variance_reg * variance_grad
+
+    log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
+
+    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
+
+    return new_target
+
+--    target:scatter(2,actions:long(),weight:float())
+
+--    return target + opt.variance_reg * variance_grad
 --    return target
 end
 
