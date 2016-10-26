@@ -114,7 +114,7 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 
     p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
-    weighted_reward = torch.cmul(rewards,p_of_actions_student)
+    weighted_reward = 1-torch.cmul(rewards - opt.baseline,p_of_actions_student)
 
 
     for i=1,opt.batchSize do
