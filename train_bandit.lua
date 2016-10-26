@@ -65,7 +65,7 @@ function probability_of_actions(model_output, actions,temperature)
 end
 
 function compute_weight(rewards_arg, probability_actions_student_model, probability_actions_teacher_model)
-    probability_actions_teacher_model:clamp(0.01, torch.max(probability_actions_teacher_model))
+--    probability_actions_teacher_model:clamp(0.01, torch.max(probability_actions_teacher_model))
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model)
     return -torch.cmul(rewards_arg,propencity)
 --    return rewards_arg
@@ -149,12 +149,15 @@ end
 
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
     target = torch.Tensor(size):fill(0)
-    weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model)
+    probability_actions_teacher_model_clamped = torch.clamp(probability_actions_teacher_model,0.01, torch.max(probability_actions_teacher_model))
 
-
+    weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model_clamped)
     target:scatter(2,actions:long(),weight:float())
 
-    gradient_of_risk =torch.cdiv(rewards_arg-opt.baseline,probability_actions_teacher_model)
+    gradient_of_risk =torch.cdiv(rewards_arg-opt.baseline,probability_actions_teacher_model_clamped)
+    gradient_of_risk_scattered =torch.Tensor(size):fill(0)
+    gradient_of_risk_scattered:scatter(2,actions:long(),weight:float())
+
 --    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
 --    expected_reward_scattered = torch.Tensor(size):fill(0)
 --    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
