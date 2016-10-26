@@ -142,7 +142,7 @@ function get_constants(mean_weighted_rewards, variance, num_examples)
 end
 
 function get_variance_gradient(weighted_rewards, grad_of_weighted_rewards)
-    var_grad = A_w0*grad_of_weighted_rewards + 2 * b_w0 * torch.cmul(weighted_rewards , grad_of_weighted_rewards)
+    var_grad = A_w0*grad_of_weighted_rewards + 2 * b_w0 * torch.cmul(weighted_rewards:cuda() , grad_of_weighted_rewards)
     return var_grad
 end
 
