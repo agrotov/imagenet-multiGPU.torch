@@ -258,7 +258,7 @@ function train_imagenet_bandit(model, data_path)
        if epoch % 1 == 0 or curr_time - last_test_time > 15 * 60 then
            rewards_sum_new_test,rewards_sum_logged_test,rewards_new_test, rewards_logged_test = test_imagenet_bandit(model, opt.bandit_test_data)
            last_test_time = sys.clock()
-
+           print("epoch",epoch,"rewards_sum_new_train",rewards_sum_new_train,"rewards_sum_new_train - rewards_sum_logged_train",rewards_sum_new_train - rewards_sum_logged_train,"rewards_new_train",rewards_new_train,"rewards_logged_train",rewards_logged_train,"batch_number",batch_number)
            print("epoch",epoch,"rewards_sum_new_test",rewards_sum_new_test,"rewards_sum_logged_test",rewards_sum_logged_test,"rewards_sum_new_test - rewards_sum_logged_test",rewards_sum_new_test - rewards_sum_logged_test,"rewards_new_test",rewards_new_test,"rewards_logged_test",rewards_logged_test,"batch_number",batch_number)
 
                    if rewards_sum_new_test - rewards_weigted_test_current < 0 then
