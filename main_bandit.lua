@@ -86,11 +86,7 @@ local logged_data = nil
 local test_logged_data = nil
 if opt.produce_dataset ~= 1 and opt.produce_test_dataset ~= 1 then
     logged_data = torch.load(opt.bandit_data)
-    print("logged_data",logged_data[1])
     test_logged_data = torch.load(opt.bandit_test_data)
-    print("test_logged_data",test_logged_data[1])
-
-    exit()
 end
 
 
