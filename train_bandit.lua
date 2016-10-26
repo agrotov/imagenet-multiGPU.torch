@@ -161,8 +161,8 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     gradient_of_risk_scattered =torch.Tensor(size):fill(0)
     gradient_of_risk_scattered:scatter(2,actions:long(),gradient_of_risk:float())
 
-    print("target",target:size())
-    print("gradient_of_risk_scattered",gradient_of_risk_scattered:size())
+    print("target",target:mean(),target:min(),target:max())
+    print("gradient_of_risk_scattered",gradient_of_risk_scattered:mean(),gradient_of_risk_scattered:min(),gradient_of_risk_scattered:max())
 
 --    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
 --    expected_reward_scattered = torch.Tensor(size):fill(0)
@@ -172,13 +172,13 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variace_regularised_target = target + opt.variance_reg * variance_grad
 
-    print("variace_regularised_target",variace_regularised_target:size())
+    print("variace_regularised_target",variace_regularised_target:mean(),variace_regularised_target:min(),variace_regularised_target:max())
 
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions):float()
     log_probability_of_actions_val_scattered = torch.Tensor(size):fill(0)
     log_probability_of_actions_val_scattered:scatter(2,actions:long(),log_probability_of_actions_val:float())
 
-    print("log_probability_of_actions_val",log_probability_of_actions_val_scattered:size())
+    print("log_probability_of_actions_val",log_probability_of_actions_val:mean(),log_probability_of_actions_val:min(),log_probability_of_actions_val:max())
 
     new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val_scattered)
 
