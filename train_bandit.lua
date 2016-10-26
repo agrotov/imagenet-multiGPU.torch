@@ -291,6 +291,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         gpu_target = target:cuda()
         model:backward(inputs, gpu_target)
+        print("gpu_target",gpu_target:mean(),gpu_target:min(),gpu_target:max())
+        print("gradParameters_fresh", gradParameters:mean(),gradParameters:min(),gradParameters:max())
 
 --        nan_mask = gradParameters:ne(gradParameters)
 --        non_nan_mask = gradParameters:eq(gradParameters)
