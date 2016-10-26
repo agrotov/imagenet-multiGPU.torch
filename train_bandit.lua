@@ -142,7 +142,7 @@ function get_constants(mean_weighted_rewards, variance, num_examples)
 end
 
 function get_variance_gradient(weighted_rewards, grad_of_weighted_rewards)
-    var_grad = A_w0*grad_of_weighted_rewards + 2 * b_w0 * torch.cmul(weighted_rewards:cuda() , grad_of_weighted_rewards)
+    var_grad = A_w0*grad_of_weighted_rewards + 2 * b_w0 * torch.cmul(weighted_rewards , grad_of_weighted_rewards)
     return var_grad
 end
 
@@ -162,7 +162,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 --    expected_reward_scattered = torch.Tensor(size):fill(0)
 --    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
 
-    variance_grad = get_variance_gradient(target, gradient_of_risk)
+    variance_grad = get_variance_gradient(target, gradient_of_risk_scattered)
 
     variace_regularised_target = target + opt.variance_reg * variance_grad
 
