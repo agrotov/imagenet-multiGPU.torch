@@ -170,7 +170,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variance_grad = get_variance_gradient(target, gradient_of_risk)
 
-    variace_regularised_target = target + opt.variance_reg * variance_grad
+    variace_regularised_target = opt.variance_reg * variance_grad
 
     print("variace_regularised_target",variace_regularised_target:mean(),variace_regularised_target:min(),variace_regularised_target:max())
 
