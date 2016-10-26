@@ -174,7 +174,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     print("variace_regularised_target",variace_regularised_target:mean(),variace_regularised_target:min(),variace_regularised_target:max())
 
-    log_probability_of_actions_val = log_probability_of_actions(outputs, actions):float()
+    log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
 --    log_probability_of_actions_val_scattered = torch.Tensor(size):fill(0)
 --    log_probability_of_actions_val_scattered:scatter(2,actions:long(),log_probability_of_actions_val:float())
 
