@@ -172,7 +172,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     variace_regularised_target = target + opt.variance_reg * variance_grad
 
-    log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
+    log_probability_of_actions_val = log_probability_of_actions(outputs, actions):float()
 
     new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
 
