@@ -186,7 +186,7 @@ function train_imagenet_bandit(model, data_path)
 
        batch_number = 0
 
-       compute_variance()
+--       compute_variance()
 
        for t = 1,logged_data:size(1),opt.batchSize do
 
