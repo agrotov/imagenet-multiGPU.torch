@@ -352,7 +352,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     new_probabilities = probability_of_actions(outputs, actions, temperature)
 
-    print("new_probabilities",torch.cat(probabilities_logged,torch.cat(new_probabilities,rewards,2),2))
+    print("new_probabilities_val",torch.cat(probabilities_logged,torch.cat(new_probabilities,rewards,2),2))
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
@@ -377,7 +377,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     print("outputs", outputs:mean(),outputs:min(),outputs:max())
     print("probabilities_logged", probabilities_logged:mean(),probabilities_logged:min(),probabilities_logged:max())
-    print("new_probabilities", new_probabilities:mean(),new_probabilities:min(),new_probabilities:max())
+    print("new_probabilities_stat", new_probabilities:mean(),new_probabilities:min(),new_probabilities:max())
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
