@@ -367,10 +367,13 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     end
     top1 = top1 * 100 / opt.batchSize;
 
-    print("actions_cpu",actions_cpu)
-    print("labelsCPU",labelsCPU)
 
-    rewards_logged = 1-reward_for_actions(loss_matrix, actions_cpu, labelsCPU)
+    local actions_logged_eva = torch.LongTensor(opt.batchSize,1)
+    for i=1,opt.batchSize do
+        actions_logged_eva[i] = actions_cpu[i]
+    end
+
+    rewards_logged = 1-reward_for_actions(loss_matrix, actions_logged_eva, labelsCPU)
     rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
 
