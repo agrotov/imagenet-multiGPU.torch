@@ -180,7 +180,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     print("log_probability_of_actions_val",log_probability_of_actions_val:mean(),log_probability_of_actions_val:min(),log_probability_of_actions_val:max())
 
---    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
+    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
     new_target = variace_regularised_target
 
     new_target_scattered = torch.Tensor(size):fill(0)
@@ -299,6 +299,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         model:backward(inputs, gpu_target)
         print("gpu_target",gpu_target:mean(),gpu_target:min(),gpu_target:max())
         print("gradParameters_fresh", gradParameters:mean(),gradParameters:min(),gradParameters:max())
+        print("gradParameters:size",gradParameters:size())
 
 --        nan_mask = gradParameters:ne(gradParameters)
 --        non_nan_mask = gradParameters:eq(gradParameters)
