@@ -166,6 +166,14 @@ function trainBatch_full(inputsCPU, labelsCPU)
       local gradOutputs = criterion:backward(outputs, labels)
       model:backward(inputs, gradOutputs)
 
+      print("gpu_target",gradOutputs:mean(),gradOutputs:min(),gradOutputs:max())
+      print("gradParameters_fresh", gradParameters:mean(),gradParameters:min(),gradParameters:max())
+
+--      gradParameters:clamp(-5, 5)
+--      print("gradParameters", gradParameters:mean(),gradParameters:min(),gradParameters:max())
+      print("parameters", parameters:mean(),parameters:min(),parameters:max())
+
+
       return err, gradParameters
    end
    optim.sgd(feval, parameters, optimState)
