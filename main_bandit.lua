@@ -274,8 +274,8 @@ function train_imagenet_bandit(model, data_path)
 
 
        model:clearState()
-       saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
-       torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
+--       saveDataParallel(paths.concat(opt.save, 'model_' .. epoch .. '.t7'), model) -- defined in util.lua
+--       torch.save(paths.concat(opt.save, 'optimState_' .. epoch .. '.t7'), optimState)
        epoch = epoch + 1
    end --for epoch = epoch or 1, opt.nEpochs do
 end -- of train_imagenet_bandit()
