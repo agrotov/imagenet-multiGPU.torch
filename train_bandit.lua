@@ -157,6 +157,8 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     target = -torch.cmul(rewards_arg-opt.baseline,propencity)
 --    target:scatter(2,actions:long(),weight:float())
 
+    print("rewards_arg-opt.baseline",rewards_arg-opt.baseline)
+
     gradient_of_risk = -torch.cdiv(rewards_arg-opt.baseline,probability_actions_teacher_model_clamped)
 --    gradient_of_risk_scattered =torch.Tensor(size):fill(0)
 --    gradient_of_risk_scattered:scatter(2,actions:long(),gradient_of_risk:float())
