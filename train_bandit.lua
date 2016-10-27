@@ -367,6 +367,9 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     end
     top1 = top1 * 100 / opt.batchSize;
 
+    print("actions_cpu",actions_cpu)
+    print("labelsCPU",labelsCPU)
+
     rewards_logged = 1-reward_for_actions(loss_matrix, actions_cpu, labelsCPU)
     rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
