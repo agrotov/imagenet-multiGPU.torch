@@ -367,15 +367,15 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     end
     top1 = top1 * 100 / opt.batchSize;
 
-
+    rewards_logged = 1-reward_for_actions(loss_matrix, actions_cpu, labelsCPU)
     rewards_eva = 1-reward_for_actions(loss_matrix, actions_eva, labelsCPU)
 
 
-    diff_rewards = rewards_eva:mean() - rewards:mean()
+    diff_rewards = rewards_eva:mean() - rewards_logged:mean()
 
 
-    rewards_sum_logged = torch.sum(torch.cmul(rewards,probabilities_logged))/torch.sum(probabilities_logged)
-    rewards_sum_new = torch.sum(torch.cmul(rewards,new_probabilities))/torch.sum(new_probabilities)
+    rewards_sum_logged = torch.sum(torch.cmul(rewards_logged,probabilities_logged))/torch.sum(probabilities_logged)
+    rewards_sum_new = torch.sum(torch.cmul(rewards_logged,new_probabilities))/torch.sum(new_probabilities)
 
     print("outputs", outputs:mean(),outputs:min(),outputs:max())
     print("probabilities_logged", probabilities_logged:mean(),probabilities_logged:min(),probabilities_logged:max())
@@ -383,17 +383,17 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     -- Calculate top-1 error, and print information
     print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batch_number, num_batches, timer:time().real,rewards_eva:mean(), rewards:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
+        epoch, batch_number, num_batches, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
         optimState.learningRate))
 
 
     rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
     rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
     rewards_new_sum = rewards_new_sum + rewards_eva:mean()
-    rewards_logged_sum = rewards_logged_sum + rewards:mean()
+    rewards_logged_sum = rewards_logged_sum + rewards_logged:mean()
 
 
-    return rewards_sum_new,rewards_sum_logged,rewards_eva:mean(), rewards:mean()
+    return rewards_sum_new,rewards_sum_logged,rewards_eva:mean(), rewards_logged:mean()
 end
 
 
