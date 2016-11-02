@@ -169,8 +169,8 @@ function train_imagenet_bandit(model, data_path)
 
    local last_test_time = sys.clock()
 
---   rewards_weigted_test_current, rewards_sum_logged_test_current,rewards_new_test_current, rewards_logged_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
---   print("eninitial rewards_weigted_test_current",rewards_weigted_test_current,"rewards_sum_logged_test_current",rewards_sum_logged_test_current,"rewards_new_test_current",rewards_new_test_current,"rewards_logged_test_current",rewards_logged_test_current)
+   rewards_weigted_test_current, rewards_sum_logged_test_current,rewards_new_test_current, rewards_logged_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
+   print("eninitial rewards_weigted_test_current",rewards_weigted_test_current,"rewards_sum_logged_test_current",rewards_sum_logged_test_current,"rewards_new_test_current",rewards_new_test_current,"rewards_logged_test_current",rewards_logged_test_current)
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
