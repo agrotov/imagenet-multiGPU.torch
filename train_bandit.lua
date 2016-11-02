@@ -186,7 +186,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     new_target_scattered = torch.Tensor(size):fill(0)
 --    new_target_scattered:scatter(2,actions:long(),new_target:float())
 
---    new_target_scattered[100] = -1
+    new_target_scattered[100] = 1
 
 --    print("new_target_scattered",new_target_scattered)
 
@@ -298,8 +298,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         p_of_actions_student = probability_of_actions(outputs, actions, temperature)
 
         target = compute_target(outputs, size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
-
-        print("targettarget",target:mean(),target:min(),target:max())
 
         gpu_target = target:cuda()
 
