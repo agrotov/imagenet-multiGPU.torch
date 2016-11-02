@@ -362,7 +362,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     new_probabilities = probability_of_actions(outputs, actions, temperature)
 
-    print("new_probabilities_val",torch.cat(probabilities_logged,torch.cat(new_probabilities,rewards,2),2))
+--    print("new_probabilities_val",torch.cat(probabilities_logged,torch.cat(new_probabilities,rewards,2),2))
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
