@@ -153,7 +153,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
 --    weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model_clamped)
 
-    transformed_reward = (rewards_arg-opt.baseline) * 0.0001
+    transformed_reward = (rewards_arg-opt.baseline) * 0.1
 
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model_clamped)
     target = torch.cmul(transformed_reward,propencity)
