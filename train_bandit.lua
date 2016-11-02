@@ -186,7 +186,8 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     new_target_scattered = torch.Tensor(size):fill(0)
 --    new_target_scattered:scatter(2,actions:long(),new_target:float())
 
-    new_target_scattered[100] = 0.0001
+    new_target_scattered[1] = 0.0001
+--    new_target_scattered[2] = -0.0001
 
 --    print("new_target_scattered",new_target_scattered)
 
