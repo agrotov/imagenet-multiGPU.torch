@@ -300,8 +300,8 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
         target = compute_target(outputs, size_output,actions, rewards, p_of_actions_student, probabilities_logged, baseline)
 
         gpu_target = target:cuda()
-        model:backward(inputs, gpu_target)
         print("gpu_target",gpu_target:mean(),gpu_target:min(),gpu_target:max())
+        model:backward(inputs, gpu_target)
         print("gradParameters_fresh", gradParameters:mean(),gradParameters:min(),gradParameters:max())
         print("gradParameters:size",gradParameters:size())
 
