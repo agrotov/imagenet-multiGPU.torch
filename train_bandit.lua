@@ -192,7 +192,7 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     print("new_target",new_target_scattered:mean(),new_target_scattered:min(),new_target_scattered:max())
 
-    return new_target
+    return new_target_scattered
 
 --    target:scatter(2,actions:long(),weight:float())
 
