@@ -59,6 +59,7 @@ local trainHook = function(self, path, h1, w1, flip)
    local oH = sampleSize[2]
    local h1 = h1 or math.ceil(torch.uniform(1e-2, iH-oH))
    local w1 = w1 or math.ceil(torch.uniform(1e-2, iW-oW))
+   print("path",path)
    local out = image.crop(input, w1, h1, w1 + oW, h1 + oH)
    assert(out:size(3) == oW)
    assert(out:size(2) == oH)
