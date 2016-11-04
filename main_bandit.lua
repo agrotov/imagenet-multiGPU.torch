@@ -92,6 +92,9 @@ end
 
 function compute_variance()
 
+    if not opt.variance_reg == 0 then
+        return 
+    end
     nuber_of_data_processed, mean_so_far, m2_value = 0.0
 
     print("compute_variance")
