@@ -182,8 +182,8 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
 
     print("log_probability_of_actions_val",log_probability_of_actions_val:mean(),log_probability_of_actions_val:min(),log_probability_of_actions_val:max())
 
---    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
-    new_target = variace_regularised_target
+    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
+--    new_target = variace_regularised_target
 
     new_target_scattered = torch.Tensor(size):fill(0)
     new_target_scattered:scatter(2,actions:long(),new_target:float())
