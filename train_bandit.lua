@@ -177,12 +177,13 @@ function compute_target(outputs, size, actions, rewards_arg, probability_actions
     print("variace_regularised_target",variace_regularised_target:mean(),variace_regularised_target:min(),variace_regularised_target:max())
 
     log_probability_of_actions_val = log_probability_of_actions(outputs, actions)
+    log_probability_of_actions_val_clamped = torch.clamp(probability_actions_teacher_model,torch.log(0.99), torch.log(0.01))
 --    log_probability_of_actions_val_scattered = torch.Tensor(size):fill(0)
 --    log_probability_of_actions_val_scattered:scatter(2,actions:long(),log_probability_of_actions_val:float())
 
-    print("log_probability_of_actions_val",log_probability_of_actions_val:mean(),log_probability_of_actions_val:min(),log_probability_of_actions_val:max())
+    print("log_probability_of_actions_val",log_probability_of_actions_val_clamped:mean(),log_probability_of_actions_val_clamped:min(),log_probability_of_actions_val_clamped:max())
 
-    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val)
+    new_target = -torch.cdiv(variace_regularised_target, log_probability_of_actions_val_clamped)
 --    new_target = variace_regularised_target
 
     new_target_scattered = torch.Tensor(size):fill(0)
