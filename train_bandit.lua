@@ -225,6 +225,11 @@ local optimState = {
 }
 
 
+local optimState_adam = {
+}
+
+
+
 if opt.optimState ~= nil and opt.optimState ~= 'none' then
     assert(paths.filep(opt.optimState), 'File not found: ' .. opt.optimState)
     print('Loading optimState from file: ' .. opt.optimState)
@@ -321,7 +326,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         return err, gradParameters
     end
-    optim.adam(feval, parameters, optimState)
+    optim.adam(feval, parameters, optimState_adam)
 
 
     -- DataParallelTable's syncParameters
