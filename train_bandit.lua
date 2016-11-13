@@ -323,7 +323,6 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
     end
     optim.adam(feval, parameters, optimState)
 
-    print("optimState",optimState)
 
     -- DataParallelTable's syncParameters
     if model.needsSync then
