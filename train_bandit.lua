@@ -100,7 +100,7 @@ A_w0 = 0
 b_w0 = 0
 
 
-function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature)
+function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature, probability_actions_teacher_model_cpu)
     model:training()
 
     cutorch.synchronize()
@@ -109,12 +109,20 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     inputs:resize(inputsCPU:size()):copy(inputsCPU)
     actions:copy(actions_cpu)
     rewards:copy(rewards_cpu)
+    probabilities_logged:copy(probability_actions_teacher_model_cpu)
 
     outputs = model:forward(inputs)
 
-    p_of_actions_student = probability_of_actions(outputs, actions, temperature)
+    probability_actions_student_model = probability_of_actions(outputs, actions, temperature)
 
-    weighted_reward = 1-torch.cmul(rewards - opt.baseline,p_of_actions_student)
+    probability_actions_teacher_model_clamped = torch.clamp(probabilities_logged,0.01, torch.max(probabilities_logged))
+
+
+    transformed_reward = (rewards-opt.baseline) * opt.rewardScale
+
+    propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model_clamped)
+
+    weighted_reward = torch.cmul(transformed_reward,propencity)
 
 
     for i=1,opt.batchSize do
@@ -130,6 +138,53 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
     end
 
 end
+
+
+function compute_variance_batch_parallel(inputsCPU, actions_cpu, rewards_cpu, temperature, probability_actions_teacher_model_cpu)
+    model:training()
+
+    cutorch.synchronize()
+    collectgarbage()
+    -- transfer over to GPU
+    inputs:resize(inputsCPU:size()):copy(inputsCPU)
+    actions:copy(actions_cpu)
+    rewards:copy(rewards_cpu)
+    probabilities_logged:copy(probability_actions_teacher_model_cpu)
+
+    outputs = model:forward(inputs)
+
+
+    probability_actions_student_model = probability_of_actions(outputs, actions, temperature)
+
+    probability_actions_teacher_model_clamped = torch.clamp(probabilities_logged,0.01, torch.max(probabilities_logged))
+
+
+    transformed_reward = (rewards-opt.baseline) * opt.rewardScale
+
+    propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model_clamped)
+
+    weighted_reward = torch.cmul(transformed_reward,propencity)
+
+
+    if number_of_data_processed == 0 then
+        mean_so_far = 0
+        var_so_far = 0
+        number_of_data_processed = 0
+    end
+
+
+
+
+    delta = avg_b - avg_a
+
+
+    m_a = var_a * (count_a - 1)
+    m_b = var_b * (count_b - 1)
+    M2 = m_a + m_b + delta * delta * count_a * count_b / (count_a + count_b)
+    return M2 / (count_a + count_b - 1)
+end
+
+
 
 
 
@@ -150,58 +205,37 @@ end
 function compute_target(outputs, size, actions, rewards_arg, probability_actions_student_model, probability_actions_teacher_model, baseline)
 --    target = torch.Tensor(size):fill(0)
     probability_actions_teacher_model_clamped = torch.clamp(probability_actions_teacher_model,0.01, torch.max(probability_actions_teacher_model))
+    probability_actions_student_model_clamped = torch.clamp(probability_actions_student_model,0.1, torch.max(probability_actions_student_model))
 
---    weight = compute_weight(rewards_arg-opt.baseline, probability_actions_student_model, probability_actions_teacher_model_clamped)
-
-    transformed_reward = (rewards_arg-opt.baseline) * 0.1
+    transformed_reward = (rewards_arg-opt.baseline) * opt.rewardScale
 
     local propencity = torch.cdiv(probability_actions_student_model,probability_actions_teacher_model_clamped)
     target = torch.cmul(transformed_reward,propencity)
---    target:scatter(2,actions:long(),weight:float())
+--    target = torch.cdiv(transformed_reward,probability_actions_teacher_model_clamped)
 
-    gradient_of_risk = -torch.cdiv(transformed_reward,probability_actions_teacher_model_clamped)
---    gradient_of_risk_scattered =torch.Tensor(size):fill(0)
---    gradient_of_risk_scattered:scatter(2,actions:long(),gradient_of_risk:float())
 
     print("target",target:mean(),target:min(),target:max())
-    print("gradient_of_risk",gradient_of_risk:mean(),gradient_of_risk:min(),gradient_of_risk:max())
 
---    expected_reward = torch.cmul(probability_actions_student_model,rewards_arg-opt.baseline)
---    expected_reward_scattered = torch.Tensor(size):fill(0)
---    expected_reward_scattered:scatter(2,actions:long(),expected_reward:float())
+    expected_risk_grad = torch.cmul(transformed_reward,probability_actions_student_model)
 
-    variance_grad = get_variance_gradient(target, gradient_of_risk)
+    variance_grad = get_variance_gradient(target, expected_risk_grad)
 
     variace_regularised_target = target + opt.variance_reg * variance_grad
 
     print("variace_regularised_target",variace_regularised_target:mean(),variace_regularised_target:min(),variace_regularised_target:max())
 
-    log_probability_of_actions_val = probability_of_actions(outputs, actions)
-    log_probability_of_actions_val_clamped = torch.clamp(log_probability_of_actions_val, torch.log(0.01), torch.log(0.99))
---    log_probability_of_actions_val_scattered = torch.Tensor(size):fill(0)
---    log_probability_of_actions_val_scattered:scatter(2,actions:long(),log_probability_of_actions_val:float())
-
---    print("log_probability_of_actions_val",log_probability_of_actions_val_clamped:mean(),log_probability_of_actions_val_clamped:min(),log_probability_of_actions_val_clamped:max())
 --
-    new_target = torch.cdiv(variace_regularised_target, log_probability_of_actions_val_clamped)
+--    new_target = torch.cdiv(variace_regularised_target, probability_actions_student_model_clamped)
     new_target = variace_regularised_target
+--    new_target = variace_regularised_target
 
     new_target_scattered = torch.Tensor(size):fill(0)
     new_target_scattered:scatter(2,actions:long(),new_target:float())
-
---    new_target_scattered[1] = -0.0001
---    new_target_scattered[2] = -0.0001
-
---    print("new_target_scattered",new_target_scattered)
 
     print("new_target",new_target_scattered:mean(),new_target_scattered:min(),new_target_scattered:max())
 
     return new_target_scattered
 
---    target:scatter(2,actions:long(),weight:float())
-
---    return target + opt.variance_reg * variance_grad
---    return target
 end
 
 
@@ -322,7 +356,7 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
         return err, gradParameters
     end
-    optim.adam(feval, parameters, optimState)
+    optim.sgd(feval, parameters, optimState)
 
 
     -- DataParallelTable's syncParameters
@@ -337,7 +371,9 @@ function trainBatch_bandit(inputsCPU, actions_cpu, rewards_cpu, probabilities_lo
 
 end
 
-
+function compute_risk(rewards, probabilities_new, probabilities_old)
+    return torch.cmul(rewards, probabilities_new):cdiv(probabilities_old):mean()
+end
 
 function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabilities_logged_cpu, labelsCPU, temperature)
     batch_number = batch_number + 1
@@ -365,7 +401,7 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
 
     new_probabilities = probability_of_actions(outputs, actions, temperature)
 
---    print("new_probabilities_val",torch.cat(probabilities_logged,torch.cat(new_probabilities,rewards,2),2))
+    print("new_probabilities_val",torch.cat(new_probabilities,torch.cat(new_probabilities - probabilities_logged,rewards,2),2))
 
     local _,prediction_sorted = outputs:float():sort(2, true) -- descending
     for i=1,opt.batchSize do
@@ -398,19 +434,24 @@ function full_information_full_test(inputsCPU, actions_cpu, rewards_cpu, probabi
     print("probabilities_logged", probabilities_logged:mean(),probabilities_logged:min(),probabilities_logged:max())
     print("new_probabilities_stat", new_probabilities:mean(),new_probabilities:min(),new_probabilities:max())
 
+    risk_student = compute_risk(rewards,new_probabilities,probabilities_logged)
+    risk_teacher = compute_risk(rewards,probabilities_logged,probabilities_logged)
+
     -- Calculate top-1 error, and print information
-    print(('Epoch: [%d][%d/%d]\tTime %.3f Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Top1-%%: %.2f LR %.0e'):format(
-        epoch, batch_number, num_batches, timer:time().real,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, top1,
-        optimState.learningRate))
+    print(('Epoch: [%d][%d/%d]\t Reward %.4f RewardsLogged %.4f RewardDiff %.4f  WeightedRewards %.4f WeightedRewardsNew %.4f WeightedRewardsDiff %.4f Risk %.4f RiskLogged %.4f'):format(
+        epoch, batch_number, num_batches,rewards_eva:mean(), rewards_logged:mean(),  diff_rewards,rewards_sum_logged, rewards_sum_new, rewards_sum_new - rewards_sum_logged, risk_student,risk_teacher))
 
 
     rewards_sum_new_sum = rewards_sum_new_sum  + rewards_sum_new
     rewards_sum_logged_sum = rewards_sum_logged_sum + rewards_sum_logged
     rewards_new_sum = rewards_new_sum + rewards_eva:mean()
     rewards_logged_sum = rewards_logged_sum + rewards_logged:mean()
+    risk_sum = risk_sum +  risk_student
+    risk_logged_sum = risk_logged_sum + risk_teacher
 
 
-    return rewards_sum_new,rewards_sum_logged,rewards_eva:mean(), rewards_logged:mean()
+
+    return rewards_sum_new,rewards_sum_logged,rewards_eva:mean(), rewards_logged:mean(), risk_sum, risk_logged_sum
 end
 
 

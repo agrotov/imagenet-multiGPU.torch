@@ -70,7 +70,7 @@ local top1_epoch, loss_epoch
 -- 3. train - this function handles the high-level training loop,
 --            i.e. load data, train model, save model and state to disk
 function train()
-    percentage = 0.1
+    percentage = 1
    print('==> doing epoch on training data:')
    print("==> online epoch # " .. epoch)
 
