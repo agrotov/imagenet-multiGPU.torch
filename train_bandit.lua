@@ -124,19 +124,19 @@ function compute_variance_batch(inputsCPU, actions_cpu, rewards_cpu, temperature
 
     weighted_reward = torch.cmul(transformed_reward,propencity)
 
-
     for i=1,opt.batchSize do
         weighted_reward_value = weighted_reward[i][1]
 
-        number_of_data_processed  = number_of_data_processed  + 1.0
+        count_so_far  = count_so_far  + 1.0
 
         delta = weighted_reward_value - mean_so_far
 
-        mean_so_far = mean_so_far + delta/number_of_data_processed
+        mean_so_far = mean_so_far + delta/count_so_far
 
         m2_value = m2_value + delta*(weighted_reward_value - mean_so_far)
     end
 
+    variance = m2_value/(count_so_far-1)
 end
 
 
@@ -165,23 +165,42 @@ function compute_variance_batch_parallel(inputsCPU, actions_cpu, rewards_cpu, te
 
     weighted_reward = torch.cmul(transformed_reward,propencity)
 
+    count_so_far = count_so_far or 0
 
-    if number_of_data_processed == 0 then
-        mean_so_far = 0
-        var_so_far = 0
-        number_of_data_processed = 0
+
+    if count_so_far == 0 then
+        mean_so_far = weighted_reward:mean()
+        var_so_far = weighted_reward:var()
+        count_so_far = weighted_reward:size()[1]
+
+        variance = var_so_far
+        return var_so_far
     end
 
+    mean_curr = weighted_reward:mean()
+    var_curr = weighted_reward:var()
+    count_curr = weighted_reward:size()[1]
 
 
+    delta = mean_so_far - mean_curr
 
-    delta = avg_b - avg_a
+
+    m_so_far = var_so_far * (count_so_far - 1)
+    m_curr = var_curr * (count_curr - 1)
 
 
-    m_a = var_a * (count_a - 1)
-    m_b = var_b * (count_b - 1)
-    M2 = m_a + m_b + delta * delta * count_a * count_b / (count_a + count_b)
-    return M2 / (count_a + count_b - 1)
+    m2_value = m_so_far + m_curr + delta * delta * count_so_far * count_curr / (count_so_far + count_curr)
+
+
+    var_so_far = m2_value / (count_so_far + count_curr - 1)
+    mean_so_far = (count_so_far*mean_so_far + count_curr*mean_curr)/(count_so_far + count_curr)
+
+    count_so_far = count_so_far + count_curr
+
+
+    variance = m2_value/(count_so_far-1)
+
+    return var_so_far
 end
 
 

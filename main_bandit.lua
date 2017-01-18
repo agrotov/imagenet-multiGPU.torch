@@ -95,15 +95,11 @@ function compute_variance()
     if opt.variance_reg == 0 then
         return
     end
-    nuber_of_data_processed, mean_so_far, m2_value = 0.0
-
-    print("compute_variance")
 
     mean_so_far= 0
     var_so_far = 0
-    number_of_data_processed = 0
+    count_so_far = 0
     m2_value = 0
-
 
     for t = 1,logged_data:size(1),opt.batchSize do
         donkeys:addjob(
@@ -157,8 +153,7 @@ function compute_variance()
 
 
         donkeys:synchronize()
-        variance = m2_value/(number_of_data_processed-1)
-        A_w0,b_w0 = get_constants(mean_so_far, variance, number_of_data_processed)
+        A_w0,b_w0 = get_constants(mean_so_far, variance, count_so_far)
         print("compute_variance",variance,"mean_so_far",mean_so_far)
         print("A_w0",A_w0,"b_w0",b_w0)
 --        sys.exit()
@@ -174,11 +169,11 @@ function train_imagenet_bandit(model, data_path)
    local last_test_time = sys.clock()
 
 
-   rewards_weigted_train_current, rewards_sum_logged_train_current,rewards_new_train_current, rewards_logged_train_current, risk_train_current, risk_logged_train_current = test_imagenet_bandit(model, opt.bandit_train_data)
-   print("eninitial rewards_weigted_train_current",rewards_weigted_train_current,"rewards_sum_logged_train_current",rewards_sum_logged_train_current,"rewards_new_train_current",rewards_new_train_current,"rewards_logged_train_current",rewards_logged_train_current, "risk_train_current", risk_train_current,"risk_logged_train_current",risk_logged_train_current)
-
-   rewards_weigted_test_current, rewards_sum_logged_test_current,rewards_new_test_current, rewards_logged_test_current, risk_test_current, risk_logged_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
-   print("eninitial rewards_weigted_test_current",rewards_weigted_test_current,"rewards_sum_logged_test_current",rewards_sum_logged_test_current,"rewards_new_test_current",rewards_new_test_current,"rewards_logged_test_current",rewards_logged_test_current, "risk_test_current",risk_test_current,"risk_logged_test_current",risk_logged_test_current)
+--   rewards_weigted_train_current, rewards_sum_logged_train_current,rewards_new_train_current, rewards_logged_train_current, risk_train_current, risk_logged_train_current = test_imagenet_bandit(model, opt.bandit_train_data)
+--   print("EpochTrain 0 rewards_sum",rewards_weigted_train_current,"rewards_sum_logged",rewards_sum_logged_train_current,"rewards",rewards_new_train_current,"rewards_logged",rewards_logged_train_current, "risk", risk_train_current,"risk_logged",risk_logged_train_current)
+--
+--   rewards_weigted_test_current, rewards_sum_logged_test_current,rewards_new_test_current, rewards_logged_test_current, risk_test_current, risk_logged_test_current = test_imagenet_bandit(model, opt.bandit_test_data)
+--   print("EpochTest 0  rewards_sum",rewards_weigted_test_current,"rewards_sum_logged",rewards_sum_logged_test_current,"rewards",rewards_new_test_current,"rewards_logged",rewards_logged_test_current, "risk",risk_test_current,"risk_logged",risk_logged_test_current)
 
    for i = epoch, opt.nEpochs do
        -- do one epoch
